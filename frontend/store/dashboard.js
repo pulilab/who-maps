@@ -15,6 +15,7 @@ const DEFAULT_QUERY = {
   selectedHFA: [],
   selectedHSC: [],
   selectedHIS: [],
+  selectedSAPP: [],
   selectedPlatforms: [],
   selectedRows: [],
   filteredCountries: [],
@@ -51,6 +52,7 @@ export const getters = {
     g.hfa.length === 0 &&
     g.his.length === 0 &&
     g.hsc.length === 0 &&
+    g.sapp.length === 0 &&
     g.in === undefined &&
     g.q === undefined &&
     g.region === null &&
@@ -87,6 +89,7 @@ export const getters = {
   getSelectedHFA: state => state.selectedHFA,
   getSelectedHSC: state => state.selectedHSC,
   getSelectedHIS: state => state.selectedHIS,
+  getSelectedSAPP: state => state.selectedSAPP,
   getSelectedPlatforms: state => state.selectedPlatforms,
   getSelectedRows: state => state.selectedRows,
   getFilteredCountries: state => {
@@ -128,6 +131,7 @@ export const getters = {
       hfa: state.selectedHFA,
       hsc: state.selectedHSC,
       his: state.selectedHIS,
+      sapp: state.selectedSAPP,
       view_as: state.dashboardType !== 'user' ? state.dashboardType : undefined,
       sc: (() => {state.selectedColumns.every((el) => {return DEFAULT_QUERY.selectedColumns.contains(el)})}) ? undefined : state.selectedColumns
     }
@@ -191,6 +195,10 @@ export const actions = {
   },
   setSelectedHIS ({ commit }, columns) {
     commit('SET_SELECTED_HIS', columns)
+    commit('SET_CURRENT_PAGE', 1)
+  },
+  setSelectedSAPP ({ commit }, columns) {
+    commit('SET_SELECTED_SAPP', columns)
     commit('SET_CURRENT_PAGE', 1)
   },
   setSelectedPlatforms ({ commit }, columns) {
@@ -304,6 +312,7 @@ export const mutations = {
     state.selectedHFA = intArrayFromQs(options.hfa)
     state.selectedHSC = intArrayFromQs(options.hsc)
     state.selectedHIS = intArrayFromQs(options.his)
+    state.selectedSAPP = intArrayFromQs(options.sapp)
     state.selectedColumns = options.sc ? strArrayFromQs(options.sc) : defaultSelectedColumns()
     state.dashboardType = options.view_as ? options.view_as : 'user'
     state.dashboardId = options.view_as === 'country' ? intArrayFromQs(options.country)[0] : options.view_as === 'donor' ? +options.donor : null
@@ -322,6 +331,9 @@ export const mutations = {
   },
   SET_SELECTED_HIS: (state, his) => {
     state.selectedHIS = his
+  },
+  SET_SELECTED_SAPP: (state, sapp) => {
+    state.selectedSAPP = sapp
   },
   SET_SELECTED_PLATFORMS: (state, platforms) => {
     state.selectedPlatforms = platforms
