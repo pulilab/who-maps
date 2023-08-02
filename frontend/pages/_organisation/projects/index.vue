@@ -51,7 +51,7 @@ export default {
     counters() {
       return {
         myprojects: this.userProjecList.length,
-        archive: this.userProfile.archive.length
+        archive: this.userProfile?.archive ? this.userProfile.archive.length : 0
       }
     }
   },
