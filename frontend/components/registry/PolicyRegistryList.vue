@@ -1,70 +1,75 @@
 <template>
   <table class="PolicyList">
-    <thead v-if="!isEmpty">
+    <tbody v-if="isEmpty && loading">
       <tr>
-        <translate tag="th">Country</translate>
-        <translate tag="th">Title</translate>
-        <translate tag="th">Period</translate>
-        <translate tag="th">Type</translate>
-        <translate tag="th">Language</translate>
-        <translate tag="th">Keywords</translate>
-        <translate tag="th">Featured</translate>
-        <translate v-if="actions" tag="th">Actions</translate>
-      </tr>
-    </thead>
-    <tbody v-if="isEmpty">
-      <tr>
-        <td>
-          <translate>There's no Health Policy document uploaded to this country. You can upload new policy document.</translate>
-        </td>
+        <translate tag="td" class="state">Loading documents...</translate>
       </tr>
     </tbody>
-    <tbody v-else>
-      <tr v-for="doc in documents" :key="doc.id" @click="showDocumentDetails(doc)">
-        <td>
-          <div class="country">
-            <CountryFlag :code="doc.country.code" small />
-            <span>{{ doc.country.name }}</span>
-          </div>
-        </td>
-        <td class="title">
-          {{ doc.title }}
-        </td>
-        <td>
-          <PolicyPeriod :document="doc" />
-        </td>
-        <td>
-          <div class="tags">
-            <span v-for="type in doc.types" :key="type.id">
-              {{ type.name }}
-            </span>
-          </div>
-        </td>
-        <td class="language">
-          {{ doc.language.name }}
-        </td>
-        <td>
-          <div class="tags">
-            <span v-for="(tag,i) in doc.tags" :key="i">
-              {{ tag }}
-            </span>
-          </div>
-        </td>
-        <td class="featured">
-          <i :class="`${doc.featured ? 'el-icon-star-on' : 'el-icon-star-off'}`" />
-        </td>
-        <td v-if="actions">
-          <div class="actions">
-            <el-tooltip :content="$gettext('Edit document')" placement="top">
-              <el-button icon="el-icon-edit" size="medium" type="text" @click.stop="editPolicyDocument(doc)" />
-            </el-tooltip>
-            <el-tooltip :content="$gettext('Delete document')" placement="top">
-              <el-button icon="el-icon-delete" size="medium" type="text" class="delete" @click.stop="confirmDeletePolicyDocument(doc)" />
-            </el-tooltip>
-          </div>
-        </td>
+    <tbody v-else-if="isEmpty && !loading">
+      <tr>
+        <translate tag="td" class="state">{{ emptyMessage }}</translate>
       </tr>
     </tbody>
+    <template v-else-if="!isEmpty">
+      <thead >
+        <tr>
+          <translate tag="th">Country</translate>
+          <translate tag="th">Title</translate>
+          <translate tag="th">Period</translate>
+          <translate tag="th">Type</translate>
+          <translate tag="th">Language</translate>
+          <translate tag="th">Keywords</translate>
+          <translate tag="th">Featured</translate>
+          <translate v-if="actions" tag="th">Actions</translate>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="doc in documents" :key="doc.id" @click="showDocumentDetails(doc)">
+          <td>
+            <div class="country">
+              <CountryFlag :code="doc.country.code" small />
+              <span>{{ doc.country.name }}</span>
+            </div>
+          </td>
+          <td class="title">
+            {{ doc.title }}
+          </td>
+          <td>
+            <PolicyPeriod :document="doc" />
+          </td>
+          <td>
+            <div class="tags">
+              <span v-for="type in doc.types" :key="type.id">
+                {{ type.name }}
+              </span>
+            </div>
+          </td>
+          <td class="language">
+            {{ doc.language.name }}
+          </td>
+          <td>
+            <div class="tags">
+              <span v-for="(tag,i) in doc.tags" :key="i">
+                {{ tag }}
+              </span>
+            </div>
+          </td>
+          <td class="featured">
+            <i :class="`${doc.featured ? 'el-icon-star-on' : 'el-icon-star-off'}`" />
+          </td>
+          <td v-if="actions">
+            <div class="actions">
+              <el-tooltip :content="$gettext('Edit document')" placement="top">
+                <el-button icon="el-icon-edit" size="medium" type="text" @click.stop="editPolicyDocument(doc)" />
+              </el-tooltip>
+              <el-tooltip :content="$gettext('Delete document')" placement="top">
+                <el-button icon="el-icon-delete" size="medium" type="text" class="delete" @click.stop="confirmDeletePolicyDocument(doc)" />
+              </el-tooltip>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </template>
   </table>
 </template>
 
@@ -83,6 +88,10 @@ export default {
       type: Array,
       required: true
     },
+    emptyMessage: {
+      type: String,
+      default: 'Empty'
+    },
     actions: {
       type: Boolean,
       default: true
@@ -94,8 +103,7 @@ export default {
     }),
     isEmpty() {
       return this.documents.length === 0
-    }
-
+    },
   },
   methods: {
     showDocumentDetails(doc) {
@@ -130,10 +138,13 @@ export default {
 
   tr {
     border-bottom: 1px solid #eee;
-
     &:hover td {
       cursor: pointer;
       background-color: mix(@colorWhite, @colorBrandPrimary, 90%);
+      &.state {
+        cursor: default;
+        background-color: transparent;
+      }
     }
 
     &:last-child {
@@ -149,6 +160,12 @@ export default {
     display: table-cell;
     vertical-align: top;
     padding: 16px 8px;
+
+    &.state {
+      padding-top: 3em;
+      text-align: center;
+      font-size: 1.2em;
+    }
 
     &.title {
       min-width: 320px;

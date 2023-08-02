@@ -3,6 +3,7 @@
     <div class="DocumentList">
       <PolicyRegistryList
         :documents="documents"
+        :emptyMessage="emptyMessage"
         :actions="false"
         @details="showDocumentDetails"
         class=""
@@ -18,6 +19,11 @@ import PolicyRegistryList from '@/components/registry/PolicyRegistryList'
 export default {
   components: {
     PolicyRegistryList,
+  },
+  data() {
+    return {
+      emptyMessage: this.$gettext('No Health Policy document can be found with the current filters.'),
+    }
   },
   computed: {
     ...mapGetters({
