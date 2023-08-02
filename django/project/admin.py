@@ -75,7 +75,7 @@ class SoftwareStateFilter(SimpleListFilter):
 
 class TechnologyPlatformAdmin(AllObjectsAdmin):
     list_display = [
-        'name', 'state', 'added_by', 'number_of_projects'
+        'id', 'name', 'state', 'added_by', 'number_of_projects'
     ]
     list_filter = [SoftwareStateFilter]
     search_fields = ['name']
