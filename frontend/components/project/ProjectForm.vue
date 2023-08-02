@@ -259,7 +259,6 @@ export default {
           '?reloadDataFromStorage=true'
         window.location.href = newUrl
       } catch (e) {
-        console.log('User declined the option to save, just reloading')
         window.location.reload(true)
       }
     },

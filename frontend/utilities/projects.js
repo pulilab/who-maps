@@ -118,7 +118,7 @@ export const projectFields = () => ({
   health_focus_areas: [],
   hsc_challenges: [],
   hsc_challenges_other: [],
-  his_bucket: [],
+  services_and_application_types: [],
   coverageType: 1,
   coverage: [],
   coverageData: {},
@@ -285,7 +285,9 @@ export const publishRules = () => {
     hsc_challenges_other: {
       max: 256
     },
-    his_bucket: {},
+    services_and_application_types: {
+      required: true,
+    },
     coverage: {
       district: {
         required: true
