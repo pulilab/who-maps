@@ -1,63 +1,35 @@
 <template>
-  <el-row
-    type="flex"
-    :class="`matrix-layout ${classes}`"
-    :gutter="gutter"
-  >
+  <el-row type="flex" :class="`matrix-layout ${classes}`" :gutter="gutter">
     <template v-if="!inverse">
       <el-col :span="cols[0]">
-        <el-row
-          v-if="$slots.lefttop && $slots.leftbottom"
-          class="fill"
-        >
-          <el-col
-            :span="24"
-            class="mb"
-          >
+        <el-row v-if="$slots.lefttop && $slots.leftbottom" class="fill">
+          <el-col :span="24" class="mb">
             <slot name="lefttop" />
           </el-col>
-          <el-col
-            :span="24"
-            class="fill"
-          >
+          <el-col :span="24" class="fill">
             <slot name="leftbottom" />
           </el-col>
         </el-row>
-        <el-row
-          v-if="$slots.left"
-          class="fill"
-        >
-          <el-col
-            :span="24"
-            class="fill"
-          >
+        <el-row v-if="$slots.left" class="fill">
+          <el-col :span="24" class="fill">
             <slot name="left" />
           </el-col>
         </el-row>
       </el-col>
-      <el-col :span="cols[1]">
+      <el-col v-if="colNum > 1" :span="cols[1]">
         <slot name="right" />
       </el-col>
     </template>
     <template v-else>
-      <el-col :span="cols[1]">
+      <el-col v-if="colNum > 1" :span="cols[1]">
         <slot name="right" />
       </el-col>
       <el-col :span="cols[0]">
-        <el-row
-          v-if="$slots.lefttop && $slots.leftbottom"
-          class="fill"
-        >
-          <el-col
-            :span="24"
-            class="mb"
-          >
+        <el-row v-if="$slots.lefttop && $slots.leftbottom" class="fill">
+          <el-col :span="24" class="mb">
             <slot name="lefttop" />
           </el-col>
-          <el-col
-            :span="24"
-            class="fill"
-          >
+          <el-col :span="24" class="fill">
             <slot name="leftbottom" />
           </el-col>
         </el-row>
@@ -90,6 +62,11 @@ export default {
       type: String,
       required: false,
       default: ''
+    }
+  },
+  computed: {
+    colNum() {
+      return this.cols.length
     }
   }
 }
