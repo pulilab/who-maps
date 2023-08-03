@@ -208,6 +208,7 @@ export default {
       editing: false,
       submitError: false,
       errors: [],
+      emptyMessage: this.$gettext("There's no Health Policy document uploaded to this country. You can upload new policy document."),
       document: {
         file: [],
         title: '',
