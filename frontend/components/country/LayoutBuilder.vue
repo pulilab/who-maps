@@ -1,14 +1,6 @@
 <template>
   <div>
-    <!-- default -->
-    <default
-      v-show="
-        image === false &&
-          description === false &&
-          gdhi === false &&
-          documents === false
-      "
-    >
+    <default v-show="showDefault">
       <template #left>
         <w-default />
       </template>
@@ -17,34 +9,18 @@
       </template>
     </default>
 
-    <!-- description (only) -->
     <default
-      v-show="
-        image === false &&
-          description === true &&
-          gdhi === false &&
-          documents === false
-      "
+      v-show="showDescriptionOnly"
       :gutter="30"
+      :cols="[24]"
       classes="pb-0"
     >
       <template #left>
         <w-description :description="data.cover_text" />
       </template>
-      <template #right>
-        <w-image :url="default2" />
-      </template>
     </default>
 
-    <default
-      v-show="
-        image === false &&
-          description === true &&
-          gdhi === false &&
-          documents === false
-      "
-      inverse
-    >
+    <default v-show="showDescriptionOnly" inverse>
       <template #left>
         <w-default />
       </template>
@@ -53,65 +29,9 @@
       </template>
     </default>
 
-    <!-- image (only) -->
-    <default
-      v-show="
-        image === true &&
-          description === false &&
-          gdhi === false &&
-          documents === false
-      "
-      inverse
-      :cols="[10, 14]"
-      :gutter="30"
-    >
+    <default v-show="showDescriptionAndStats" :cols="[12,12]" :gutter="30">
       <template #left>
-        <w-default vertical />
-      </template>
-      <template #right>
-        <w-image :url="data.cover_url" />
-      </template>
-    </default>
-
-    <!-- image, description (only) -->
-    <default
-      v-show="
-        image === true &&
-          description === true &&
-          gdhi === false &&
-          documents === false
-      "
-      :gutter="30"
-    >
-      <template #lefttop>
         <w-description :description="data.cover_text" />
-      </template>
-      <template #leftbottom>
-        <w-image :url="data.cover_url" />
-      </template>
-      <template #right>
-        <w-default
-          vertical
-          :url="default1"
-        />
-      </template>
-    </default>
-
-    <!-- image, description, stats (complete or partial) (only) -->
-    <default
-      v-show="
-        image === true &&
-          description === true &&
-          gdhi === true &&
-          documents === false
-      "
-      :gutter="30"
-    >
-      <template #lefttop>
-        <w-description :description="data.cover_text" />
-      </template>
-      <template #leftbottom>
-        <w-image :url="data.cover_url" />
       </template>
       <template #right>
         <w-stats
@@ -122,44 +42,18 @@
       </template>
     </default>
 
-    <!-- image, description, documents (only) -->
-    <default
-      v-show="
-        image === true &&
-          description === true &&
-          gdhi === false &&
-          documents === true
-      "
-      :gutter="30"
-    >
-      <template #lefttop>
+    <default v-show="showDescriptionAndDocs" :gutter="30">
+      <template #left>
         <w-description :description="data.cover_text" />
-      </template>
-      <template #leftbottom>
-        <w-image :url="data.cover_url" />
       </template>
       <template #right>
         <w-documents :documents="data.documents" />
       </template>
     </default>
 
-    <!-- description, image, stats (complete or partial), documents -->
-    <three-columns
-      v-show="
-        image === true &&
-          description === true &&
-          gdhi === true &&
-          documents === true
-      "
-    >
-      <template #lefttop>
-        <w-description
-          single
-          :description="data.cover_text"
-        />
-      </template>
-      <template #leftbottom>
-        <w-image :url="data.cover_url" />
+    <three-columns v-show="showAll">
+      <template #left>
+        <w-description single :description="data.cover_text" />
       </template>
       <template #middle>
         <w-stats
@@ -173,23 +67,9 @@
       </template>
     </three-columns>
 
-    <!-- description, stats (complete or partial), documents -->
-    <three-columns
-      v-show="
-        image === false &&
-          description === true &&
-          gdhi === true &&
-          documents === true
-      "
-    >
-      <template #lefttop>
-        <w-description
-          single
-          :description="data.cover_text"
-        />
-      </template>
-      <template #leftbottom>
-        <img :src="default2">
+    <three-columns v-show="showStatsAndDocs">
+      <template #left>
+        <w-default vertical :url="default1" />
       </template>
       <template #middle>
         <w-stats
@@ -203,75 +83,9 @@
       </template>
     </three-columns>
 
-    <!-- image, stats (complete or partial), documents -->
-    <three-columns
-      v-show="
-        image === true &&
-          description === false &&
-          gdhi === true &&
-          documents === true
-      "
-    >
-      <template #lefttop>
-        <img :src="data.cover_url">
-      </template>
-      <template #leftbottom>
-        <w-default vertical />
-      </template>
-      <template #middle>
-        <w-stats
-          :code="data.alpha_3_code"
-          :stats="stats"
-          :simple="simpleStats"
-        />
-      </template>
-      <template #right>
-        <w-documents :documents="data.documents" />
-      </template>
-    </three-columns>
-
-    <!-- stats (complete or partial), documents -->
-    <three-columns
-      v-show="
-        image === false &&
-          description === false &&
-          gdhi === true &&
-          documents === true
-      "
-    >
+    <default v-show="showStatsOnly" :gutter="30">
       <template #left>
-        <w-default
-          vertical
-          :url="default1"
-        />
-      </template>
-      <template #middle>
-        <w-stats
-          :code="data.alpha_3_code"
-          :stats="stats"
-          :simple="simpleStats"
-        />
-      </template>
-      <template #right>
-        <w-documents :documents="data.documents" />
-      </template>
-    </three-columns>
-
-    <!-- stats (complete or partial) only -->
-    <default
-      v-show="
-        image === false &&
-          description === false &&
-          gdhi === true &&
-          documents === false
-      "
-      :gutter="30"
-    >
-      <template #left>
-        <w-default
-          vertical
-          :url="default1"
-        />
+        <w-default vertical :url="default1" />
       </template>
       <template #right>
         <w-stats
@@ -282,69 +96,12 @@
       </template>
     </default>
 
-    <!-- documents only -->
-    <default
-      v-show="
-        image === false &&
-          description === false &&
-          gdhi === false &&
-          documents === true
-      "
-      :gutter="30"
-    >
+    <default v-show="showDocsOnly" :gutter="30">
       <template #left>
-        <w-default
-          vertical
-          :url="default1"
-        />
+        <w-default vertical :url="default1" />
       </template>
       <template #right>
         <w-documents :documents="data.documents" />
-      </template>
-    </default>
-
-    <!-- image and stats only -->
-    <default
-      v-show="
-        image === true &&
-          description === false &&
-          gdhi === true &&
-          documents === false
-      "
-      :gutter="30"
-    >
-      <template #left>
-        <img :src="data.cover_url">
-      </template>
-      <template #right>
-        <w-stats
-          :code="data.alpha_3_code"
-          :stats="stats"
-          :simple="simpleStats"
-        />
-      </template>
-    </default>
-
-    <!-- description and stats only -->
-    <default
-      v-show="
-        image === false &&
-          description === true &&
-          gdhi === true &&
-          documents === false
-      "
-      :gutter="30"
-      :cols="[10, 14]"
-    >
-      <template #left>
-        <w-description :description="data.cover_text" />
-      </template>
-      <template #right>
-        <w-stats
-          :code="data.alpha_3_code"
-          :stats="stats"
-          :simple="simpleStats"
-        />
       </template>
     </default>
   </div>
@@ -362,7 +119,6 @@ import WStats from '@/components/country/widgets/WStats'
 
 // images
 import default1 from '~/assets/img/default/whyusedha-new.jpg'
-import default2 from '~/assets/img/default/coverimage-default.jpg'
 
 export default {
   components: {
@@ -383,12 +139,32 @@ export default {
   data () {
     return {
       default1,
-      default2
     }
   },
   computed: {
-    image () {
-      return this.data.cover !== null
+    showDefault() {
+      return !this.description && !this.gdhi && !this.documents
+    },
+    showDescriptionOnly() {
+      return this.description && !this.gdhi && !this.documents
+    },
+    showDescriptionAndStats() {
+      return this.description && this.gdhi && !this.documents
+    },
+    showDescriptionAndDocs() {
+      return this.description && !this.gdhi && this.documents
+    },
+    showStatsAndDocs() {
+      return !this.description && this.gdhi && this.documents
+    },
+    showStatsOnly() {
+      return !this.description && this.gdhi && !this.documents
+    },
+    showDocsOnly() {
+      return !this.description && !this.gdhi && this.documents
+    },
+    showAll() {
+      return this.description && this.gdhi && this.documents
     },
     description () {
       return this.data.cover_text !== '' && this.data.cover_text !== null
@@ -557,6 +333,7 @@ export default {
     h1,
     h3,
     h2 {
+      text-align: center;
       color: @colorTextPrimary;
       margin: 0 0 20px;
     }
