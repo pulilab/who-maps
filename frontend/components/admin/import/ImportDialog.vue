@@ -244,7 +244,7 @@ export default {
     dialogStyle () {
       return {
         top: this.dialogData.column === 'digitalHealthInterventions' ? '10vh' : undefined,
-        width: this.dialogData.column === 'digitalHealthInterventions' ? '90vw' : '50%',
+        width: this.dialogData.column === 'digitalHealthInterventions' ? '90vw' : '60%',
         className: ['ImportDialog', this.dialogData.column].join(' ')
       }
     }
