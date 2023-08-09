@@ -64,7 +64,7 @@
               ref="Start date"
               v-model="start_date"
               v-validate="rules.start_date"
-              :placeholder="$gettext('Pick a date (required)') | translate"
+              :placeholder="$gettext('Pick a target date (required)') | translate"
               data-vv-name="start_date"
               data-vv-as="Start date"
               class="Date"
@@ -342,6 +342,9 @@ export default {
 }
 
 .StageOverview {
+  .Date {
+    width: 256px;
+  }
   .research {
     width: 721px;
     max-width: 721px;
