@@ -13,7 +13,7 @@
       <el-form
         ref="countryInfo"
         :rules="rules"
-        :model="{ logo, cover }"
+        :model="{ logo }"
         label-width="220px"
         label-position="left"
         @submit.native.prevent
@@ -36,17 +36,6 @@
             :disabled="notSCA"
             :auto-upload="false"
             :files.sync="logo"
-            :limit="1"
-          />
-        </el-form-item>
-
-        <el-form-item
-          :label="$gettext('Cover image') | translate"
-          prop="cover"
-        >
-          <file-upload
-            :disabled="notSCA"
-            :files.sync="cover"
             :limit="1"
           />
         </el-form-item>
@@ -458,17 +447,6 @@ export default {
             }
           }
         ],
-        cover: [
-          {
-            validator: (rule, value, callback) => {
-              if (this.coverError) {
-                callback(new Error(this.coverError))
-              } else {
-                callback()
-              }
-            }
-          }
-        ],
         partnerLogos: [
           {
             validator: (rule, value, callback) => {
@@ -530,26 +508,6 @@ export default {
       },
       set ([value]) {
         this.setDataField({ field: 'logo', data: value })
-      }
-    },
-
-    cover: {
-      get () {
-        if (typeof this.country.cover === 'string') {
-          return [
-            {
-              url: this.country.cover,
-              name: ('' + this.country.cover).split('/').pop()
-            }
-          ]
-        } else if (!this.country.cover) {
-          return []
-        } else {
-          return [this.country.cover]
-        }
-      },
-      set ([value]) {
-        this.setDataField({ field: 'cover', data: value })
       }
     },
 
@@ -640,34 +598,6 @@ export default {
         )
       } else {
         this.logoError = ''
-      }
-      this.$refs.countryInfo.validate(() => {})
-    },
-
-    cover (newArr, oldArr) {
-      // Handles error message placing for wrong image formats
-      if (!newArr.length) {
-        return
-      }
-
-      const filteredArray = [
-        ...this.cover.filter(image => {
-          return (
-            !image.raw ||
-            (image.raw && image.raw.name.endsWith('.jpg')) ||
-            (image.raw && image.raw.name.endsWith('.jpeg')) ||
-            (image.raw && image.raw.name.endsWith('.png'))
-          )
-        })
-      ]
-
-      if (newArr.length !== filteredArray.length) {
-        this.cover = filteredArray
-        this.coverError = this.$gettext(
-          'Wrong image format, you can only upload .jpg and .png files'
-        )
-      } else {
-        this.coverError = ''
       }
       this.$refs.countryInfo.validate(() => {})
     },
