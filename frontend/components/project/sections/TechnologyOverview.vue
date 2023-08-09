@@ -37,6 +37,12 @@
           <translate key="repository">
             Can you provide a link to code documentation?
           </translate>
+          <tooltip
+            :text="
+              $gettext('It is recommended to publish technical documentation of your project if your software is open source and public access link should be added here')
+                | translate
+            "
+          />
         </template>
 
         <character-count-input-standalone
@@ -62,6 +68,12 @@
           <translate key="mobile_application">
             Can you provide a link to a demo of the application?
           </translate>
+          <tooltip
+            :text="
+              $gettext('It is recommended to have a demo instance of your software publicly available and public access link should be added here')
+                | translate
+            "
+          />
         </template>
 
         <character-count-input-standalone
@@ -88,6 +100,12 @@
           <translate key="wiki">
             Can you provide a link to the software wikipage?
           </translate>
+          <tooltip
+            :text="
+              $gettext('It is recommended to make user manual of your project freely available and public access link should be added here')
+                | translate
+            "
+          />
         </template>
 
         <character-count-input-standalone
@@ -114,11 +132,13 @@ import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
 import { mapGettersActions } from '../../../utilities/form'
 import CollapsibleCard from '../CollapsibleCard'
 import LicenseSelector from '../LicenseSelector'
+import Tooltip from '@/components/dashboard/Tooltip'
 
 export default {
   components: {
     CollapsibleCard,
-    LicenseSelector
+    LicenseSelector,
+    Tooltip,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
