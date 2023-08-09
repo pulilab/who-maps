@@ -19,6 +19,8 @@
           <translate key="project-name">
             What is the project name?
           </translate>
+          <tooltip  :text="$gettext('Enter the name in the format: Project Name-System Type') | translate"  />
+
           <form-hint>
             <translate key="project-name-hint">
               If this is your first time uploading a project, a sample data form
@@ -50,7 +52,7 @@
           <tooltip
             :text="
               $gettext(
-                'Investment partners can include those contributing funds, human resources or in-kind support.'
+                'If you cannot find your investment partner in the list corresponding to the question, ask Investor/Donor to register on DHA platform by sending an email to digital-health-atlas@who.int'
               ) | translate
             "
           />
@@ -74,6 +76,13 @@
           <translate key="implementing-partners">
             Who are your implementing partners?
           </translate>
+          <tooltip
+            :text="
+              $gettext(
+                'Implementing partners can include technologists and/or health experts deploying the digital health project'
+              ) | translate
+            "
+          />
         </template>
         <el-row v-for="(partner, index) in implementing_partners" :key="index">
           <el-col :span="17">
@@ -114,6 +123,13 @@
           <translate key="organisation">
             What is the name of the lead organization?
           </translate>
+          <tooltip
+            :text="
+              $gettext(
+                'Lead organization is the one that steers the project direction and decisions. Projects generally have one lead organization and one or more supporting organizations.'
+              ) | translate
+            "
+          />
         </template>
         <organisation-select
           v-model="organisation"
@@ -148,7 +164,7 @@
             :label="$gettext('Set project as \'Global project\'') | translate"
             :tooltip="
               $gettext(
-                'If your project is located in more than one country, or is part of a broader global initiative, your project is a Global Project. Indicated the countries covered and scope in the Narrative Summary Field.'
+                'If your project is located in more than one country, or is part of a broader global initiative, your project is a Global Project. Indicate the countries covered and scope in geographic scope.'
               ) | translate
             "
             placement="top"
@@ -178,7 +194,7 @@
           <tooltip
             :text="
               $gettext(
-                'Describe the user types, geographic coverage and other coverage details.'
+                `Specify a brief on: 1.	Current and planned expansion of the project (countries) 2.	Readiness check points required for the implementation of the project in geographies other than the one's planned.`
               ) | translate
             "
           />
@@ -217,7 +233,7 @@
           </translate>
           <tooltip
             :text="
-              $gettext('Describe your overall digital health project design.')
+              $gettext('Specify a brief on: Business Context, Problem Statement, Solution Overview, Process Overview, User Groups, Benefits, Future Agenda and References')
                 | translate
             "
           />
@@ -400,7 +416,7 @@ export default {
         'setImplementingPartners',
         300,
         true
-      ],    
+      ],
       donors: ['project', 'getDonors', 'setDonors', 0],
     }),
     isGlobal: {
