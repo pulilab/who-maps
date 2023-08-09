@@ -13,17 +13,21 @@
           :label="standard.id"
         >
           {{ standard.name }}
+          <Tooltip :text="$gettext('Specify other digital health systems that ') | translate" />
         </el-checkbox>
       </div>
-      <tooltip :text="$gettext('Specify other digital health systems that ') | translate" />
     </div>
   </el-checkbox-group>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import Tooltip from '@/components/dashboard/Tooltip'
 
 export default {
+  components: {
+    Tooltip,
+  },
   model: {
     prop: 'value',
     event: 'change'
@@ -89,6 +93,7 @@ export default {
     .Group {
       padding: 8px 0;
       .name {
+        padding-bottom: 4px;
         margin-bottom: 10px;
         font-size: @fontSizeBase;
         border-bottom: 1px solid @colorGrayLight;
