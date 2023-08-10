@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="dialog"
-    :title="$gettext('Health Policy document')"
+    :title="$gettext('Country Reference Document')"
     modal
     show-close
     top="10vh"

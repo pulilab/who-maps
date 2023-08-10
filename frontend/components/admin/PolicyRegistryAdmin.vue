@@ -2,12 +2,12 @@
   <PageLayout>
     <template #title>
       <translate :parameters="{ name: country.name }">
-        Policy Registry admin for {name}
+        Reference Documents admin for {name}
       </translate>
     </template>
     <Panel v-if="showForm" key="registryForm">
       <template #header>
-        <translate>New Health Policy Registry</translate>
+        <translate>Upload new Reference Documents</translate>
       </template>
       <div class="RegistryForm">
         <el-form
@@ -153,7 +153,7 @@
     <template v-else>
       <Panel key="registryList">
         <template #header>
-          <translate>Policy registry</translate>
+          <translate>Reference Documents</translate>
           <el-button class="add-btn" @click="showForm = true">
             <i class="el-icon-upload2" />
             <translate>Upload new policy document</translate>
@@ -208,7 +208,7 @@ export default {
       editing: false,
       submitError: false,
       errors: [],
-      emptyMessage: this.$gettext("There's no Health Policy document uploaded to this country. You can upload new policy document."),
+      emptyMessage: this.$gettext("There's no Reference Documents uploaded to this country. You can upload new policy document."),
       document: {
         file: [],
         title: '',

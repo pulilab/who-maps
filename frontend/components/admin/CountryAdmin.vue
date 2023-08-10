@@ -330,7 +330,7 @@
                     </li>
                     <li>
                       <translate key="sca-list-item-8">
-                        Can upload and manage Health Policy Registry documents
+                        Can upload and manage Countries' Reference Documents
                       </translate>
                     </li>
                   </ul>

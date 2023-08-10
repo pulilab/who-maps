@@ -36,7 +36,7 @@
               tag="div"
             >
               <translate key="registry-admin">
-                Policy Registry Admin
+                Reference Documents Admin
               </translate>
             </nuxt-link>
           </el-col>

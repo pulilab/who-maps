@@ -36,7 +36,7 @@
             :to="localePath({name: 'organisation-policy-registry',params: $route.params})"
             @click.native="closePopover"
           >
-            <translate>Health Policy Registry</translate>
+            <translate>Countries Reference Documents</translate>
           </nuxt-link>
         </div>
         <div class="DropdownLink">

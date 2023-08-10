@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      emptyMessage: this.$gettext('No Health Policy document can be found with the current filters.'),
+      emptyMessage: this.$gettext('No Reference Documents can be found with the current filters.'),
     }
   },
   computed: {
