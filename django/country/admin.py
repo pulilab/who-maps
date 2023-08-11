@@ -5,7 +5,7 @@ from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
 from gfklookupwidget.widgets import GfkLookupWidget
 
 from core.admin import AllObjectsAdmin
-from .models import Country, Donor, ReferenceDocument
+from .models import Country, Donor, ReferenceDocument, ReferenceDocumentType
 from project.models import Project
 from nonrelated_inlines.admin import NonrelatedStackedInline
 from django.db.models import Q
@@ -100,9 +100,15 @@ class ReferenceDocumentAdmin(admin.ModelAdmin):
                     'author', 'valid_from', 'valid_until', 'tag_list')
     ordering = ('-created',)
     autocomplete_fields = ('author', 'country')
+    filter_horizontal = ('document_types',)
 
     def get_queryset(self, request):  # pragma: no cover
         return super().get_queryset(request).prefetch_related('tags')
 
     def tag_list(self, obj):  # pragma: no cover
         return u", ".join(o.name for o in obj.tags.all())
+
+
+@admin.register(ReferenceDocumentType)
+class ReferenceDocumentTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'external_id')
