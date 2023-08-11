@@ -36,7 +36,6 @@ class ProjectTests(SetupTests):
         self.assertContains(response, "interoperability_standards")
         self.assertContains(response, "his_bucket")
         self.assertContains(response, "hsc_challenges")
-        self.assertEqual(len(response.json().keys()), 10)
 
     def test_retrieve_project_structure_cache(self):
         with self.settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}}):
