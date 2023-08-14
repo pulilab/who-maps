@@ -28,9 +28,13 @@ export const getters = {
     state.projectStructure.health_focus_areas
       ? [...state.projectStructure.health_focus_areas]
       : [],
-  getHealthPolicyTags: state =>
+  getReferenceDocumentsTags: state =>
     state.projectStructure.tags
       ? [...state.projectStructure.tags]
+      : [],
+  getReferenceDocumentsTypes: state =>
+    state.projectStructure.reference_document_types
+      ? [...state.projectStructure.reference_document_types]
       : [],
   getHisBucket: state =>
     state.projectStructure.his_bucket

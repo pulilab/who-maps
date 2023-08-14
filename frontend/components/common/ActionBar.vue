@@ -31,12 +31,12 @@
           <el-col class="ActionBarTab">
             <nuxt-link
               v-if="allowSuperCountryAdmin"
-              :to="localePath({name: 'organisation-admin-registry', params: $route.params})"
+              :to="localePath({name: 'organisation-admin-reference-documents', params: $route.params})"
               class="ActionBarLink"
               tag="div"
             >
-              <translate key="registry-admin">
-                Policy Registry Admin
+              <translate key="reference-documents-admin">
+                Reference Documents Admin
               </translate>
             </nuxt-link>
           </el-col>
@@ -120,7 +120,7 @@
         </el-row>
       </el-col>
 
-      <el-col v-if="!isDashboard && !isProjects && !isAdmin && !isRegistry" class="SearchComponentWrapper">
+      <el-col v-if="!isDashboard && !isProjects && !isAdmin && !isReferenceDocuments" class="SearchComponentWrapper">
         <SearchComponent />
       </el-col>
       <template v-if="isDashboard">
@@ -170,12 +170,12 @@ export default {
     },
     allowSuperCountryAdmin () {
       if (this.userProfile) {
-        return (this.userProfile.account_type === 'SCA' && this.userProfile.account_type_approved) || this.userProfile.is_superuser
+        return (this.userProfile.account_type === 'SCA' && this.userProfile.account_type_approved)
       }
       return false
     },
-    isRegistry () {
-      return this.$route.path.includes('/policy-registry')
+    isReferenceDocuments () {
+      return this.$route.path.includes('/reference-documents')
     },
     isDashboard () {
       return this.$route.path.includes('/dashboard')

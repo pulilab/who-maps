@@ -1,5 +1,5 @@
 <template>
-  <table class="PolicyList">
+  <table class="DocumentList">
     <tbody v-if="isEmpty && loading">
       <tr>
         <td class="state">Loading documents...</td>
@@ -16,7 +16,7 @@
           <translate tag="th">Country</translate>
           <translate tag="th">Title</translate>
           <translate tag="th">Period</translate>
-          <translate tag="th">Type</translate>
+          <translate tag="th">Document type</translate>
           <translate tag="th">Language</translate>
           <translate tag="th">Keywords</translate>
           <translate tag="th">Featured</translate>
@@ -35,7 +35,7 @@
             {{ doc.title }}
           </td>
           <td>
-            <PolicyPeriod :document="doc" />
+            <DocumentPeriod :document="doc" />
           </td>
           <td>
             <div class="tags">
@@ -60,10 +60,10 @@
           <td v-if="actions">
             <div class="actions">
               <el-tooltip :content="$gettext('Edit document')" placement="top">
-                <el-button icon="el-icon-edit" size="medium" type="text" @click.stop="editPolicyDocument(doc)" />
+                <el-button icon="el-icon-edit" size="medium" type="text" @click.stop="editDocument(doc)" />
               </el-tooltip>
               <el-tooltip :content="$gettext('Delete document')" placement="top">
-                <el-button icon="el-icon-delete" size="medium" type="text" class="delete" @click.stop="confirmDeletePolicyDocument(doc)" />
+                <el-button icon="el-icon-delete" size="medium" type="text" class="delete" @click.stop="confirmDeleteDocument(doc)" />
               </el-tooltip>
             </div>
           </td>
@@ -76,12 +76,12 @@
 <script>
 import { mapGetters } from "vuex";
 import CountryFlag from '@/components/common/CountryFlag'
-import PolicyPeriod from '@/components/common/PolicyPeriod'
+import DocumentPeriod from '@/components/common/DocumentPeriod'
 
 export default {
   components: {
     CountryFlag,
-    PolicyPeriod
+    DocumentPeriod
   },
   props: {
     documents: {
@@ -99,7 +99,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      loading: 'registry/getLoading'
+      loading: 'documents/getLoading'
     }),
     isEmpty() {
       return this.documents.length === 0
@@ -109,10 +109,10 @@ export default {
     showDocumentDetails(doc) {
       this.$emit('details', doc)
     },
-    editPolicyDocument(doc) {
+    editDocument(doc) {
       this.$emit('edit', doc)
     },
-    confirmDeletePolicyDocument(doc) {
+    confirmDeleteDocument(doc) {
       this.$emit('delete', doc)
     },
   },
@@ -123,7 +123,7 @@ export default {
 @import "~assets/style/variables.less";
 @import "~assets/style/mixins.less";
 
-.PolicyList {
+.DocumentList {
   width: calc(100% - 2em);
   margin: auto;
   font-size: 12px;

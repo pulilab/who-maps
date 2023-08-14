@@ -11,31 +11,32 @@ from datetime import date
 from datetime import timedelta
 from rest_framework.test import APIClient
 
-from country.models import Country, ReferenceDocument
+from country.models import Country, ReferenceDocument, ReferenceDocumentType
 from country.tests.base import CountryBaseTests
 
 
-class PolicyRegistryTests(CountryBaseTests):
+class ReferenceDocumentTests(CountryBaseTests):
 
     def test_list_documents_for_a_country(self):
         country = Country.objects.first()
         country.super_admins.add(self.test_user['user_profile_id'])
 
         self.assertEqual(country.documents.count(), 0)
+        rft_1 = ReferenceDocumentType.objects.first()
 
         for i in range(2):
-            ReferenceDocument.objects.create(
+            rf = ReferenceDocument.objects.create(
                 country=country,
                 title=f'{i} test',
                 author_id=self.test_user['user_profile_id'],
                 language=ReferenceDocument.Language.ENGLISH,
                 purpose=f'{i} test purpose',
                 featured=True,
-                types=[ReferenceDocument.Type.FRAMEWORK, ReferenceDocument.Type.STRATEGY],
                 valid_from=date.today(),
                 valid_until=date.today(),
                 document=ContentFile('test_content', name=f'test_file_{i}.xls')
             )
+            rf.document_types.add(rft_1.id)
         self.assertEqual(country.documents.count(), 2)
 
         url = reverse('country-detail', args=[country.id])
@@ -53,6 +54,7 @@ class PolicyRegistryTests(CountryBaseTests):
     def test_upload_document_success(self):
         country = Country.objects.first()
         country.super_admins.add(self.test_user['user_profile_id'])
+        rft_1 = ReferenceDocumentType.objects.first()
 
         file = SimpleUploadedFile("test_file.xls", b"test_content")
         url = reverse('reference-document-list')
@@ -61,7 +63,7 @@ class PolicyRegistryTests(CountryBaseTests):
             'title': 'test document',
             'document': file,
             'language': ReferenceDocument.Language.ENGLISH,
-            'types': [ReferenceDocument.Type.FRAMEWORK, ReferenceDocument.Type.STRATEGY],
+            'document_types': [rft_1.id],
             'purpose': "test purpose",
             'valid_from': date.today(),
         }
@@ -74,6 +76,7 @@ class PolicyRegistryTests(CountryBaseTests):
 
     def test_upload_document_without_permission(self):
         country = Country.objects.first()
+        rft_1 = ReferenceDocumentType.objects.first()
 
         self.assertEqual(country.admins.count(), 0)
 
@@ -84,7 +87,7 @@ class PolicyRegistryTests(CountryBaseTests):
             'title': 'test document',
             'document': file,
             'language': ReferenceDocument.Language.ENGLISH,
-            'types': [ReferenceDocument.Type.FRAMEWORK, ReferenceDocument.Type.STRATEGY],
+            'document_types': [rft_1.id],
             'purpose': "test purpose",
             'valid_from': date.today(),
         }
@@ -94,6 +97,7 @@ class PolicyRegistryTests(CountryBaseTests):
     def test_upload_document_wrong_dates(self):
         country = Country.objects.first()
         country.super_admins.add(self.test_user['user_profile_id'])
+        rft_1 = ReferenceDocumentType.objects.first()
 
         file = SimpleUploadedFile("test_file.xls", b"test_content")
         url = reverse('reference-document-list')
@@ -102,7 +106,7 @@ class PolicyRegistryTests(CountryBaseTests):
             'title': 'test document',
             'document': file,
             'language': ReferenceDocument.Language.ENGLISH,
-            'types': [ReferenceDocument.Type.FRAMEWORK, ReferenceDocument.Type.STRATEGY],
+            'document_types': [rft_1.id],
             'purpose': "test purpose",
             'valid_from': date.today(),
             'valid_until': date.today() - timedelta(days=1),
@@ -114,6 +118,7 @@ class PolicyRegistryTests(CountryBaseTests):
     def test_upload_document_with_invalid_extension(self):
         country = Country.objects.first()
         country.super_admins.add(self.test_user['user_profile_id'])
+        rft_1 = ReferenceDocumentType.objects.first()
 
         file = SimpleUploadedFile("test_file.abc", b"test_content")
         url = reverse('reference-document-list')
@@ -122,7 +127,7 @@ class PolicyRegistryTests(CountryBaseTests):
             'title': 'test document',
             'document': file,
             'language': ReferenceDocument.Language.ENGLISH,
-            'types': [ReferenceDocument.Type.FRAMEWORK, ReferenceDocument.Type.STRATEGY],
+            'document_types': [rft_1.id],
             'purpose': "test purpose",
             'valid_from': date.today(),
         }
@@ -139,6 +144,7 @@ class PolicyRegistryTests(CountryBaseTests):
         letters = string.ascii_lowercase
         content = ''.join(random.choice(letters) for _ in range(settings.MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE + 10))
         file = SimpleUploadedFile("test_file.txt", content.encode())
+        rft_1 = ReferenceDocumentType.objects.first()
 
         country = Country.objects.first()
         country.super_admins.add(self.test_user['user_profile_id'])
@@ -149,7 +155,7 @@ class PolicyRegistryTests(CountryBaseTests):
             'title': 'test document',
             'document': file,
             'language': ReferenceDocument.Language.ENGLISH,
-            'types': [ReferenceDocument.Type.FRAMEWORK, ReferenceDocument.Type.STRATEGY],
+            'document_types': [rft_1.id],
             'purpose': "test purpose",
             'valid_from': date.today(),
         }
@@ -162,6 +168,8 @@ class PolicyRegistryTests(CountryBaseTests):
 
         country = Country.objects.first()
         country.super_admins.add(self.test_user['user_profile_id'])
+        rft_1 = ReferenceDocumentType.objects.first()
+        rft_2 = ReferenceDocumentType.objects.last()
 
         upload_url = reverse('reference-document-list')
         data = {
@@ -169,7 +177,7 @@ class PolicyRegistryTests(CountryBaseTests):
             'title': 'excel',
             'document': SimpleUploadedFile("01.xls", b"test_content_for_pdf"),
             'language': ReferenceDocument.Language.ENGLISH,
-            'types': [ReferenceDocument.Type.FRAMEWORK, ReferenceDocument.Type.STRATEGY],
+            'document_types': [rft_1.id, rft_2.id],
             'purpose': "test purpose",
             'featured': True,
             'valid_from': date.today() + timedelta(days=1),

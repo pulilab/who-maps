@@ -21,7 +21,7 @@ from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion
 from project.permissions import InCountryAdminForApproval, IsOwnerShipModifiable
 from toolkit.models import Toolkit, ToolkitVersion
-from country.models import Country, Donor
+from country.models import Country, Donor, ReferenceDocumentType
 from .tasks import notify_superusers_about_new_pending_software
 from user.models import Organisation
 
@@ -91,7 +91,8 @@ class ProjectPublicViewSet(ViewSet):
             hsc_challenges=hsc_challenges,
             strategies=strategies,
             stages=Stage.objects.values('id', 'name', 'tooltip', 'order'),
-            tags=Tag.objects.values('id', 'name')  # TODO: invalidate on new Tag
+            tags=Tag.objects.values('id', 'name'),  # TODO: invalidate on new Tag
+            reference_document_types=ReferenceDocumentType.objects.values('id', 'name')
         )
 
     @staticmethod

@@ -1,5 +1,5 @@
 <template>
-  <div class="PolicySearch">
+  <div class="DocumentSearch">
     <el-input
       v-model="filter.search"
       :placeholder="$gettext('Type something...') | translate"
@@ -29,7 +29,7 @@
         class="mb"
       >
         <el-option
-          v-for="language in policyRegistry.languages"
+          v-for="language in referenceDocuments.languages"
           :key="language.id"
           :label="language.name"
           :value="language.id"
@@ -43,7 +43,7 @@
         class="mb"
       >
         <el-option
-          v-for="type in policyRegistry.types"
+          v-for="type in referenceDocumentTypes"
           :key="type.id"
           :label="type.name"
           :value="type.id"
@@ -86,7 +86,7 @@ import FilterSwitch from '@/components/dashboard/FilterSwitch'
 import FilterItem from '@/components/dashboard/FilterItem'
 
 export default {
-  name: 'PolicySearch',
+  name: 'DocumentSearch',
   components: {
     FilterSwitch,
     FilterItem
@@ -118,7 +118,8 @@ export default {
   computed: {
     ...mapGetters({
       countries: 'countries/getCountries',
-      policyRegistry: 'system/getPolicyRegistry',
+      referenceDocuments: 'system/getReferenceDocuments',
+      referenceDocumentTypes: 'projects/getReferenceDocumentsTypes',
     }),
     user() {
       return this.$auth.user
@@ -137,10 +138,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      loadRegistry: 'registry/loadRegistry',
+      loadDocuments: 'documents/loadDocuments',
     }),
     updateSearch: debounce(function() {
-      this.loadRegistry(this.filter)
+      this.loadDocuments(this.filter)
     }, 500),
   }
 }
@@ -150,7 +151,7 @@ export default {
 @import '~assets/style/variables.less';
 @import '~assets/style/mixins.less';
 
-.PolicySearch {
+.DocumentSearch {
   box-sizing: border-box;
   width: @advancedSearchWidth;
   min-height: 100%;
