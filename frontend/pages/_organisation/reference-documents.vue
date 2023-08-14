@@ -5,18 +5,18 @@
     </div>
 
     <div class="FilterArea">
-      <PolicySearch />
+      <DocumentSearch />
     </div>
   </div>
 </template>
 
 <script>
-import PolicySearch from '@/components/registry/PolicySearch'
+import DocumentSearch from '@/components/documents/DocumentSearch'
 
 export default {
-  name: 'PolicyRegistry',
+  name: 'ReferenceDocuments',
   components: {
-    PolicySearch,
+    DocumentSearch,
   },
   async fetch ({ store }) {
     await store.dispatch('system/loadUserProfiles'),

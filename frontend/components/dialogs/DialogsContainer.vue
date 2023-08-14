@@ -6,7 +6,7 @@
     <SendEmailDialog />
     <ProjectApprovalDialog />
     <EditSubLevelDialog />
-    <PolicyDocumentDialog />
+    <ReferenceDocumentDialog />
   </div>
 </template>
 
@@ -18,7 +18,7 @@ import SaveFilterDialog from './SaveFilterDialog'
 import SendEmailDialog from './SendEmailDialog'
 import ProjectApprovalDialog from './ProjectApprovalDialog'
 import EditSubLevelDialog from './EditSubLevelDialog'
-import PolicyDocumentDialog from './PolicyDocumentDialog'
+import ReferenceDocumentDialog from './ReferenceDocumentDialog'
 
 export default {
   components: {
@@ -28,7 +28,7 @@ export default {
     SendEmailDialog,
     ProjectApprovalDialog,
     EditSubLevelDialog,
-    PolicyDocumentDialog,
+    ReferenceDocumentDialog,
   },
   computed: {
     ...mapGettersActions({

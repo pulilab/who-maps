@@ -1,14 +1,13 @@
 <template>
-  <PolicyRegistryAdmin />
+  <ReferenceDocumentAdmin />
 </template>
 
 <script>
-import PolicyRegistryAdmin from '@/components/admin/PolicyRegistryAdmin'
+import ReferenceDocumentAdmin from '@/components/admin/ReferenceDocumentAdmin'
 
 export default {
-  name: 'Registry',
   components: {
-    PolicyRegistryAdmin
+    ReferenceDocumentAdmin
   },
   async fetch ({ store }) {
     await store.dispatch('system/loadUserProfiles'),
