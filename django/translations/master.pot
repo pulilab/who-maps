@@ -62,8 +62,8 @@ msgstr ""
 msgid "{name} level deployment"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:86 components/admin/CountryAdmin.vue:97
-#: components/admin/CountryAdmin.vue:108 components/admin/DonorAdmin.vue:48
+#: components/admin/CountryAdmin.vue:82 components/admin/CountryAdmin.vue:93
+#: components/admin/CountryAdmin.vue:104 components/admin/DonorAdmin.vue:48
 #: components/admin/DonorAdmin.vue:58 components/admin/DonorAdmin.vue:68
 msgid "{num} new request(s)"
 msgstr ""
@@ -305,8 +305,8 @@ msgstr ""
 msgid "Action cancelled"
 msgstr ""
 
-#: components/registry/PolicyRegistryList.vue:22
-#: components/registry/PolicyRegistryList.vue:10
+#: components/documents/ReferenceDocumentList.vue:22
+#: components/documents/ReferenceDocumentList.vue:10
 msgid "Actions"
 msgstr ""
 
@@ -419,7 +419,7 @@ msgstr ""
 msgid "All Countries"
 msgstr ""
 
-#: components/registry/PolicySearch.vue:30
+#: components/documents/DocumentSearch.vue:30
 msgid "All periods"
 msgstr ""
 
@@ -498,7 +498,7 @@ msgstr ""
 msgid "Applying specific filter to map/list"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:211 components/admin/DonorAdmin.vue:182
+#: components/admin/CountryAdmin.vue:180 components/admin/DonorAdmin.vue:182
 #: components/admin/ProjectApproval.vue:45
 #: components/admin/ProjectApproval.vue:157
 #: components/dialogs/ProjectApprovalDialog.vue:5
@@ -565,7 +565,7 @@ msgstr ""
 msgid "Attention"
 msgstr ""
 
-#: components/dialogs/PolicyDocumentDialog.vue:64
+#: components/dialogs/ReferenceDocumentDialog.vue:64
 msgid "Author"
 msgstr ""
 
@@ -600,14 +600,14 @@ msgid ""
 msgstr ""
 
 #: components/UserPrivileges.vue:41 components/UserPrivileges.vue:73
-#: components/UserPrivileges.vue:27 components/admin/CountryAdmin.vue:180
-#: components/admin/CountryAdmin.vue:228
+#: components/UserPrivileges.vue:27 components/admin/CountryAdmin.vue:176
+#: components/admin/CountryAdmin.vue:224
 msgid "Can approve projects if the project approval feature is active"
 msgstr ""
 
 #: components/UserPrivileges.vue:36 components/UserPrivileges.vue:68
-#: components/UserPrivileges.vue:22 components/admin/CountryAdmin.vue:175
-#: components/admin/CountryAdmin.vue:223
+#: components/UserPrivileges.vue:22 components/admin/CountryAdmin.vue:171
+#: components/admin/CountryAdmin.vue:219
 msgid "Can approve users to join the Government page"
 msgstr ""
 
@@ -618,8 +618,8 @@ msgid "Can approve users to join the investor page"
 msgstr ""
 
 #: components/UserPrivileges.vue:21 components/UserPrivileges.vue:53
-#: components/UserPrivileges.vue:7 components/admin/CountryAdmin.vue:159
-#: components/admin/CountryAdmin.vue:207
+#: components/UserPrivileges.vue:7 components/admin/CountryAdmin.vue:155
+#: components/admin/CountryAdmin.vue:203
 msgid "Can create and delete Government-specific questions"
 msgstr ""
 
@@ -630,7 +630,7 @@ msgid "Can create and delete investor-specific questions"
 msgstr ""
 
 #: components/UserPrivileges.vue:78 components/UserPrivileges.vue:32
-#: components/admin/CountryAdmin.vue:234
+#: components/admin/CountryAdmin.vue:230
 msgid "Can customize and update Government home page"
 msgstr ""
 
@@ -641,8 +641,8 @@ msgstr ""
 
 #: components/UserPrivileges.vue:4 components/UserPrivileges.vue:31
 #: components/UserPrivileges.vue:63 components/UserPrivileges.vue:2
-#: components/UserPrivileges.vue:17 components/admin/CountryAdmin.vue:127
-#: components/admin/CountryAdmin.vue:169 components/admin/CountryAdmin.vue:217
+#: components/UserPrivileges.vue:17 components/admin/CountryAdmin.vue:123
+#: components/admin/CountryAdmin.vue:165 components/admin/CountryAdmin.vue:213
 msgid "Can read/export responses to private Government questions"
 msgstr ""
 
@@ -659,25 +659,25 @@ msgstr ""
 
 #: components/UserPrivileges.vue:26 components/UserPrivileges.vue:58
 #: components/UserPrivileges.vue:107 components/UserPrivileges.vue:129
-#: components/UserPrivileges.vue:12 components/admin/CountryAdmin.vue:164
-#: components/admin/CountryAdmin.vue:212 components/admin/DonorAdmin.vue:117
+#: components/UserPrivileges.vue:12 components/admin/CountryAdmin.vue:160
+#: components/admin/CountryAdmin.vue:208 components/admin/DonorAdmin.vue:117
 #: components/admin/DonorAdmin.vue:154
 msgid "Can select which questions are private and public"
 msgstr ""
 
 #: components/UserPrivileges.vue:16 components/UserPrivileges.vue:48
-#: components/UserPrivileges.vue:2 components/admin/CountryAdmin.vue:154
-#: components/admin/CountryAdmin.vue:202
+#: components/UserPrivileges.vue:2 components/admin/CountryAdmin.vue:150
+#: components/admin/CountryAdmin.vue:198
 msgid "Can update Government map data"
 msgstr ""
 
 #: components/UserPrivileges.vue:83 components/UserPrivileges.vue:37
-#: components/admin/CountryAdmin.vue:239
-msgid "Can upload and manage Health Policy Registry documents"
+#: components/admin/CountryAdmin.vue:235
+msgid "Can upload and manage Countries' Reference Documents"
 msgstr ""
 
 #: components/UserPrivileges.vue:9 components/UserPrivileges.vue:7
-#: components/admin/CountryAdmin.vue:133
+#: components/admin/CountryAdmin.vue:129
 msgid "Can view when a project is approved/declined"
 msgstr ""
 
@@ -702,7 +702,7 @@ msgid "Can't find anything related to"
 msgstr ""
 
 #: components/admin/DhaQuestion.vue:78 components/admin/DhaQuestion.vue:116
-#: components/admin/PolicyRegistryAdmin.vue:241
+#: components/admin/ReferenceDocumentAdmin.vue:232
 #: components/admin/import/ImportDataTable.vue:143
 #: components/admin/import/ImportDataTable.vue:167
 #: components/admin/import/ImportDataTable.vue:257
@@ -928,19 +928,23 @@ msgstr ""
 msgid "Copy to clipboard"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:61
+#: components/admin/ReferenceDocumentAdmin.vue:61
 msgid ""
 "Could not save the uploaded document. Please correct the following errors "
 "and try again:"
 msgstr ""
 
+#: components/BreadCrumb.vue:28 components/common/NavigationMenu.vue:21
+msgid "Countries' Reference Documents"
+msgstr ""
+
 #: components/ProfileEditor.vue:29 components/ProfileEditor.vue:236
 #: components/common/ProjectCard.vue:66 components/common/UserDropdown.vue:19
 #: components/dashboard/MainTable.vue:9 components/dashboard/MainTable.vue:86
-#: components/dialogs/PolicyDocumentDialog.vue:49
+#: components/dialogs/ReferenceDocumentDialog.vue:49
+#: components/documents/ReferenceDocumentList.vue:15
+#: components/documents/ReferenceDocumentList.vue:3
 #: components/project/collection/CollectionProjects.vue:41
-#: components/registry/PolicyRegistryList.vue:15
-#: components/registry/PolicyRegistryList.vue:3
 msgid "Country"
 msgstr ""
 
@@ -971,11 +975,15 @@ msgstr ""
 msgid "Country logo"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:257 components/admin/CountryAdmin.vue:649
+#: components/admin/CountryAdmin.vue:253 components/admin/CountryAdmin.vue:636
 msgid "Country map"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:253 components/admin/CountryAdmin.vue:640
+#: components/dialogs/ReferenceDocumentDialog.vue:37
+msgid "Country Reference Document"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:249 components/admin/CountryAdmin.vue:627
 msgid "Country specific questionnaire"
 msgstr ""
 
@@ -988,12 +996,11 @@ msgstr ""
 msgid "Country View"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:18 components/admin/CountryAdmin.vue:138
 #: components/admin/DonorAdmin.vue:18 components/admin/DonorAdmin.vue:121
 msgid "Cover image"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:22 components/admin/CountryAdmin.vue:151
+#: components/admin/CountryAdmin.vue:18 components/admin/CountryAdmin.vue:138
 #: components/admin/DonorAdmin.vue:22 components/admin/DonorAdmin.vue:134
 msgid "Cover text"
 msgstr ""
@@ -1067,11 +1074,11 @@ msgstr ""
 msgid "Delete canceled"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:248
+#: components/admin/ReferenceDocumentAdmin.vue:239
 msgid "Delete completed"
 msgstr ""
 
-#: components/registry/PolicyRegistryList.vue:163
+#: components/documents/ReferenceDocumentList.vue:163
 msgid "Delete document"
 msgstr ""
 
@@ -1161,9 +1168,9 @@ msgstr ""
 msgid "Disclaimer: data above sourced from"
 msgstr ""
 
-#: components/ProfileEditor.vue:385 components/admin/CountryAdmin.vue:265
+#: components/ProfileEditor.vue:385 components/admin/CountryAdmin.vue:261
 #: components/admin/DonorAdmin.vue:186
-#: components/admin/PolicyRegistryAdmin.vue:82
+#: components/admin/ReferenceDocumentAdmin.vue:82
 msgid "Dismiss changes"
 msgstr ""
 
@@ -1180,8 +1187,8 @@ msgstr ""
 msgid "Districts center pin"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:79
-#: components/dialogs/PolicyDocumentDialog.vue:34
+#: components/admin/ReferenceDocumentAdmin.vue:73
+#: components/dialogs/ReferenceDocumentDialog.vue:34
 msgid "Document"
 msgstr ""
 
@@ -1190,8 +1197,14 @@ msgstr ""
 msgid "Document Completion of Project Stages"
 msgstr ""
 
-#: components/dialogs/PolicyDocumentDialog.vue:10
+#: components/dialogs/ReferenceDocumentDialog.vue:10
+#: components/documents/ReferenceDocumentList.vue:18
+#: components/documents/ReferenceDocumentList.vue:6
 msgid "Document type"
+msgstr ""
+
+#: components/admin/ReferenceDocumentAdmin.vue:155
+msgid "Document types"
 msgstr ""
 
 #: components/admin/ApiAdmin.vue:7
@@ -1206,11 +1219,11 @@ msgid ""
 msgstr ""
 
 #: components/admin/VueMapCustomizer.vue:11
-#: components/dialogs/PolicyDocumentDialog.vue:39
+#: components/dialogs/ReferenceDocumentDialog.vue:39
 msgid "Download"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:17
+#: components/admin/ReferenceDocumentAdmin.vue:10
 msgid "Download document"
 msgstr ""
 
@@ -1256,7 +1269,7 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: components/registry/PolicyRegistryList.vue:149
+#: components/documents/ReferenceDocumentList.vue:149
 msgid "Edit document"
 msgstr ""
 
@@ -1349,7 +1362,7 @@ msgstr ""
 msgid "Expand"
 msgstr ""
 
-#: components/registry/PolicySearch.vue:32
+#: components/documents/DocumentSearch.vue:32
 msgid "Expired documents only"
 msgstr ""
 
@@ -1403,18 +1416,18 @@ msgstr ""
 msgid "Failed to restore auto-saved project"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:236
-#: components/admin/PolicyRegistryAdmin.vue:242
-#: components/registry/PolicyRegistryList.vue:21
-#: components/registry/PolicyRegistryList.vue:9
+#: components/admin/ReferenceDocumentAdmin.vue:209
+#: components/admin/ReferenceDocumentAdmin.vue:215
+#: components/documents/ReferenceDocumentList.vue:21
+#: components/documents/ReferenceDocumentList.vue:9
 msgid "Featured"
 msgstr ""
 
-#: components/registry/PolicySearch.vue:25
+#: components/documents/DocumentSearch.vue:25
 msgid "Featured and non featured"
 msgstr ""
 
-#: components/registry/PolicySearch.vue:26
+#: components/documents/DocumentSearch.vue:26
 msgid "Featured only"
 msgstr ""
 
@@ -1445,12 +1458,12 @@ msgstr ""
 msgid "First and Last Name"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:30 components/admin/CountryAdmin.vue:179
+#: components/admin/CountryAdmin.vue:26 components/admin/CountryAdmin.vue:166
 #: components/admin/DonorAdmin.vue:30 components/admin/DonorAdmin.vue:161
 msgid "Footer text"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:26 components/admin/CountryAdmin.vue:165
+#: components/admin/CountryAdmin.vue:22 components/admin/CountryAdmin.vue:152
 #: components/admin/DonorAdmin.vue:26 components/admin/DonorAdmin.vue:148
 msgid "Footer title"
 msgstr ""
@@ -1531,7 +1544,7 @@ msgid ""
 "some common use cases"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:59 components/admin/CountryAdmin.vue:259
+#: components/admin/CountryAdmin.vue:55 components/admin/CountryAdmin.vue:246
 msgid "Global Digital Health Index"
 msgstr ""
 
@@ -1580,7 +1593,7 @@ msgstr ""
 msgid "Government Admin"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:94
+#: components/admin/CountryAdmin.vue:90
 msgid "Government Admins"
 msgstr ""
 
@@ -1601,7 +1614,7 @@ msgstr ""
 msgid "Government System Admin"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:105
+#: components/admin/CountryAdmin.vue:101
 msgid "Government System Admins"
 msgstr ""
 
@@ -1619,7 +1632,7 @@ msgstr ""
 msgid "Government Viewer"
 msgstr ""
 
-#: components/ProfileEditor.vue:150 components/admin/CountryAdmin.vue:83
+#: components/ProfileEditor.vue:150 components/admin/CountryAdmin.vue:79
 msgid "Government Viewers"
 msgstr ""
 
@@ -1729,14 +1742,6 @@ msgstr ""
 
 #: components/project/sections/view/Implementation.vue:214
 msgid "Health Information System (HIS)"
-msgstr ""
-
-#: components/dialogs/PolicyDocumentDialog.vue:37
-msgid "Health Policy document"
-msgstr ""
-
-#: components/BreadCrumb.vue:28 components/common/NavigationMenu.vue:21
-msgid "Health Policy Registry"
 msgstr ""
 
 #: components/dialogs/DashboardFiltersDialog.vue:6
@@ -1892,7 +1897,7 @@ msgid ""
 "using the details below:"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:15
+#: components/admin/ReferenceDocumentAdmin.vue:3
 msgid ""
 "If you need to change the uploaded file of this policy, please delete this "
 "policy and create a new one where you can upload the new file."
@@ -2136,10 +2141,10 @@ msgstr ""
 msgid "Keep working"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:208
-#: components/dialogs/PolicyDocumentDialog.vue:20
-#: components/registry/PolicyRegistryList.vue:20
-#: components/registry/PolicyRegistryList.vue:8
+#: components/admin/ReferenceDocumentAdmin.vue:181
+#: components/dialogs/ReferenceDocumentDialog.vue:20
+#: components/documents/ReferenceDocumentList.vue:20
+#: components/documents/ReferenceDocumentList.vue:8
 msgid "Keywords"
 msgstr ""
 
@@ -2151,10 +2156,10 @@ msgstr ""
 msgid "Kpi's integration"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:157
-#: components/dialogs/PolicyDocumentDialog.vue:58
-#: components/registry/PolicyRegistryList.vue:19
-#: components/registry/PolicyRegistryList.vue:7
+#: components/admin/ReferenceDocumentAdmin.vue:130
+#: components/dialogs/ReferenceDocumentDialog.vue:58
+#: components/documents/ReferenceDocumentList.vue:19
+#: components/documents/ReferenceDocumentList.vue:7
 msgid "Language"
 msgstr ""
 
@@ -2252,7 +2257,7 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:59 components/admin/CountryAdmin.vue:260
+#: components/admin/CountryAdmin.vue:55 components/admin/CountryAdmin.vue:247
 #: components/common/NotifySwitchers.vue:12
 #: components/common/NotifySwitchers.vue:48
 msgid "Lorem ipsum"
@@ -2427,13 +2432,8 @@ msgstr ""
 msgid "National Level Deployment"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:158
+#: components/admin/ReferenceDocumentAdmin.vue:169
 msgid "Network error. Please try again or report the error."
-msgstr ""
-
-#: components/admin/PolicyRegistryAdmin.vue:9
-#: components/admin/PolicyRegistryAdmin.vue:1
-msgid "New Health Policy Registry"
 msgstr ""
 
 #: pages/_organisation/admin/import/index.vue:31
@@ -2454,7 +2454,12 @@ msgstr ""
 msgid "New projects"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:211 components/admin/DonorAdmin.vue:182
+#: components/admin/ReferenceDocumentAdmin.vue:9
+#: components/admin/ReferenceDocumentAdmin.vue:1
+msgid "New Reference Document"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:180 components/admin/DonorAdmin.vue:182
 msgid "New requests"
 msgstr ""
 
@@ -2499,10 +2504,6 @@ msgstr ""
 msgid "No file chosen"
 msgstr ""
 
-#: pages/_organisation/policy-registry/index.vue:10
-msgid "No Health Policy document can be found with the current filters."
-msgstr ""
-
 #: components/admin/DhaQuestionOptions.vue:4
 msgid "No options added yet"
 msgstr ""
@@ -2521,6 +2522,10 @@ msgstr ""
 msgid "No project to show..."
 msgstr ""
 
+#: pages/_organisation/reference-documents/index.vue:10
+msgid "No Reference Documents can be found with the current filters."
+msgstr ""
+
 #: components/admin/import/SmartCell.vue:14
 #: components/admin/import/SmartCell.vue:7
 #: components/project/sections/ImplementationOverview.vue:123
@@ -2528,7 +2533,7 @@ msgstr ""
 msgid "No, they have not yet contributed"
 msgstr ""
 
-#: components/registry/PolicySearch.vue:27
+#: components/documents/DocumentSearch.vue:27
 msgid "Non featured only"
 msgstr ""
 
@@ -2544,7 +2549,7 @@ msgstr ""
 msgid "Not Covered"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:39
+#: components/admin/CountryAdmin.vue:35
 msgid "Not used for projects in country"
 msgstr ""
 
@@ -2609,7 +2614,7 @@ msgstr ""
 
 #: components/DhaLogin.vue:74 components/admin/DhaQuestion.vue:77
 #: components/admin/DhaQuestion.vue:115
-#: components/admin/PolicyRegistryAdmin.vue:240
+#: components/admin/ReferenceDocumentAdmin.vue:231
 #: components/admin/import/ImportDataTable.vue:142
 #: components/admin/import/ImportDataTable.vue:166
 #: components/admin/import/ImportDataTable.vue:256
@@ -2688,7 +2693,7 @@ msgstr ""
 msgid "overview_video_id"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:45 components/admin/CountryAdmin.vue:225
+#: components/admin/CountryAdmin.vue:41 components/admin/CountryAdmin.vue:212
 #: components/admin/DonorAdmin.vue:34 components/admin/DonorAdmin.vue:174
 msgid "Partner logos"
 msgstr ""
@@ -2710,9 +2715,9 @@ msgstr ""
 msgid "Pending"
 msgstr ""
 
-#: components/dialogs/PolicyDocumentDialog.vue:43
-#: components/registry/PolicyRegistryList.vue:17
-#: components/registry/PolicyRegistryList.vue:5
+#: components/dialogs/ReferenceDocumentDialog.vue:43
+#: components/documents/ReferenceDocumentList.vue:17
+#: components/documents/ReferenceDocumentList.vue:5
 msgid "Period"
 msgstr ""
 
@@ -2720,8 +2725,8 @@ msgstr ""
 msgid "Phase"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:256
-#: components/admin/PolicyRegistryAdmin.vue:269
+#: components/admin/ReferenceDocumentAdmin.vue:229
+#: components/admin/ReferenceDocumentAdmin.vue:242
 msgid "Pick a date"
 msgstr ""
 
@@ -2763,7 +2768,7 @@ msgstr ""
 msgid "Please describe where your implementation is currently taking place"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:53
+#: components/admin/CountryAdmin.vue:49
 msgid "Please enable widgets you want to show on the landing page:"
 msgstr ""
 
@@ -2783,8 +2788,8 @@ msgstr ""
 msgid "Please fill your profile first"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:55
-msgid "Please input policy title"
+#: components/admin/ReferenceDocumentAdmin.vue:52
+msgid "Please input document title"
 msgstr ""
 
 #: components/project/sections/GeneralOverview.vue:112
@@ -2793,8 +2798,8 @@ msgid ""
 "Please provide a narrative summary of the digital health implementation."
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:58
-msgid "Please provide policy purpose"
+#: components/admin/ReferenceDocumentAdmin.vue:55
+msgid "Please provide document purpose"
 msgstr ""
 
 #: pages/_organisation/terms.vue:15
@@ -2807,16 +2812,20 @@ msgstr ""
 msgid "Please restore the following project:"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:52
-#: components/admin/PolicyRegistryAdmin.vue:99
+#: components/admin/ReferenceDocumentAdmin.vue:49
+#: components/admin/ReferenceDocumentAdmin.vue:97
 msgid "Please select a file"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:64
+#: components/admin/ReferenceDocumentAdmin.vue:118
+msgid "Please select a file that has the approriate extension and size."
+msgstr ""
+
+#: components/admin/ReferenceDocumentAdmin.vue:61
 msgid "Please select at least one type"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:61
+#: components/admin/ReferenceDocumentAdmin.vue:58
 msgid "Please select language"
 msgstr ""
 
@@ -2828,7 +2837,7 @@ msgstr ""
 msgid "Please select the \"{column}\" column"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:67
+#: components/admin/ReferenceDocumentAdmin.vue:64
 msgid "Please select the start date of the policy"
 msgstr ""
 
@@ -2843,25 +2852,6 @@ msgstr ""
 
 #: components/dashboard/PdfExport.vue:218
 msgid "Point of contact:"
-msgstr ""
-
-#: components/admin/PolicyRegistryAdmin.vue:94
-#: components/admin/PolicyRegistryAdmin.vue:3
-#: components/admin/PolicyRegistryAdmin.vue:1
-msgid "Policy registry"
-msgstr ""
-
-#: components/common/UserDropdown.vue:51
-msgid "Policy Registry admin"
-msgstr ""
-
-#: components/common/ActionBar.vue:19
-msgid "Policy Registry Admin"
-msgstr ""
-
-#: components/admin/PolicyRegistryAdmin.vue:3
-#: components/admin/PolicyRegistryAdmin.vue:1
-msgid "Policy Registry admin for {name}"
 msgstr ""
 
 #: pages/_organisation/admin/import/index.vue:9
@@ -2889,11 +2879,11 @@ msgstr ""
 msgid "Private"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:149 components/admin/CountryAdmin.vue:2
+#: components/admin/CountryAdmin.vue:145 components/admin/CountryAdmin.vue:2
 msgid "Privileges for Government Admins"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:197 components/admin/CountryAdmin.vue:2
+#: components/admin/CountryAdmin.vue:193 components/admin/CountryAdmin.vue:2
 msgid "Privileges for Government System Admins"
 msgstr ""
 
@@ -2905,7 +2895,7 @@ msgid ""
 "request."
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:122 components/admin/CountryAdmin.vue:2
+#: components/admin/CountryAdmin.vue:118 components/admin/CountryAdmin.vue:2
 msgid "Privileges for Government Viewers"
 msgstr ""
 
@@ -2934,7 +2924,7 @@ msgstr ""
 msgid "Project"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:74 components/admin/CountryAdmin.vue:293
+#: components/admin/CountryAdmin.vue:70 components/admin/CountryAdmin.vue:280
 #: components/dialogs/ProjectApprovalDialog.vue:1
 #: components/dialogs/ProjectApprovalDialog.vue:33
 msgid "Project Approval"
@@ -2944,7 +2934,7 @@ msgstr ""
 msgid "Project approval per countries"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:34 components/admin/CountryAdmin.vue:193
+#: components/admin/CountryAdmin.vue:30 components/admin/CountryAdmin.vue:180
 msgid "Project approval process"
 msgstr ""
 
@@ -3084,7 +3074,7 @@ msgstr ""
 msgid "Published Projects"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:143
+#: components/admin/ReferenceDocumentAdmin.vue:116
 msgid "Purpose"
 msgstr ""
 
@@ -3120,6 +3110,25 @@ msgstr ""
 
 #: components/project/ProjectForm.vue:144
 msgid "Recover & Reload"
+msgstr ""
+
+#: components/admin/ReferenceDocumentAdmin.vue:94
+#: components/admin/ReferenceDocumentAdmin.vue:3
+#: components/admin/ReferenceDocumentAdmin.vue:1
+msgid "Reference Documents"
+msgstr ""
+
+#: components/common/UserDropdown.vue:51
+msgid "Reference Documents admin"
+msgstr ""
+
+#: components/common/ActionBar.vue:19
+msgid "Reference Documents Admin"
+msgstr ""
+
+#: components/admin/ReferenceDocumentAdmin.vue:3
+#: components/admin/ReferenceDocumentAdmin.vue:1
+msgid "Reference Documents admin for {name}"
 msgstr ""
 
 #: components/common/ProjectCard.vue:73 components/dashboard/MainTable.vue:34
@@ -3204,8 +3213,8 @@ msgstr ""
 msgid "Save all projects"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:268 components/admin/DonorAdmin.vue:189
-#: components/admin/PolicyRegistryAdmin.vue:85
+#: components/admin/CountryAdmin.vue:264 components/admin/DonorAdmin.vue:189
+#: components/admin/ReferenceDocumentAdmin.vue:85
 msgid "Save changes"
 msgstr ""
 
@@ -3271,9 +3280,9 @@ msgid "Select collection"
 msgstr ""
 
 #: components/common/CountrySelect.vue:1 components/common/CountrySelect.vue:12
+#: components/documents/DocumentSearch.vue:6
+#: components/documents/DocumentSearch.vue:32
 #: components/project/collection/CollectionProjects.vue:114
-#: components/registry/PolicySearch.vue:6
-#: components/registry/PolicySearch.vue:32
 msgid "Select country"
 msgstr ""
 
@@ -3290,7 +3299,7 @@ msgstr ""
 msgid "Select Facility List"
 msgstr ""
 
-#: components/registry/PolicySearch.vue:85
+#: components/documents/DocumentSearch.vue:85
 msgid "Select featured filter"
 msgstr ""
 
@@ -3338,14 +3347,14 @@ msgstr ""
 msgid "Select Investor"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:164
+#: components/admin/ReferenceDocumentAdmin.vue:137
 #: components/common/LanguageSelect.vue:1
 #: components/common/LanguageSelect.vue:10
-#: components/registry/PolicySearch.vue:50
+#: components/documents/DocumentSearch.vue:50
 msgid "Select language"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:218
+#: components/admin/ReferenceDocumentAdmin.vue:191
 msgid "Select or create keywords"
 msgstr ""
 
@@ -3370,12 +3379,12 @@ msgstr ""
 msgid "Select status"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:190
-#: components/registry/PolicySearch.vue:68
+#: components/admin/ReferenceDocumentAdmin.vue:163
+#: components/documents/DocumentSearch.vue:68
 msgid "Select types"
 msgstr ""
 
-#: components/registry/PolicySearch.vue:102
+#: components/documents/DocumentSearch.vue:102
 msgid "Select validity filter"
 msgstr ""
 
@@ -3481,12 +3490,12 @@ msgstr ""
 msgid "Show legend"
 msgstr ""
 
-#: components/registry/PolicySearch.vue:15
+#: components/documents/DocumentSearch.vue:15
 msgid ""
 "Show only documents that \"Valid until\" date is not set or is in the future"
 msgstr ""
 
-#: components/registry/PolicySearch.vue:14
+#: components/documents/DocumentSearch.vue:14
 msgid "Show only documents that are marked as featued (start indicator)"
 msgstr ""
 
@@ -3627,7 +3636,7 @@ msgstr ""
 msgid "Summary score"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:23
+#: components/admin/ReferenceDocumentAdmin.vue:23
 msgid ""
 "Supported file formats include: {list} The file size is limited to {size}MB."
 msgstr ""
@@ -3783,7 +3792,7 @@ msgid ""
 "coordination, and facilitate institutionalization and scale."
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:121
+#: components/admin/ReferenceDocumentAdmin.vue:127
 msgid "The file size exceeds the upload limit of {size}MB."
 msgstr ""
 
@@ -3836,10 +3845,10 @@ msgid ""
 "submitted"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:38
+#: components/admin/ReferenceDocumentAdmin.vue:35
 msgid ""
-"There's no Health Policy document uploaded to this country. You can upload "
-"new policy document."
+"There's no Reference Documents uploaded to this country. You can upload new "
+"Refernce Document."
 msgstr ""
 
 #: pages/_organisation/terms.vue:403
@@ -3928,7 +3937,7 @@ msgstr ""
 msgid "This will permanently delete the question?"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:237
+#: components/admin/ReferenceDocumentAdmin.vue:228
 msgid "This will permanently delete the selected policy. Continue?"
 msgstr ""
 
@@ -3945,9 +3954,9 @@ msgstr ""
 msgid "This year"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:129
-#: components/registry/PolicyRegistryList.vue:16
-#: components/registry/PolicyRegistryList.vue:4
+#: components/admin/ReferenceDocumentAdmin.vue:102
+#: components/documents/ReferenceDocumentList.vue:16
+#: components/documents/ReferenceDocumentList.vue:4
 msgid "Title"
 msgstr ""
 
@@ -4017,11 +4026,6 @@ msgstr ""
 msgid "Totals amount"
 msgstr ""
 
-#: components/registry/PolicyRegistryList.vue:18
-#: components/registry/PolicyRegistryList.vue:6
-msgid "Type"
-msgstr ""
-
 #: components/common/OrganisationSelect.vue:1
 #: components/common/OrganisationSelect.vue:11
 #: components/project/DonorSelector.vue:1
@@ -4038,8 +4042,8 @@ msgid "Type name (eg: COVID-19)"
 msgstr ""
 
 #: components/dashboard/SearchBox.vue:4 components/dashboard/SearchBox.vue:35
-#: components/registry/PolicySearch.vue:2
-#: components/registry/PolicySearch.vue:16
+#: components/documents/DocumentSearch.vue:2
+#: components/documents/DocumentSearch.vue:16
 msgid "Type something..."
 msgstr ""
 
@@ -4051,17 +4055,13 @@ msgstr ""
 msgid "Type to filter softwares"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:142 components/admin/CountryAdmin.vue:190
-#: components/admin/CountryAdmin.vue:248 components/admin/CountryAdmin.vue:438
-#: components/admin/CountryAdmin.vue:524 components/admin/CountryAdmin.vue:626
+#: components/admin/CountryAdmin.vue:138 components/admin/CountryAdmin.vue:186
+#: components/admin/CountryAdmin.vue:244 components/admin/CountryAdmin.vue:425
+#: components/admin/CountryAdmin.vue:511 components/admin/CountryAdmin.vue:613
 #: components/admin/DonorAdmin.vue:95 components/admin/DonorAdmin.vue:131
 #: components/admin/DonorAdmin.vue:173 components/admin/DonorAdmin.vue:317
 #: components/admin/DonorAdmin.vue:387 components/admin/DonorAdmin.vue:465
 msgid "Type to filter users..."
-msgstr ""
-
-#: components/admin/PolicyRegistryAdmin.vue:182
-msgid "Types"
 msgstr ""
 
 #: components/admin/DhaQuestionOptions.vue:17
@@ -4115,10 +4115,10 @@ msgstr ""
 msgid "Upload file"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:97
-#: components/admin/PolicyRegistryAdmin.vue:6
-#: components/admin/PolicyRegistryAdmin.vue:4
-msgid "Upload new policy document"
+#: components/admin/ReferenceDocumentAdmin.vue:97
+#: components/admin/ReferenceDocumentAdmin.vue:6
+#: components/admin/ReferenceDocumentAdmin.vue:4
+msgid "Upload new Reference Document"
 msgstr ""
 
 #: pages/_organisation/terms.vue:147
@@ -4127,7 +4127,7 @@ msgid ""
 "and/or emblem require advance written approval of WHO."
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:36
+#: components/admin/CountryAdmin.vue:32
 msgid "Used for projects in country"
 msgstr ""
 
@@ -4144,7 +4144,7 @@ msgstr ""
 msgid "User created succesfully"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:78 components/admin/CountryAdmin.vue:303
+#: components/admin/CountryAdmin.vue:74 components/admin/CountryAdmin.vue:290
 #: components/admin/DonorAdmin.vue:40 components/admin/DonorAdmin.vue:193
 msgid "User management"
 msgstr ""
@@ -4158,15 +4158,15 @@ msgstr ""
 msgid "Users"
 msgstr ""
 
-#: components/registry/PolicySearch.vue:31
+#: components/documents/DocumentSearch.vue:31
 msgid "Valid documents only"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:248
+#: components/admin/ReferenceDocumentAdmin.vue:221
 msgid "Valid from"
 msgstr ""
 
-#: components/admin/PolicyRegistryAdmin.vue:262
+#: components/admin/ReferenceDocumentAdmin.vue:235
 msgid "Valid until"
 msgstr ""
 
@@ -4222,13 +4222,13 @@ msgid ""
 "rights;"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:66
+#: components/admin/CountryAdmin.vue:62
 msgid "Visit digitalhealthindex.org"
 msgstr ""
 
 #: components/DhaLogin.vue:72 components/admin/DhaQuestion.vue:75
 #: components/admin/DhaQuestion.vue:113
-#: components/admin/PolicyRegistryAdmin.vue:238
+#: components/admin/ReferenceDocumentAdmin.vue:229
 #: components/dashboard/FilterPresetsActions.vue:47
 #: components/dialogs/DialogsContainer.vue:32
 #: components/dialogs/ProjectApprovalDialog.vue:105
@@ -4392,12 +4392,11 @@ msgstr ""
 msgid "Why use the Digital Health Atlas?"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:51 components/admin/CountryAdmin.vue:239
+#: components/admin/CountryAdmin.vue:47 components/admin/CountryAdmin.vue:226
 msgid "Widgets"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:235 components/admin/CountryAdmin.vue:263
-#: components/admin/CountryAdmin.vue:287
+#: components/admin/CountryAdmin.vue:204 components/admin/CountryAdmin.vue:228
 msgid "Wrong image format, you can only upload .jpg and .png files"
 msgstr ""
 
