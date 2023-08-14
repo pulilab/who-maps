@@ -221,10 +221,10 @@ export default {
           { required: true, message: this.$gettext('Please select a file')},
         ],
         title: [
-          { required: true, message: this.$gettext('Please input policy title')},
+          { required: true, message: this.$gettext('Please input document title')},
         ],
         purpose: [
-          { required: true, message: this.$gettext('Please provide policy purpose')},
+          { required: true, message: this.$gettext('Please provide document purpose')},
         ],
         language: [
           { required: true, message: this.$gettext('Please select language')},
@@ -277,7 +277,7 @@ export default {
     ...mapActions({
       refreshTags: 'projects/loadProjectStructure',
       loadDocuments: 'documents/loadDocuments',
-      openDocumentDialog: 'documents/openPolicyDocumentDialog',
+      openDocumentDialog: 'documents/openReferenceDocumentDialog',
     }),
     selectDocumentFile (document) {
       // can check file type, etc.
@@ -285,8 +285,15 @@ export default {
     async uploadPolicyDocument() {
       await this.$nextTick()
       try {
-        // if (this.document.file.length === 0) return false
-        if (!this.editing) {
+        if (this.document.file.length === 0) {
+            this.errors = {
+              file: [this.$gettext('Please select a file that has the approriate extension and size.')]
+            }
+            this.submitError = true
+            return false
+        }
+        const formData = new FormData()
+        if (!this.editing || this.document.file[0]?.size) {
           if (this.document.file[0].size > this.documentMaxSize * 1000000) {
             this.errors = {
               file: [this.$gettext('The file size exceeds the upload limit of {size}MB.',{size: this.documentMaxSize})]
@@ -294,40 +301,35 @@ export default {
             this.submitError = true
             return false
           }
+          formData.append('document', this.document.file[0].raw)
         }
-        const formData = new FormData()
         formData.append('country', this.country.id)
-        formData.append('document', this.document.file[0].raw)
         formData.append('title', this.document.title)
         formData.append('purpose', this.document.purpose)
         formData.append('language', this.document.language)
         if (this.document.types.length > 0) {
-          this.document.types.forEach((type,i) => formData.append(`document_types[${i}]`, type))
+          this.document.types.forEach(type => formData.append(`document_types`, type))
         } else {
-          formData.append('document_types[0]', null)
+          formData.append('document_types', null)
         }
         if (this.document.tags.length > 0) {
-          this.document.tags.forEach((tag,i) => formData.append(`tags[${i}]`, tag))
-        } else {
-          formData.append('tags[0]', null)
+          this.document.tags.forEach((tag) => formData.append(`tags`, tag))
+        } else if (this.editing) {
+          this.$axios.patch(`/api/document/${this.document.id}/`, { tags: [] })
         }
         formData.append('valid_from', this.document.valid_from)
         if (this.document.valid_until) formData.append('valid_until', this.document.valid_until)
         formData.append('featured', this.document.featured)
 
-        if (this.editing) {
-          await this.$axios.patch(`/api/document/${this.document.id}/`, formData, {
-            headers: {
-              'content-type': 'multipart/form-data'
-            }
-          })
-        } else {
-          await this.$axios.post('/api/document/', formData, {
-            headers: {
-              'content-type': 'multipart/form-data'
-            }
-          })
+        const options = {
+          method: this.editing ? 'PATCH' : 'POST',
+          url: this.editing ? `/api/document/${this.document.id}/` : '/api/document/',
+          headers: {
+            'content-type': 'multipart/form-data'
+          },
+          data: formData
         }
+        await this.$axios(options)
         this.showForm = false
         return true
       } catch (error) {
@@ -343,30 +345,13 @@ export default {
         return false
       }
     },
-    async updatePolicyDocument () {
-      try {
-        const policyDoc = {
-          title: this.document.title,
-          purpose: this.document.purpose,
-          language: this.document.language.id,
-          types: this.document.types,
-          tags: this.document.tags,
-          featured: this.document.featured,
-          valid_from: this.document.valid_from,
-          valid_until: this.document.valid_until,
-        }
-        await this.$axios.patch(`/api/document/${this.document.id}/`, policyDoc)
-        this.showForm = false
-        return true
-      } catch (error) {
-        console.log("🚀 ~ file: ReferenceDocumentAdmin.vue:354 ~ updatePolicyDocument ~ error:", error)
-        return false
-      }
-    },
     editPolicyDocument(doc) {
       this.document = {
         id: doc.id,
-        file: [],
+        file: [{
+          name: doc.document,
+          editing: true
+        }],
         document: doc.document,
         title: doc.title,
         purpose: doc.purpose,
@@ -377,17 +362,13 @@ export default {
         valid_from: doc.valid_from,
         valid_until: doc.valid_until,
       }
+      this.submitError = false
       this.showForm = true
       this.editing = true
     },
     async submitForm() {
       let res = false
       res = await this.uploadPolicyDocument()
-      /* if (this.editing) {
-        res = await this.updatePolicyDocument()
-      } else {
-        res = await this.uploadPolicyDocument()
-      } */
       if (res) {
         this.loadDocuments(),
         this.refreshTags(true)

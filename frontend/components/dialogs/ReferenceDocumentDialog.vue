@@ -173,6 +173,7 @@ export default {
     }
 
     .content-header {
+      flex-grow: 1;
       .tag-wrapper {
         display: flex;
         gap: 2em;
