@@ -52,7 +52,7 @@
             <translate tag="div" class="label">
               Period
             </translate>
-            <PolicyPeriod :document="document" />
+            <DocumentPeriod :document="document" />
           </div>
           <div>
             <translate tag="div" class="label">
@@ -89,20 +89,20 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { mapGettersActions } from '@/utilities/form'
-import PolicyPeriod from '@/components/common/PolicyPeriod'
+import DocumentPeriod from '@/components/common/DocumentPeriod'
 import CountryFlag from '@/components/common/CountryFlag'
 
 export default {
   components: {
-    PolicyPeriod,
+    DocumentPeriod,
     CountryFlag,
   },
   computed: {
     ...mapGetters({
-      document: 'registry/getDocument',
+      document: 'documents/getDocument',
     }),
     ...mapGettersActions({
-      dialog: ['registry','getDialog','setDialog', false],
+      dialog: ['documents','getDialog','setDialog', false],
     }),
     countryCode() {
       return this.document?.country?.code
@@ -122,7 +122,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      closeDialog: 'registry/closePolicyDocumentDialog'
+      closeDialog: 'documents/closeReferenceDocumentDialog'
     }),
     close() {
       this.closeDialog()

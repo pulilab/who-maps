@@ -62,7 +62,7 @@
 
         <div v-if="isUserSCA" class="DropdownLink">
           <nuxt-link
-            :to="localePath({name: 'organisation-admin-registry', params: $route.params})"
+            :to="localePath({name: 'organisation-admin-reference-documents', params: $route.params})"
             @click.native="closePopover"
           >
             <span class="MenuIcon">

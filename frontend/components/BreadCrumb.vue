@@ -36,7 +36,7 @@ export default {
       }
       const pages = {
         'organisation-edit-profile': this.$gettext('Admin'),
-        'organisation-admin-documents': this.$gettext('Admin'),
+        'organisation-admin-reference-documents': this.$gettext('Admin'),
         'organisation-admin-country': this.$gettext('Admin'),
         'organisation-admin-api': this.$gettext('Admin'),
         'organisation-graphs': this.$gettext('KPI Graphs'),
@@ -46,7 +46,7 @@ export default {
         'organisation-collection-id': this.$gettext('Collection data'),
         'organisation-dashboard': this.$gettext('Dashboard'),
         'organisation-dashboard-list': this.$gettext('Dashboard'),
-        'organisation-reference-documents': this.$gettext('Countries Reference Documents'),
+        'organisation-reference-documents': this.$gettext("Countries' Reference Documents"),
         'organisation-projects': this.$gettext('My Projects'),
         'organisation-projects-id-published': this.$gettext('Published Project'),
         'organisation-projects-id-edit': this.$gettext('Edit Project'),

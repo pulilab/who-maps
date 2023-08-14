@@ -1,7 +1,7 @@
 <template>
-  <div class="RegistryList">
+  <div class="ReferenceList">
     <div class="DocumentList">
-      <PolicyRegistryList
+      <ReferenceDocumentList
         :documents="documents"
         :emptyMessage="emptyMessage"
         :actions="false"
@@ -14,11 +14,11 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import PolicyRegistryList from '@/components/registry/PolicyRegistryList'
+import ReferenceDocumentList from '@/components/documents/ReferenceDocumentList'
 
 export default {
   components: {
-    PolicyRegistryList,
+    ReferenceDocumentList,
   },
   data() {
     return {
@@ -27,12 +27,12 @@ export default {
   },
   computed: {
     ...mapGetters({
-      documents: 'registry/getDocuments',
+      documents: 'documents/getDocuments',
     }),
   },
   methods: {
     ...mapActions({
-      openDocumentDialog: 'registry/openPolicyDocumentDialog',
+      openDocumentDialog: 'documents/openReferenceDocumentDialog',
     }),
     showDocumentDetails(doc) {
       this.openDocumentDialog(doc)
@@ -44,7 +44,7 @@ export default {
 <style lang="less">
 @import '~assets/style/variables.less';
 
-.RegistryList {
+.ReferenceList {
   box-sizing: border-box;
   background-color: white;
   .DocumentList {

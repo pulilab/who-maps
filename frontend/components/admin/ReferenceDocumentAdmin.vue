@@ -7,7 +7,7 @@
     </template>
     <Panel v-if="showForm" key="registryForm">
       <template #header>
-        <translate>Upload new Reference Documents</translate>
+        <translate>New Reference Document</translate>
       </template>
       <div class="RegistryForm">
         <el-form
@@ -19,14 +19,13 @@
           @submit.native.prevent
         >
           <el-form-item :label="$gettext('Document')" name="file" class="with-help" prop="file">
-            <div v-if="editing" class="selectedDocument">
+            <!-- <div v-if="editing" class="selectedDocument">
               <translate>If you need to change the uploaded file of this policy, please delete this policy and create a new one where you can upload the new file.</translate>
               <a :href="`/media/${document.document}`" download class="ml">
                 <translate>Download document</translate>
               </a>
-            </div>
+            </div> -->
             <file-upload
-              v-else
               :auto-upload="false"
               :files.sync="document.file"
               :limit="1"
@@ -57,14 +56,14 @@
               class="LanguageSelectorDropdown"
             >
               <el-option
-                v-for="language in policyRegistry.languages"
+                v-for="language in referenceDocuments.languages"
                 :key="language.id"
                 :label="language.name"
                 :value="language.id"
               />
             </el-select>
           </el-form-item>
-          <el-form-item :label="$gettext('Types')" prop="types">
+          <el-form-item :label="$gettext('Document types')" prop="types">
             <el-select
               v-model="document.types"
               multiple
@@ -72,7 +71,7 @@
               class="w-full"
             >
               <el-option
-                v-for="type in policyRegistry.types"
+                v-for="type in referenceDocumentTypes"
                 :key="type.id"
                 :label="type.name"
                 :value="type.id"
@@ -156,10 +155,10 @@
           <translate>Reference Documents</translate>
           <el-button class="add-btn" @click="showForm = true">
             <i class="el-icon-upload2" />
-            <translate>Upload new policy document</translate>
+            <translate>Upload new Reference Document</translate>
           </el-button>
         </template>
-        <PolicyRegistryList
+        <ReferenceDocumentList
           :documents="documents"
           @details="showDocumentDetails"
           @edit="editPolicyDocument"
@@ -176,8 +175,7 @@ import PageLayout from '@/components/common/wrappers/PageLayout'
 import Panel from '@/components/common/Panel'
 import FileUpload from '@/components/common/FileUpload'
 import CountryFlag from '@/components/common/CountryFlag'
-import PolicyRegistryList from '@/components/registry/PolicyRegistryList'
-import PolicyPeriod from '@/components/common/PolicyPeriod'
+import ReferenceDocumentList from '@/components/documents/ReferenceDocumentList'
 
 const newDocument = {
   file: [],
@@ -192,14 +190,12 @@ const newDocument = {
 }
 
 export default {
-  name: 'RegistryAdmin',
   components: {
     PageLayout,
     Panel,
     FileUpload,
     CountryFlag,
-    PolicyRegistryList,
-    PolicyPeriod,
+    ReferenceDocumentList,
   },
   data() {
     return {
@@ -208,7 +204,7 @@ export default {
       editing: false,
       submitError: false,
       errors: [],
-      emptyMessage: this.$gettext("There's no Reference Documents uploaded to this country. You can upload new policy document."),
+      emptyMessage: this.$gettext("There's no Reference Documents uploaded to this country. You can upload new Refernce Document."),
       document: {
         file: [],
         title: '',
@@ -246,9 +242,10 @@ export default {
     ...mapGetters({
       country: 'admin/country/getData',
       countries: 'countries/getCountries',
-      tags: 'projects/getHealthPolicyTags',
-      policyRegistry: 'system/getPolicyRegistry',
-      documents: 'registry/getDocuments'
+      tags: 'projects/getReferenceDocumentsTags',
+      referenceDocuments: 'system/getReferenceDocuments',
+      referenceDocumentTypes: 'projects/getReferenceDocumentsTypes',
+      documents: 'documents/getDocuments'
     }),
     user() {
       return this.$auth.user
@@ -257,10 +254,10 @@ export default {
       return this.user && this.user.is_superuser
     },
     extensionList () {
-      return this.policyRegistry.valid_formats.join(', ')
+      return this.referenceDocuments.valid_formats.join(', ')
     },
     documentMaxSize() {
-      return this.policyRegistry.max_size_in_MB
+      return this.referenceDocuments.max_size_in_MB
     },
   },
   mounted() {
@@ -279,22 +276,24 @@ export default {
   methods: {
     ...mapActions({
       refreshTags: 'projects/loadProjectStructure',
-      loadDocuments: 'registry/loadRegistry',
-      openDocumentDialog: 'registry/openPolicyDocumentDialog',
+      loadDocuments: 'documents/loadDocuments',
+      openDocumentDialog: 'documents/openPolicyDocumentDialog',
     }),
     selectDocumentFile (document) {
-      console.log("🚀 ~ selectDocumentFile ~ might need to check extension:", document)
+      // can check file type, etc.
     },
     async uploadPolicyDocument() {
       await this.$nextTick()
       try {
-        if (this.document.file.length === 0) return false
-        if (this.document.file[0].size > this.documentMaxSize * 1000000) {
-          this.errors = {
-            file: [this.$gettext('The file size exceeds the upload limit of {size}MB.',{size: this.documentMaxSize})]
+        // if (this.document.file.length === 0) return false
+        if (!this.editing) {
+          if (this.document.file[0].size > this.documentMaxSize * 1000000) {
+            this.errors = {
+              file: [this.$gettext('The file size exceeds the upload limit of {size}MB.',{size: this.documentMaxSize})]
+            }
+            this.submitError = true
+            return false
           }
-          this.submitError = true
-          return false
         }
         const formData = new FormData()
         formData.append('country', this.country.id)
@@ -303,9 +302,9 @@ export default {
         formData.append('purpose', this.document.purpose)
         formData.append('language', this.document.language)
         if (this.document.types.length > 0) {
-          this.document.types.forEach((type,i) => formData.append(`types[${i}]`, type))
+          this.document.types.forEach((type,i) => formData.append(`document_types[${i}]`, type))
         } else {
-          formData.append('types[0]', null)
+          formData.append('document_types[0]', null)
         }
         if (this.document.tags.length > 0) {
           this.document.tags.forEach((tag,i) => formData.append(`tags[${i}]`, tag))
@@ -315,11 +314,20 @@ export default {
         formData.append('valid_from', this.document.valid_from)
         if (this.document.valid_until) formData.append('valid_until', this.document.valid_until)
         formData.append('featured', this.document.featured)
-        await this.$axios.post('/api/document/', formData, {
-          headers: {
-            'content-type': 'multipart/form-data'
-          }
-        })
+
+        if (this.editing) {
+          await this.$axios.patch(`/api/document/${this.document.id}/`, formData, {
+            headers: {
+              'content-type': 'multipart/form-data'
+            }
+          })
+        } else {
+          await this.$axios.post('/api/document/', formData, {
+            headers: {
+              'content-type': 'multipart/form-data'
+            }
+          })
+        }
         this.showForm = false
         return true
       } catch (error) {
@@ -330,7 +338,7 @@ export default {
           this.errors = {
             general: [this.$gettext('Network error. Please try again or report the error.')]
           }
-          console.log("🚀 ~ file: PolicyRegistryAdmin.vue:263 ~ postPolicyDocument ~ error:", error)
+          console.log("🚀 ~ file: ReferenceDocumentAdmin.vue:326 ~ uploadPolicyDocument ~ error:", error)
         }
         return false
       }
@@ -351,7 +359,7 @@ export default {
         this.showForm = false
         return true
       } catch (error) {
-        console.log("🚀 ~ file: PolicyRegistryAdmin.vue:263 ~ postPolicyDocument ~ error:", error)
+        console.log("🚀 ~ file: ReferenceDocumentAdmin.vue:354 ~ updatePolicyDocument ~ error:", error)
         return false
       }
     },
@@ -374,11 +382,12 @@ export default {
     },
     async submitForm() {
       let res = false
-      if (this.editing) {
+      res = await this.uploadPolicyDocument()
+      /* if (this.editing) {
         res = await this.updatePolicyDocument()
       } else {
         res = await this.uploadPolicyDocument()
-      }
+      } */
       if (res) {
         this.loadDocuments(),
         this.refreshTags(true)
@@ -402,7 +411,7 @@ export default {
       try {
         await this.$axios.delete(`/api/document/${id}/`)
       } catch (error) {
-        console.log("🚀 ~ file: PolicyRegistryAdmin.vue:392 ~ deletePolicyDocument ~ error:", error)
+        console.log("🚀 ~ file: ReferenceDocumentAdmin.vue:405 ~ deletePolicyDocument ~ error:", error)
       }
     },
     confirmDeletePolicyDocument(doc) {
