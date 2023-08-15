@@ -19,7 +19,7 @@
           <translate tag="th">Document type</translate>
           <translate tag="th">Language</translate>
           <translate tag="th">Keywords</translate>
-          <translate tag="th">Featured</translate>
+          <translate tag="th" class="featured">Featured</translate>
           <translate v-if="actions" tag="th">Actions</translate>
         </tr>
       </thead>
@@ -154,6 +154,9 @@ export default {
 
   th {
     padding: 16px 0;
+    &.featured {
+      padding-right: 1em;
+    }
   }
 
   td {
@@ -187,6 +190,7 @@ export default {
       color: @colorOwner;
       text-align: center;
       font-size: 1.2rem;
+      padding-right: 1em;
       i {
         display: inline-block;
         &.el-icon-star-on {

@@ -48,7 +48,7 @@ export default {
   box-sizing: border-box;
   background-color: white;
   .DocumentList {
-    height: calc(100vh - 168px);
+    max-height: calc(100vh - 168px);
     overflow: auto;
   }
 }

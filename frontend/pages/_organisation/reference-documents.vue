@@ -44,6 +44,7 @@ export default {
       min-width: @appWidthMinLimit - @advancedSearchWidth;
       max-width: @appWidthMaxLimit - @advancedSearchWidth;
       height: 100%;
+      background-color: white;
 
       .DashboardMap {
         height: calc(100vh - @topBarHeightSubpage - @actionBarHeight - @appFooterHeight);
