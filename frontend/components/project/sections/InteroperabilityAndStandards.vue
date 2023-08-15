@@ -20,6 +20,12 @@
             Does your project share information with one or more of these
             digital Health Information System components?
           </translate>
+          <tooltip
+            :text="
+              $gettext('Specify other digital health systems that your project interfaces with. The link given must point to specific system and not generic website of the vendor.')
+                | translate
+            "
+          />
         </template>
 
         <interoperability-link-component
