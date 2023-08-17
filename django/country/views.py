@@ -197,6 +197,12 @@ class ReferenceDocumentViewSet(TokenAuthMixin, mixins.CreateModelMixin, mixins.U
         serializer.save(author=self.request.user.userprofile)
 
 
+class ReferenceDocumentUploadViewSet(ReferenceDocumentViewSet):
+    # TODO: only for API Docs generator, remove it if bug is solved
+    # https://github.com/axnsan12/drf-yasg/issues/386
+    parser_classes = [MultiPartParser]
+
+
 class DocumentFilter(django_filters.FilterSet):
     valid = django_filters.BooleanFilter(label='Valid', method='filter_valid')
 
