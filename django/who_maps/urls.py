@@ -9,7 +9,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework.routers import SimpleRouter
 
 from country.views import CountryLandingPageViewSet, CountryLandingListPageViewSet, DonorLandingPageViewSet, \
-    DonorLandingListPageViewSet, ReferenceDocumentViewSet, DocumentSearchViewSet, ReferenceDocumentUploadViewSet
+    DonorLandingListPageViewSet, DocumentSearchViewSet, ReferenceDocumentUploadViewSet
 from project.views import ProjectPublicViewSet, ExternalDraftAPI, ExternalPublishAPI
 from user.views import OrganisationViewSet, TokenCheckView
 
