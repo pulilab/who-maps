@@ -197,13 +197,18 @@ class ReferenceDocumentViewSet(TokenAuthMixin, mixins.CreateModelMixin, mixins.U
         serializer.save(author=self.request.user.userprofile)
 
 
+class ReferenceDocumentUploadViewSet(ReferenceDocumentViewSet):
+    # TODO: only for API Docs generator, remove it if bug is solved
+    # https://github.com/axnsan12/drf-yasg/issues/386
+    parser_classes = [MultiPartParser]
+
+
 class DocumentFilter(django_filters.FilterSet):
-    types = django_filters.BaseInFilter(field_name='types', lookup_expr='overlap')
     valid = django_filters.BooleanFilter(label='Valid', method='filter_valid')
 
     class Meta:
         model = ReferenceDocument
-        fields = ['featured', 'country', 'types', 'language', 'valid']
+        fields = ['featured', 'country', 'document_types', 'language', 'valid']
 
     @staticmethod
     def filter_valid(qs, field_name, value):
