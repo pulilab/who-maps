@@ -37,9 +37,9 @@
       </el-select>
 
       <el-select
-        v-model="filter.types"
+        v-model="filter.document_types"
         clearable
-        :placeholder="$gettext('Select types')"
+        :placeholder="$gettext('Select a document type')"
         class="mb"
       >
         <el-option
@@ -98,7 +98,7 @@ export default {
 			filter: {
 				search: '',
         country: [],
-        types: [],
+        document_types: null,
         language: null,
         featured: null,
         valid: null

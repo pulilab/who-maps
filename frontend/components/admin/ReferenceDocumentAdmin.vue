@@ -19,12 +19,6 @@
           @submit.native.prevent
         >
           <el-form-item :label="$gettext('Document')" name="file" class="with-help" prop="file">
-            <!-- <div v-if="editing" class="selectedDocument">
-              <translate>If you need to change the uploaded file of this policy, please delete this policy and create a new one where you can upload the new file.</translate>
-              <a :href="`/media/${document.document}`" download class="ml">
-                <translate>Download document</translate>
-              </a>
-            </div> -->
             <file-upload
               :auto-upload="false"
               :files.sync="document.file"
@@ -261,7 +255,7 @@ export default {
     },
   },
   mounted() {
-    this.loadDocuments()
+    this.loadDocuments({ country: this.country.id })
   },
   watch: {
     showForm(val) {
