@@ -6,12 +6,13 @@ from dj_rest_auth.serializers import PasswordResetSerializer, JWTSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import Field as Field
 from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from country.models import Country
 from project.models import Project
 from user.forms import PasswordHTMLEmailResetForm
 from .models import UserProfile, Organisation
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import AnonymousUser, User
 
 
 class ProfileJWTSerializer(JWTSerializer):
@@ -161,3 +162,32 @@ class TokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Token
         fields = '__all__'
+
+
+class ImpersonateTokenSerializer(serializers.Serializer):
+    user = serializers.IntegerField()
+
+    token_class = RefreshToken
+
+    @classmethod
+    def get_token(cls, user):
+        return cls.token_class.for_user(user)
+
+    def validate_user(self, value):
+        try:
+            self.user = User.objects.get(id=value)
+        except User.DoesNotExist:
+            raise ValidationError("Authentication failed")
+        except:
+            raise ValidationError("Authentication failed")
+
+        return value
+
+    def validate(self, attrs):
+        data = {}
+        refresh = self.get_token(self.user)
+
+        data["refresh"] = str(refresh)
+        data["access"] = str(refresh.access_token)
+
+        return data
