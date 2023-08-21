@@ -8,9 +8,12 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.views import TokenViewBase
 
 from core.views import TokenAuthMixin
-from .serializers import UserProfileSerializer, OrganisationSerializer, UserProfileListSerializer, TokenSerializer
+from .permissions import IsSuperUser
+from .serializers import UserProfileSerializer, OrganisationSerializer, UserProfileListSerializer, TokenSerializer, \
+    ImpersonateTokenSerializer
 from .models import UserProfile, Organisation
 from django.contrib.auth.models import User
 
@@ -174,3 +177,12 @@ class TokenCheckView(APIView):
         token = get_object_or_404(Token, user=request.user)
         serializer = TokenSerializer(token)
         return Response(serializer.data)
+
+
+class ImpersonateTokenView(TokenViewBase):
+    """
+    Impersonate another user by providing the user's id. Only works if you are a superuser.
+    """
+    serializer_class = ImpersonateTokenSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated, IsSuperUser)

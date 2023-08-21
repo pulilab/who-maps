@@ -29,4 +29,5 @@ urlpatterns = [
 
     path('jwt/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('jwt/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('jwt/impersonate/', views.ImpersonateTokenView.as_view(), name='token_impersonate'),
 ]

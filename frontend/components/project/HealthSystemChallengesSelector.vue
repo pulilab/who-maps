@@ -110,11 +110,11 @@ export default {
         },
         {
           id: 15,
-          tooltip: this.$gettext("Lack of mechanisms to support continuity of care such as: - uncoordinated referrals, - lack of interoperable digital systems causing health service users' data being in disparate systems")
+          tooltip: this.$gettext(`Lack of mechanisms to support continuity of care such as: - uncoordinated referrals, - lack of interoperable digital systems causing health service users' data being in disparate systems`)
         },
         {
           id: 16,
-          tooltip: this.$gettext("Minimal support for: - healthcare providers from supervisors/providers - health service users from healthcare providers")
+          tooltip: this.$gettext(`Minimal support for: - healthcare providers from supervisors/providers - health service users from healthcare providers`)
         },
         {
           id: 17,
@@ -122,87 +122,87 @@ export default {
         },
         {
           id: 18,
-          tooltip: this.$gettext("Health systems' discrepancy with the regional and cultural context of the population")
+          tooltip: this.$gettext(`Health systems' discrepancy with the regional and cultural context of the population`)
         },
         {
           id: 19,
-          tooltip: this.$gettext("Health systems' initiatives are not in line with the health understanding of the population")
+          tooltip: this.$gettext(`Health systems' initiatives are not in line with the health understanding of the population`)
         },
         {
           id: 20,
-          tooltip: this.$gettext("Little to no demand for services due to: a) unawareness of the availability of services to resolve the health issues b) financial barriers c) no health tracking")
+          tooltip: this.$gettext(`Little to no demand for services due to: a) unawareness of the availability of services to resolve the health issues b) financial barriers c) no health tracking`)
         },
         {
           id: 21,
-          tooltip: this.$gettext("Geographic barriers to avail the: a) Laboratory and Diagnostics Services b) Medication Products & Services c) Healthcare Provider Services")
+          tooltip: this.$gettext(`Geographic barriers to avail the: a) Laboratory and Diagnostics Services b) Medication Products & Services c) Healthcare Provider Services`)
         },
         {
           id: 22,
-          tooltip: this.$gettext("Little/ No adherence to the defined treatment procedure including clinician revisits, medication, etc.")
+          tooltip: this.$gettext(`Little/ No adherence to the defined treatment procedure including clinician revisits, medication, etc.`)
         },
         {
           id: 23,
-          tooltip: this.$gettext("Inability to locate health service user details in order to determine their health status and take actions")
+          tooltip: this.$gettext(`Inability to locate health service user details in order to determine their health status and take actions`)
         },
         {
           id: 24,
-          tooltip: this.$gettext("Lack of mechanisms to appropriately manage defined workflows")
+          tooltip: this.$gettext(`Lack of mechanisms to appropriately manage defined workflows`)
         },
         {
           id: 25,
-          tooltip: this.$gettext("Absence of proper referrals mechanism from: a) healthcare provider to healthcare provider b) healthcare to other sectors")
+          tooltip: this.$gettext(`Absence of proper referrals mechanism from: a) healthcare provider to healthcare provider b) healthcare to other sectors`)
         },
         {
           id: 26,
-          tooltip: this.$gettext("Insufficient organisation of the different elements required to deliver adequate health services including: a) Human Resources b) Healthcare Services c) Goods & Commodities")
+          tooltip: this.$gettext(`Insufficient organisation of the different elements required to deliver adequate health services including: a) Human Resources b) Healthcare Services c) Goods & Commodities`)
         },
         {
           id: 27,
-          tooltip: this.$gettext("Retarded access to care due to: a) Loss of health tracking b) Limited availability of services c) Geographic Barriers")
+          tooltip: this.$gettext(`Retarded access to care due to: a) Loss of health tracking b) Limited availability of services c) Geographic Barriers`)
         },
         {
           id: 28,
-          tooltip: this.$gettext("Limited/No access to the healthcare facilities and services due to logistics barriers")
+          tooltip: this.$gettext(`Limited/No access to the healthcare facilities and services due to logistics barriers`)
         },
         {
           id: 31,
-          tooltip: this.$gettext("")
+          tooltip: this.$gettext(`N/A`)
         },
         {
           id: 32,
-          tooltip: this.$gettext("")
+          tooltip: this.$gettext(`N/a`)
         },
         {
           id: 33,
-          tooltip: this.$gettext("")
+          tooltip: this.$gettext(`N/A`)
         },
         {
           id: 34,
-          tooltip: this.$gettext("")
+          tooltip: this.$gettext(`N/A`)
         },
         {
           id: 35,
-          tooltip: this.$gettext("Inadequate information exchange of: a) Health Events b) Health System Feedback c) Healthcare literacy (precautions, home remedy)")
+          tooltip: this.$gettext(`Inadequate information exchange of: a) Health Events b) Health System Feedback c) Healthcare literacy (precautions, home remedy)`)
         },
         {
           id: 36,
-          tooltip: this.$gettext("Health Service Users and Healthcare Providers are uninformed about the health service entitlements for the health service users")
+          tooltip: this.$gettext(`Health Service Users and Healthcare Providers are uninformed about the health service entitlements for the health service users`)
         },
         {
           id: 37,
-          tooltip: this.$gettext("Lack of methods, procedures and systems for population to provide feedback to the health system")
+          tooltip: this.$gettext(`Lack of methods, procedures and systems for population to provide feedback to the health system`)
         },
         {
           id: 38,
-          tooltip: this.$gettext("No visibility to the funds flow in the process of acquiring and delivering medical goods")
+          tooltip: this.$gettext(`No visibility to the funds flow in the process of acquiring and delivering medical goods`)
         },
         {
           id: 39,
-          tooltip: this.$gettext("Absence of or undetermined framework for outlining the responsibilities of health system at different levels")
+          tooltip: this.$gettext(`Absence of or undetermined framework for outlining the responsibilities of health system at different levels`)
         },
         {
           id: 40,
-          tooltip: this.$gettext("Insufficient exposure/understanding/availability of education to the population")
+          tooltip: this.$gettext(`Insufficient exposure/understanding/availability of education to the population`)
         }
 
       ],
