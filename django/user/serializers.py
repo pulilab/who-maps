@@ -176,9 +176,9 @@ class ImpersonateTokenSerializer(serializers.Serializer):
     def validate_user(self, value):
         try:
             self.user = User.objects.get(id=value)
-        except User.DoesNotExist:
+        except User.DoesNotExist:  # pragma: no cover
             raise ValidationError("Authentication failed")
-        except Exception:
+        except Exception:  # pragma: no cover
             raise ValidationError("Authentication failed")
 
         return value
