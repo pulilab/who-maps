@@ -8,19 +8,14 @@
         <el-col class="center relative">
           <input
             v-model="userid"
-            placeholder="Type in userid (number)"
+            :placeholder="$gettext('Type in userid (number)') | translate"
             :disabled="loading"
             class="api-input"
           />
         </el-col>
       </transition>
       <el-col class="center">
-        <el-button
-          key="createBtn"
-          type="primary el-button--medium"
-          :loading="loading"
-          @click="impersonate"
-        >
+        <el-button type="primary el-button--medium" :loading="loading" @click="impersonate">
           <translate>Login as</translate>
         </el-button>
       </el-col>
@@ -71,7 +66,6 @@ export default {
             ? error.response.data.user[0]
             : error.response.data.detail
         } else {
-          console.log("🚀 ~ file: impersonate.vue:78 ~ impersonate ~ error:", error)
           this.errorMessage = this.$gettext('Cannot login with the provided user ID. Try again and if error persist, report to support.')
         }
         this.loading = false

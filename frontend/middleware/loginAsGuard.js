@@ -1,9 +1,7 @@
-export default async function ({ $auth, redirect, route }) {
-  const refreshTokenValid = $auth.strategy.refreshToken.status().valid()
-  if (!refreshTokenValid || !$auth?.user?.is_superuser) {
-    const paths = route.name.split('___')[1]
-    const path = paths[1] || '/'
-    redirect(path)
+export default async function ({ $auth, redirect }) {
+  console.log("🚀 ~ file: loginasGuard.js:3 ~ $auth?.user?.is_superuser:", $auth?.user?.is_superuser)
+  if (!$auth?.user?.is_superuser) {
+    redirect('/')
   }
 }
 
