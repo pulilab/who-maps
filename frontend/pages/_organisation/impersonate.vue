@@ -1,14 +1,15 @@
 <template>
   <page-layout>
     <template #title>
-      <translate>Imnpersonate user</translate>
+      <translate>Impersonate user</translate>
     </template>
     <el-row class="api-card relative is-always-shadow">
       <transition name="block">
-        <el-col class="center relative">
+        <el-col class="center relative formitem">
+          <translate tag="label">User's ID (number)</translate>
           <input
             v-model="userid"
-            :placeholder="$gettext('Type in userid (number)') | translate"
+            :placeholder="$gettext('Type in a user ID') | translate"
             :disabled="loading"
             class="api-input"
           />
@@ -106,34 +107,43 @@ export default {
   cursor: pointer;
 }
 
-.api-input {
-  box-sizing: border-box;
-  display: inline-block;
-  height: 40px;
-  width: 100%;
-  background-color: #ffffff;
-  background-image: none;
-  color: #474747;
-  font-size: inherit;
-  line-height: 40px;
-  text-align: center;
-  border-radius: 0;
-  border: 1px solid #9b9b9b;
+.formitem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6em;
+
+  .api-input {
+    box-sizing: border-box;
+    display: inline-block;
+    height: 40px;
+    width: 50%;
+    background-color: #ffffff;
+    background-image: none;
+    color: #474747;
+    font-size: inherit;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 0;
+    border: 1px solid #9b9b9b;
+  }
+
+  .api-input:hover {
+    border-color: #b9b9b9;
+  }
+
+  .api-input:focus {
+    outline: none;
+    border-color: #008dc9;
+  }
+
+  .error-wrapper {
+    padding: 1rem;
+    color: @colorDanger;
+    background-color: #fddbd8;
+    font-weight: bold;
+  }
 }
 
-.api-input:hover {
-  border-color: #b9b9b9;
-}
 
-.api-input:focus {
-  outline: none;
-  border-color: #008dc9;
-}
-
-.error-wrapper {
-  padding: 1rem;
-  color: @colorDanger;
-  background-color: #fddbd8;
-  font-weight: bold;
-}
 </style>
