@@ -7,6 +7,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms.widgets import MediaDefiningClass
+from django.utils.safestring import mark_safe
 from modeltranslation.translator import translator
 from import_export.fields import Field
 from import_export import resources
@@ -80,31 +81,27 @@ class UserProfileInline(admin.StackedInline):
 
 class CustomUserAdmin(ExportActionMixin, UserAdmin):
     list_display = ('userprofile', 'email', 'name', 'country', 'type', 'organisation', 'is_staff', 'is_superuser',
-                    'last_login', 'date_joined')
+                    'last_login', 'date_joined', 'impersonate')
     search_fields = ('userprofile__name', 'email', 'userprofile__country__name', 'userprofile__organisation__name')
     inlines = (UserProfileInline,)
     resource_class = UserResource
 
     def name(self, obj):
         return obj.userprofile.name
-
     name.allow_tags = True
     name.admin_order_field = 'userprofile__name'
 
     def country(self, obj):
         return obj.userprofile.country
-
     country.allow_tags = True
 
     def type(self, obj):
         return obj.userprofile.get_account_type_display()
-
     type.allow_tags = True
     type.short_description = "Account Type"
 
     def organisation(self, obj):
         return obj.userprofile.organisation
-
     organisation.allow_tags = True
 
     def get_list_filter(self, request):
@@ -121,6 +118,11 @@ class CustomUserAdmin(ExportActionMixin, UserAdmin):
         if request and request.user and not request.user.is_superuser:
             return 'password', 'is_active', 'is_staff', 'is_superuser', 'groups', 'last_login', 'date_joined'
         return super().get_readonly_fields(request, obj)
+
+    def impersonate(self, obj):  # pragma: no cover
+        return mark_safe(f"<a target='_blank' href='/en/-/impersonate/?userid={obj.id}'>URL</a>")
+    impersonate.allow_tags = True
+    impersonate.short_description = "Impersonate"
 
 
 class CustomAuthenticationForm(AuthenticationForm):
