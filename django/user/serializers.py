@@ -178,7 +178,7 @@ class ImpersonateTokenSerializer(serializers.Serializer):
             self.user = User.objects.get(id=value)
         except User.DoesNotExist:
             raise ValidationError("Authentication failed")
-        except:
+        except Exception:
             raise ValidationError("Authentication failed")
 
         return value
