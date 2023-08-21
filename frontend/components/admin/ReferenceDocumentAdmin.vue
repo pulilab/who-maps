@@ -198,7 +198,7 @@ export default {
       editing: false,
       submitError: false,
       errors: [],
-      emptyMessage: this.$gettext("There's no Reference Documents uploaded to this country. You can upload new Refernce Document."),
+      emptyMessage: this.$gettext(`There's no Reference Documents uploaded to this country. You can upload new Refernce Document.`),
       document: {
         file: [],
         title: '',
