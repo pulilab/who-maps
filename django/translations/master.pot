@@ -91,7 +91,7 @@ msgid "{total} project(s) to show"
 msgstr ""
 
 #: components/common/NavigationMenu.vue:12 components/common/TopBar.vue:15
-msgid "/download/Data_Quality_Guidebook.pdf"
+msgid "/download/Data_Quality_Guidebook_v2.0.pdf"
 msgstr ""
 
 #: components/common/map/MapProjectsBox.vue:12
