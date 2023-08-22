@@ -137,13 +137,12 @@ export default {
     border-color: #008dc9;
   }
 
-  .error-wrapper {
-    padding: 1rem;
-    color: @colorDanger;
-    background-color: #fddbd8;
-    font-weight: bold;
-  }
 }
-
+.error-wrapper {
+  padding: 1rem;
+  color: @colorDanger;
+  background-color: #fddbd8;
+  font-weight: bold;
+}
 
 </style>
