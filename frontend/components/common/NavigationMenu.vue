@@ -104,7 +104,7 @@ components: {
     return {
       shown: false,
       storiesLink: this.$gettext('https://stories.digitalhealthatlas.org'),
-      dataQualityLink: this.$gettext('/download/Data_Quality_Guidebook.pdf'),
+      dataQualityLink: this.$gettext('/download/Data_Quality_Guidebook_v2.0.pdf'),
       menuRoutes: [
         {
           path: '-/',
