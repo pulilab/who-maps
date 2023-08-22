@@ -293,8 +293,8 @@ export default {
     cursor: pointer;
     position: relative;
     height: 24px;
-    margin: 0 3px;
-    padding: 0 10px;
+    margin: 0 10px;
+    padding: 0;
     font-size: @fontSizeBase;
     font-weight: 700;
     line-height: 24px;
@@ -335,6 +335,10 @@ export default {
 
     .svg-inline--fa {
       margin-right: 6px;
+    }
+
+    span {
+      display: inline-block
     }
   }
 
