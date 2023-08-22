@@ -112,14 +112,14 @@
             </el-row>
           </el-col>
           <template v-if="!customOrganisation || countrySpecific">
-            <el-col>
+            <!-- <el-col>
               <nuxt-link
                 :to="localePath({name: 'organisation',params: { organisation: 'covid-19' }})"
                 class="HeaderBtn CovidLink"
               >
                 COVID-19
               </nuxt-link>
-            </el-col>
+            </el-col> -->
             <el-col>
               <country-chooser />
             </el-col>
