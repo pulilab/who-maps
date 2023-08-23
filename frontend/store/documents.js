@@ -1,5 +1,8 @@
 import { format, differenceInCalendarDays } from 'date-fns'
-import qs from 'qs'
+
+function addParam(paramString,paramKey,paramVal) {
+  return paramString ? `&${paramKey}=${paramVal}` : `${paramKey}=${paramVal}`
+}
 
 export const state = () => ({
   loading: true,
@@ -23,7 +26,16 @@ export const actions = {
         method: 'get',
         url: '/api/document-search/',
         params: filter,
-        paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat', encodeValuesOnly: true }),
+        paramsSerializer: params => {
+          let query = ''
+          if (params.search) query += addParam(query,'search',params.search)
+          if (params.country) query += addParam(query,'country',params.country)
+          if (params.language) query += addParam(query,'language',params.language)
+          if (params.document_types) query += addParam(query,'document_types',params.document_types)
+          if (params.featured !== null) query += addParam(query,'featured',params.featured)
+          if (params.valid !== null) query += addParam(query,'valid',params.valid)
+          return query
+        },
         progress: false
       })
 
