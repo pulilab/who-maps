@@ -23,7 +23,12 @@ export const actions = {
         method: 'get',
         url: '/api/document-search/',
         params: filter,
-        paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat', encodeValuesOnly: true }),
+        paramsSerializer: params => qs.stringify(params, {
+          filter: (prefix,value) => {
+            const val = typeof value === 'string' ? value.trim() : value
+            return val === null || val === '' ? undefined : val
+          }
+        }),
         progress: false
       })
 

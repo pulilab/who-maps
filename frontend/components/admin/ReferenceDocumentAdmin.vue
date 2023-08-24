@@ -364,7 +364,7 @@ export default {
       let res = false
       res = await this.uploadPolicyDocument()
       if (res) {
-        this.loadDocuments(),
+        this.loadDocuments({ country: this.country.id }),
         this.refreshTags(true)
       }
       this.editing = false
@@ -404,7 +404,7 @@ export default {
           type: 'success',
           message: this.$gettext('Delete completed')
         })
-        this.loadDocuments()
+        this.loadDocuments({ country: this.country.id })
       })
     },
     showDocumentDetails(doc) {
