@@ -96,8 +96,8 @@ export default {
       featuredTooltip: this.$gettext('Show only documents that are marked as featued (start indicator)'),
       validTooltip: this.$gettext(`Show only documents that "Valid until" date is not set or is in the future`),
 			filter: {
-				search: '',
-        country: [],
+				search: null,
+        country: null,
         document_types: null,
         language: null,
         featured: null,
