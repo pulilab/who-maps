@@ -1016,7 +1016,7 @@ msgstr ""
 msgid "Country information"
 msgstr ""
 
-#: components/common/TopBar.vue:58
+#: components/common/TopBar.vue:57
 msgid "Country logo"
 msgstr ""
 
@@ -3096,6 +3096,13 @@ msgstr ""
 msgid "Pick a target date (required)"
 msgstr ""
 
+#: components/project/StandardsSelector.vue:173
+msgid ""
+"PII (Personally Identifiable Information) standards dictate how the PII like "
+"person’s name, address, social security number, biometric records, etc. must "
+"be treated."
+msgstr ""
+
 #: components/common/SearchComponent.vue:241
 msgid "Planning & guidance {num}"
 msgstr ""
@@ -4563,6 +4570,13 @@ msgstr ""
 msgid "Type to filter users..."
 msgstr ""
 
+#: components/project/StandardsSelector.vue:169
+msgid ""
+"UCUM (Unified Code for Units of Measure) is a health data standard that "
+"provides a unified and standardized approach for representing and exchanging "
+"units of measure in healthcare."
+msgstr ""
+
 #: components/admin/DhaQuestionOptions.vue:17
 #: components/admin/DhaQuestionOptions.vue:65
 msgid "Unable to add or remove options on saved questions"
@@ -4881,7 +4895,7 @@ msgstr ""
 msgid "Who are your investment partners?"
 msgstr ""
 
-#: components/common/TopBar.vue:58
+#: components/common/TopBar.vue:57
 msgid "WHO logo"
 msgstr ""
 
