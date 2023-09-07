@@ -47,7 +47,7 @@ export default {
         },
         {
           name: this.$gettext('Health Data Standardization'),
-          standardIds: [28,30,22,31,26,27,21]
+          standardIds: [28,30,22,31,26,27,21,32]
         },
         {
           name: this.$gettext('Demographic Data Standardization'),
@@ -55,7 +55,7 @@ export default {
         },
         {
           name: this.$gettext('Security & Privacy Standards'),
-          standardIds: [2,3,12]
+          standardIds: [2,3,12,33]
         },
         {
           name: this.$gettext('Technical Standards'),
@@ -187,7 +187,14 @@ export default {
           id: 29,
           tooltip: this.$gettext('JSON (JavaScript Object Notation, is an open standard file format and data interchange format that uses human-readable text to store and transmit data objects consisting of attribute-value pairs and arrays (or other serializable values).')
         },
-
+        {
+          id: 32,
+          tooltip: this.$gettext('UCUM (Unified Code for Units of Measure) is a health data standard that provides a unified and standardized approach for representing and exchanging units of measure in healthcare.')
+        },
+        {
+          id: 33,
+          tooltip: this.$gettext('PII (Personally Identifiable Information) standards dictate how the PII like person’s name, address, social security number, biometric records, etc. must be treated.')
+        },
       ],
     }
   },
