@@ -1016,7 +1016,7 @@ msgstr ""
 msgid "Country information"
 msgstr ""
 
-#: components/common/TopBar.vue:58
+#: components/common/TopBar.vue:57
 msgid "Country logo"
 msgstr ""
 
@@ -2020,13 +2020,6 @@ msgid ""
 "the list."
 msgstr ""
 
-#: components/project/sections/GeneralOverview.vue:126
-msgid ""
-"If you cannot find your investment partner in the list corresponding to the "
-"question, ask Investor/Donor to register on DHA platform by sending an email "
-"to digital-health-atlas@who.int"
-msgstr ""
-
 #: components/common/CookieConsent.vue:13
 msgid "If you continue to use this site, you consent to our use of cookies."
 msgstr ""
@@ -2277,6 +2270,14 @@ msgstr ""
 
 #: components/project/sections/view/Overview.vue:76
 msgid "Investment partner(s)"
+msgstr ""
+
+#: components/project/sections/GeneralOverview.vue:126
+msgid ""
+"Investment partners are the ones who contribute to the project either "
+"financially or in kind. If you cannot find your investment partner in the "
+"list corresponding to the question, ask Investor/Donor to register on DHA "
+"platform by sending an email to digital-health-atlas@who.int"
 msgstr ""
 
 #: components/ProfileEditor.vue:166 components/common/ProjectCard.vue:67
@@ -3081,21 +3082,6 @@ msgstr ""
 msgid "Pick a date"
 msgstr ""
 
-#: components/project/sections/StageOverview.vue:113
-#: components/project/sections/StageOverview.vue:309
-msgid "Pick a date (optional)"
-msgstr ""
-
-#: components/project/sections/StageOverview.vue:75
-#: components/project/sections/StageOverview.vue:223
-msgid "Pick a date (required)"
-msgstr ""
-
-#: components/project/sections/StageOverview.vue:40
-#: components/project/sections/StageOverview.vue:130
-msgid "Pick a target date (required)"
-msgstr ""
-
 #: components/common/SearchComponent.vue:241
 msgid "Planning & guidance {num}"
 msgstr ""
@@ -3642,8 +3628,23 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
+#: components/project/sections/StageOverview.vue:113
+#: components/project/sections/StageOverview.vue:309
+msgid "Select a date (optional)"
+msgstr ""
+
+#: components/project/sections/StageOverview.vue:75
+#: components/project/sections/StageOverview.vue:223
+msgid "Select a date (required)"
+msgstr ""
+
 #: components/documents/DocumentSearch.vue:68
 msgid "Select a document type"
+msgstr ""
+
+#: components/project/sections/StageOverview.vue:40
+#: components/project/sections/StageOverview.vue:130
+msgid "Select a target date (required)"
 msgstr ""
 
 #: components/dashboard/TableTopActions.vue:5
@@ -4881,7 +4882,7 @@ msgstr ""
 msgid "Who are your investment partners?"
 msgstr ""
 
-#: components/common/TopBar.vue:58
+#: components/common/TopBar.vue:57
 msgid "WHO logo"
 msgstr ""
 
