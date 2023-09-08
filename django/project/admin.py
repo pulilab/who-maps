@@ -220,7 +220,7 @@ class ProjectImportV2Admin(admin.ModelAdmin):
     raw_id_fields = ['donor', 'country', 'user']
 
     def get_profile(self, obj):  # pragma: no cover
-        return obj.user.userprofile
+        return obj.user.userprofile if obj.user and obj.user.userprofile else '-'
     get_profile.short_description = "User"
 
     def projects(self, obj):  # pragma: no cover
