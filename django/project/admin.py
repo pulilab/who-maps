@@ -72,9 +72,10 @@ class SoftwareStateFilter(SimpleListFilter):
 
 class TechnologyPlatformAdmin(AllObjectsAdmin):
     list_display = [
-        'name', 'state', 'added_by', 'number_of_projects'
+        'name', 'id', 'state', 'added_by', 'number_of_projects',
     ]
     list_filter = [SoftwareStateFilter]
+    list_display_links = ['name', 'id']
     search_fields = ['name']
     actions = (approve, decline)
 
