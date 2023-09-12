@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from project.permissions import InTeamOrReadOnly, InTeamOrCollectionOwnerOrReadOnly, CollectionOwnerOrReadOnly
-from project.models import Project
+from project.models import Project, InteroperabilityStandard
 from country.models import Country, ReferenceDocument
 from user.authentication import BearerTokenAuthentication
 from .data.landing_page_defaults import LANDING_PAGE_DEFAULTS
@@ -122,6 +122,8 @@ class StaticDataView(GenericAPIView):
         data['toolkit_questions'] = TOOLKIT_QUESTIONS
         data['sub_level_types'] = SUB_LEVEL_TYPES
         data['regions'] = [{'id': reg[0], 'name': reg[1]} for reg in Country.REGIONS]
+        data['interoperability_categories'] = \
+            [{'id': reg[0], 'name': reg[1]} for reg in InteroperabilityStandard.Categories.choices]
         data['dashboard_columns'] = DASHBOARD_COLUMNS
         data['reference_documents'] = self.get_reference_document_limits()
 
