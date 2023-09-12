@@ -47,7 +47,7 @@ class LicenceTranslationOptions(TranslationOptions):
 
 @register(InteroperabilityStandard)
 class InteroperabilityStandardTranslationOptions(TranslationOptions):
-    fields = ('name',)
+    fields = ('name', 'description')
 
 
 @register(HISBucket)
