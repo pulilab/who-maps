@@ -85,7 +85,7 @@ class ProjectPublicViewSet(ViewSet):
             technology_platforms=TechnologyPlatform.objects.exclude(state=TechnologyPlatform.DECLINED).values(
                 'id', 'name', 'state'),
             licenses=Licence.objects.values('id', 'name'),
-            interoperability_standards=InteroperabilityStandard.objects.values('id', 'name'),
+            interoperability_standards=InteroperabilityStandard.objects.values('id', 'name', 'description'),
             his_bucket=HISBucket.objects.values('id', 'name'),
             health_focus_areas=health_focus_areas,
             hsc_challenges=hsc_challenges,
