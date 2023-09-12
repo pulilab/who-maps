@@ -115,7 +115,7 @@ class LicenceAdmin(AllObjectsAdmin):
 
 
 class InteroperabilityStandardAdmin(TabbedDjangoJqueryTranslationAdmin, AllObjectsAdmin):
-    pass
+    list_display = ['name', 'category']
 
 
 class HISBucketAdmin(AllObjectsAdmin):
