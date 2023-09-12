@@ -11,6 +11,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from simple_history.models import HistoricalRecords
+from ckeditor.fields import RichTextField
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
     ParentByIDMixin
@@ -393,7 +394,14 @@ class Licence(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
 
 
 class InteroperabilityStandard(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    pass
+    class Categories(models.IntegerChoices):
+        HDES = 1, _("Health Data Exchange Standards")
+        HDS = 2, _("Health Data Standardization")
+        DDS = 3, _("Demographic Data Standardization")
+        SPS = 4, _("Security & Privacy Standards")
+        TS = 5, _("Technical Standards")
+    category = models.PositiveSmallIntegerField(choices=Categories.choices, blank=True, null=True)
+    description = RichTextField(blank=True)
 
 
 class HISBucket(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
