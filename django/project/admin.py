@@ -1,6 +1,7 @@
 from adminsortable2.admin import SortableAdminMixin
 from django.db.models.fields.json import KeyTextTransform
 from django.db.models.functions import Cast
+from modeltranslation.admin import TabbedDjangoJqueryTranslationAdmin
 from import_export.admin import ExportActionMixin
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter, EmptyFieldListFilter
@@ -113,7 +114,7 @@ class LicenceAdmin(AllObjectsAdmin):
     pass
 
 
-class InteroperabilityStandardAdmin(AllObjectsAdmin):
+class InteroperabilityStandardAdmin(TabbedDjangoJqueryTranslationAdmin, AllObjectsAdmin):
     pass
 
 
