@@ -703,7 +703,7 @@ PT_TRANSLATIONS = [
     '2018_01_30__hscgroup_pt.json',
     '2018_01_30__hc_pt.json',
     '2018_01_30__ds_pt.json',
-    '2018_01_30__hscchallange_pt.json'
+    # '2018_01_30__hscchallange_pt.json'
 ]
 
 
