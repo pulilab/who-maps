@@ -17,7 +17,7 @@ class HSCGroupTranslationOptions(TranslationOptions):
 
 @register(HSCChallenge)
 class HSCChallengeTranslationOptions(TranslationOptions):
-    fields = ('name',)
+    fields = ('name', 'description')
 
 
 @register(HealthCategory)
