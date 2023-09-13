@@ -147,11 +147,11 @@ class TestModelTranslations(TestCase):
                          {'name': 'First group',
                           'challenges': [
                               {'id': hsc_2.id,
-                               'challenge': 'Other problem appeared'},
+                               'challenge': 'Other problem appeared', 'description': ''},
                               {'id': hsc.id,
-                               'challenge': 'Solve an issue'},
+                               'challenge': 'Solve an issue', 'description': ''},
                               {'id': hsc_3.id,
-                               'challenge': 'Third failure here'}
+                               'challenge': 'Third failure here', 'description': ''}
                           ]})
 
         response = self.test_user_client.get(url, HTTP_ACCEPT_LANGUAGE='fr')
@@ -160,9 +160,9 @@ class TestModelTranslations(TestCase):
                          {'name': 'Omlette du fromage',
                           'challenges': [
                               {'id': hsc.id,
-                               'challenge': "l'Solve an issue"},
+                               'challenge': "l'Solve an issue", 'description': ''},
                               {'id': hsc_2.id,
-                               'challenge': 'Other problem appeared'},
+                               'challenge': 'Other problem appeared', 'description': ''},
                               {'id': hsc_3.id,
-                               'challenge': 'Third failure here'}
+                               'challenge': 'Third failure here', 'description': ''}
                           ]})
