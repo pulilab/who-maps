@@ -76,8 +76,9 @@ class ProjectPublicViewSet(ViewSet):
         for group in HSCGroup.objects.values('id', 'name'):
             hsc_challenges.append(dict(
                 name=group['name'],
-                challenges=[{'id': c['id'], 'challenge': c['name']}
-                            for c in HSCChallenge.objects.filter(group__id=group['id']).values('id', 'name')]
+                challenges=[{'id': c['id'], 'challenge': c['name'], 'description': c['description']}
+                            for c in HSCChallenge.objects.filter(group__id=group['id']).values(
+                        'id', 'name', 'description')]
             ))
 
         return dict(
