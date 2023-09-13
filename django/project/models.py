@@ -307,6 +307,7 @@ class HSCChallengeQuerySet(ActiveQuerySet):
 
 class HSCChallenge(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     group = models.ForeignKey(HSCGroup, on_delete=models.CASCADE, related_name='challenges')
+    description = RichTextField(blank=True)
 
     def __str__(self):
         return '({}) {}'.format(self.group.name, self.name)
