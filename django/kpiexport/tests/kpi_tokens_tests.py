@@ -11,7 +11,7 @@ class KPITokensTests(KPITestData, APITestCase):
     def setUp(self):
         super().setUp()
         generate_date = date.today() - timedelta(days=150)
-        while generate_date <= date.today():
+        while generate_date <= date.today() + timedelta(days=1):
             update_auditlog_token_data_task(generate_date)
             generate_date = generate_date + timedelta(days=1)
 
