@@ -126,7 +126,7 @@ class HSCGroupAdmin(AllObjectsAdmin):
     pass
 
 
-class HSCChallengeAdmin(AllObjectsAdmin):
+class HSCChallengeAdmin(TabbedDjangoJqueryTranslationAdmin, AllObjectsAdmin):
     pass
 
 
