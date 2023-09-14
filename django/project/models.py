@@ -437,8 +437,8 @@ class ProjectImportV2(ExtendedModel):
 class ImportRow(models.Model):
     data = models.JSONField(default=dict)
     original_data = models.JSONField(default=dict)
-    project = models.ForeignKey(Project, null=True, on_delete=models.SET_NULL, related_name='import_rows')
-    parent = models.ForeignKey(ProjectImportV2, null=True, related_name="rows", on_delete=models.SET_NULL)
+    project = models.ForeignKey(Project, null=True, blank=True, on_delete=models.SET_NULL, related_name='import_rows')
+    parent = models.ForeignKey(ProjectImportV2, null=True, blank=True, related_name="rows", on_delete=models.SET_NULL)
 
 
 class ProjectVersion(ExtendedModel):

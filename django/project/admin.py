@@ -72,9 +72,10 @@ class SoftwareStateFilter(SimpleListFilter):
 
 class TechnologyPlatformAdmin(AllObjectsAdmin):
     list_display = [
-        'name', 'state', 'added_by', 'number_of_projects'
+        'name', 'id', 'state', 'added_by', 'number_of_projects',
     ]
     list_filter = [SoftwareStateFilter]
+    list_display_links = ['name', 'id']
     search_fields = ['name']
     actions = (approve, decline)
 
@@ -220,7 +221,7 @@ class ProjectImportV2Admin(admin.ModelAdmin):
     raw_id_fields = ['donor', 'country', 'user']
 
     def get_profile(self, obj):  # pragma: no cover
-        return obj.user.userprofile
+        return obj.user.userprofile if obj.user and obj.user.userprofile else '-'
     get_profile.short_description = "User"
 
     def projects(self, obj):  # pragma: no cover
