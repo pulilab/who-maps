@@ -75,6 +75,14 @@ INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'),
                     (2, 'Yes, there is a financial contribution through MOH budget'),
                     (3, 'Yes, MOH is fully funding the project')]
 
+RADIO_CHOICES = [(1, 'Yes'),
+                 (2, 'Yes - With restrictions'),
+                 (3, 'No')]
+
+RADIO_ALTERNATIVE_CHOICES = [(1, 'Yes'),
+                             (2, 'Partially'),
+                             (3, 'No')]
+
 
 class ProjectPublishedSerializer(serializers.Serializer):
     # SECTION 1 General Overview
@@ -117,6 +125,14 @@ class ProjectPublishedSerializer(serializers.Serializer):
     # SECTION 3 Technology Overview
     implementation_dates = serializers.CharField(max_length=128, required=False)
     licenses = serializers.ListField(child=serializers.IntegerField(), max_length=16, required=False)
+    # new Licence fields
+    zero_cost = serializers.ChoiceField(choices=RADIO_CHOICES, required=False)
+    codebase_accessible = serializers.ChoiceField(choices=RADIO_ALTERNATIVE_CHOICES, required=False)
+    is_customizable = serializers.ChoiceField(choices=RADIO_CHOICES, required=False)
+    free_replication = serializers.ChoiceField(choices=RADIO_CHOICES, required=False)
+    osi_licenses = serializers.ListField(
+        child=serializers.IntegerField(), max_length=16, min_length=0, allow_empty=True, required=False)
+
     repository = serializers.CharField(max_length=256, required=False, allow_blank=True)
     mobile_application = serializers.CharField(max_length=256, required=False, allow_blank=True)
     wiki = serializers.CharField(max_length=256, required=False, allow_blank=True)
