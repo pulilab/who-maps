@@ -18,7 +18,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, TeamCollectionTokenAuthMixin, CollectionTokenAuthMixin, \
     get_object_or_400, CollectionAuthenticatedMixin
 from project.cache import cache_structure
-from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion
+from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion, OSILicence
 from project.permissions import InCountryAdminForApproval, IsOwnerShipModifiable
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor, ReferenceDocumentType
@@ -93,6 +93,7 @@ class ProjectPublicViewSet(ViewSet):
             technology_platforms=TechnologyPlatform.objects.exclude(state=TechnologyPlatform.DECLINED).values(
                 'id', 'name', 'state'),
             licenses=Licence.objects.values('id', 'name'),
+            osi_licenses=OSILicence.objects.values('id', 'name'),
             his_bucket=HISBucket.objects.values('id', 'name'),
             interoperability_standards=interoperability_standards,
             health_focus_areas=health_focus_areas,
