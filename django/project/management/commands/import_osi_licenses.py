@@ -7,9 +7,9 @@ from project.models import OSILicence
 class Command(BaseCommand):
     help = """
     Import OSI Licenses from a previously saves list of licenses grabbed from: https://opensource.org/licenses/
-    
+
     1. Grab a list from the website: https://opensource.org/licenses/
-    
+
     var licenses = [];
     $0.querySelectorAll('tr').forEach((element) => {
       obj = Object.create(null);
@@ -28,12 +28,12 @@ class Command(BaseCommand):
           } catch (e) {
           }
         }
-    
+
       })
       licenses.push(obj)
     })
     JSON.stringify(licenses)
-    
+
     2. Save it to a file
     3. Use this script to load to DB
     """
