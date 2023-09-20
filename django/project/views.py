@@ -76,8 +76,16 @@ class ProjectPublicViewSet(ViewSet):
         for group in HSCGroup.objects.values('id', 'name'):
             hsc_challenges.append(dict(
                 name=group['name'],
-                challenges=[{'id': c['id'], 'challenge': c['name']}
-                            for c in HSCChallenge.objects.filter(group__id=group['id']).values('id', 'name')]
+                challenges=[{'id': c['id'], 'challenge': c['name'], 'description': c['description']}
+                            for c in HSCChallenge.objects.filter(group__id=group['id']).values(
+                        'id', 'name', 'description')]
+            ))
+
+        interoperability_standards = []
+        for cat_id, cat_name in InteroperabilityStandard.Categories.choices:
+            interoperability_standards.append(dict(
+                name=cat_name,
+                standards=InteroperabilityStandard.objects.filter(category=cat_id).values('id', 'name', 'description')
             ))
 
         return dict(
@@ -85,8 +93,8 @@ class ProjectPublicViewSet(ViewSet):
             technology_platforms=TechnologyPlatform.objects.exclude(state=TechnologyPlatform.DECLINED).values(
                 'id', 'name', 'state'),
             licenses=Licence.objects.values('id', 'name'),
-            interoperability_standards=InteroperabilityStandard.objects.values('id', 'name'),
             his_bucket=HISBucket.objects.values('id', 'name'),
+            interoperability_standards=interoperability_standards,
             health_focus_areas=health_focus_areas,
             hsc_challenges=hsc_challenges,
             strategies=strategies,
