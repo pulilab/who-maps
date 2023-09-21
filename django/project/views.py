@@ -33,7 +33,7 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     CollectionListSerializer, ProjectImportV2ListSerializer, ExternalProjectResponseSerializer
 
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Collection
+    HealthCategory, InteroperabilityStandard, HISBucket, HSCChallenge, Collection
 
 from django.conf import settings
 from rest_framework.views import APIView
@@ -92,7 +92,6 @@ class ProjectPublicViewSet(ViewSet):
             interoperability_links=InteroperabilityLink.objects.values('id', 'pre', 'name'),
             technology_platforms=TechnologyPlatform.objects.exclude(state=TechnologyPlatform.DECLINED).values(
                 'id', 'name', 'state'),
-            licenses=Licence.objects.values('id', 'name'),
             osi_licenses=OSILicence.objects.values('id', 'name'),
             his_bucket=HISBucket.objects.values('id', 'name'),
             interoperability_standards=interoperability_standards,
