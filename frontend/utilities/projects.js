@@ -135,6 +135,11 @@ export const projectFields = () => ({
   donors: [],
   implementation_dates: null,
   licenses: [],
+  zero_cost: '',
+  codebase_accessible : '',
+  is_customizable: '',
+  free_replication : '',
+  osi_licenses : [],
   repository: null,
   mobile_application: null,
   wiki: null,
@@ -342,7 +347,11 @@ export const publishRules = () => {
     implementation_dates: {
       isDate: true
     },
-    licenses: {},
+    zero_cost: {},
+    codebase_accessible : {},
+    is_customizable: {},
+    free_replication : {},
+    osi_licenses : {},
     repository: {
       max: 256,
       url: {

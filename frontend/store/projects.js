@@ -54,6 +54,8 @@ export const getters = {
       : [],
   getLicenses: state =>
     state.projectStructure.licenses ? [...state.projectStructure.licenses] : [],
+  getOsiLicenses: state =>
+    state.projectStructure.osi_licenses ? [...state.projectStructure.osi_licenses] : [],
   getDigitalHealthInterventions: state =>
     state.projectStructure.strategies
       ? [...state.projectStructure.strategies]
@@ -76,6 +78,7 @@ export const getters = {
   getCoverageVersions: state => [...state.currentProjectCoverageVersions],
   getProjectDetails: (state, getters, rootState, rootGetters) => p => {
     if (p) {
+      console.log("🚀 ~ file: projects.js:81 ~ p:", p)
       const user = rootGetters['user/getProfile']
       return {
         ...p,
