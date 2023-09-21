@@ -53,9 +53,15 @@ if settings.DEBUG:  # pragma: no cover
 
 api_info = openapi.Info(
     title='Digital Health Atlas Public API',
-    default_version='v1.2 BETA',
+    default_version='v1.3 BETA',
     description="""Digital Health Atlas Public API for Developers, only BETA 
 (subject to breaking changes and deprecations)
+
+# v1.3
+DEPRECATED: `project.licenses` deprecated in favor of `zero_cost`, `codebase_accessible`, `is_customizable`, 
+`free_replication` and `osi_licenses`. Data from licenses was migrated automatically over to the new fields with a 
+particular business logic.
+
 # v1.2
 ADDED: Reference Document endpoints
 - /api/document/ for CRUD
