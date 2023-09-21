@@ -23,7 +23,7 @@ from country.models import CustomQuestion, Country, Donor
 from project.utils import remove_keys
 from user.models import UserProfile
 from project.models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform, \
-    InteroperabilityLink, Licence, InteroperabilityStandard, HISBucket, Stage, HealthCategory, HealthFocusArea, \
+    InteroperabilityLink, InteroperabilityStandard, HISBucket, Stage, HealthCategory, HealthFocusArea, \
     HSCGroup, HSCChallenge, DigitalStrategy, Collection, OSILicence
 from country.serializers import CountrySerializer, DonorSerializer
 
