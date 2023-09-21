@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'scheduler',
     'cms',
     'simple_feedback',
+    'ckeditor',
     'systemmessages',
     'kpiexport',
     'rangefilter',
@@ -503,3 +504,13 @@ OBSOLETE_PROJECT_MARKERS = {
 
 SIMPLE_FEEDBACK_SEND_TO = os.environ.get('SIMPLE_FEEDBACK_SEND_TO', 'dhasupport@pulilab.com')
 TAGGIT_CASE_INSENSITIVE = True
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar_DEFAULT': [
+            ['Bold', 'Italic', 'Underline', 'Strike', '-', 'NumberedList', 'BulletedList', '-',
+             'Outdent', 'Indent', '-', 'Undo', 'Redo', '-', 'Source']
+        ],
+        'toolbar': 'DEFAULT',
+        'width': 800,
+    }
+}

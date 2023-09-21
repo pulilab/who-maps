@@ -35,6 +35,7 @@ django-ordered-model
 django-simplefeedback==1.1.2
 django-simple-history
 django-taggit
+django-ckeditor
 coreapi
 drf-yasg
 hashids
