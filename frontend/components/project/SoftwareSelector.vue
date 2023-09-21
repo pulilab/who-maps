@@ -19,13 +19,11 @@
       :value="newPlatform.id"
       class="new"
     >
-      <span class="left">
+      <div class="left">
         <b>{{ newPlatform.name }}</b>
-      </span>
-      <span class="left">
-        <translate v-if="setNewSoftwareError" key="invalidNew" class="invalid">Software is already in the system. Please select from the list or type in a unique software name.</translate>
-        <translate v-else key="addNew">DHA Admin will update the Software list to include your new software name</translate>
-      </span>
+        <translate tag="div" v-if="setNewSoftwareError" key="invalidNew" class="invalid">Software is already in the system. Please select from the list or type in a unique software name.</translate>
+        <translate v-else tag="div" key="addNew">DHA Admin will update the Software list to include your new software name</translate>
+      </div>
       <span class="right">
         <fa v-if="setNewSoftwareError" key="invalidNew" icon="exclamation-circle" class="invalid" />
         <b v-else key="addNew">
@@ -134,6 +132,10 @@ export default {
   width: 100%;
 }
 
+.PlatformSelectorDropdown {
+  max-width: 1068px;
+}
+
 .el-select-dropdown__item {
   position: relative;
   &.requested {
@@ -159,19 +161,25 @@ export default {
   }
   &.new {
     background-color: #fff8c4;
-    padding-top: 5px;
     height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     .left {
-      float: left;
-      width: 70%;
-      height: 16px;
+      overflow: hidden;
+      line-height: 20px;
+      flex-basis: 89%;
+      b {
+        display: inline-block;
+        overflow: hidden;
+      }
       .invalid {
         font-weight: bold;
         color: @colorBrandPrimary;
       }
     }
     .right {
-      float: right;
+      flex-shrink: 0;
       color: @colorBrandPrimary;
       font-size: 13px;
       margin-top: -7px;
