@@ -66,7 +66,7 @@
         <div class="DropdownLink" @click="openHowTo">
           <translate tag="a" class="HeaderBtn">How-to</translate>
         </div>
-        <div class="DropdownLink">
+        <!-- <div class="DropdownLink">
           <a
             :href="storiesLink"
             target="_blank"
@@ -75,7 +75,7 @@
           >
             <translate>Stories</translate>
           </a>
-        </div>
+        </div> -->
         <div class="DropdownLink">
           <a
             :href="dataQualityLink"

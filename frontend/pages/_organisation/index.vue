@@ -23,11 +23,11 @@
           <Banner />
         </el-col>
       </el-row>
-      <el-row type="flex">
+      <!-- <el-row type="flex">
         <el-col>
           <StoryBox />
         </el-col>
-      </el-row>
+      </el-row> -->
       <el-row type="flex">
         <el-col>
           <IntroVideo />
