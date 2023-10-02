@@ -35,11 +35,11 @@
             <div @click="openHowToDialog(0)">
               <translate class="HeaderBtn">How-to</translate>
             </div>
-            <div>
+            <!-- <div>
               <a :href="storiesLink" target="_blank" class="HeaderBtn">
                 <translate>Stories</translate>
               </a>
-            </div>
+            </div> -->
             <div>
               <a :href="dataQualityLink" target="_blank" class="HeaderBtn">
                 <translate>Data Quality Guideline</translate>

@@ -696,14 +696,14 @@ TECHNOLOGY_PLATFORMS = [
 
 PT_TRANSLATIONS = [
     '2018_01_30__licence_pt.json',
-    '2018_01_30__istandard_pt.json',
+    # '2018_01_30__istandard_pt.json',
     '2018_01_30__ilink_pt.json',
     '2018_01_30__his_pt.json',
     '2018_01_30__hfa_pt.json',
     '2018_01_30__hscgroup_pt.json',
     '2018_01_30__hc_pt.json',
     '2018_01_30__ds_pt.json',
-    '2018_01_30__hscchallange_pt.json'
+    # '2018_01_30__hscchallange_pt.json'
 ]
 
 

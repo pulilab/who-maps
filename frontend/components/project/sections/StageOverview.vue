@@ -64,7 +64,7 @@
               ref="Start date"
               v-model="start_date"
               v-validate="rules.start_date"
-              :placeholder="$gettext('Pick a target date (required)') | translate"
+              :placeholder="$gettext('Select a target date (required)') | translate"
               data-vv-name="start_date"
               data-vv-as="Start date"
               class="Date"
@@ -136,7 +136,7 @@
                         v-validate="rules.note_date"
                         :value="stage.date"
                         :placeholder="
-                          $gettext('Pick a date (required)') | translate
+                          $gettext('Select a date (required)') | translate
                         "
                         data-vv-name="note_date"
                         data-vv-as="Note date"
@@ -198,7 +198,7 @@
               <safe-date-picker
                 v-model="end_date"
                 v-validate="rules.end_date"
-                :placeholder="$gettext('Pick a date (optional)') | translate"
+                :placeholder="$gettext('Select a date (optional)') | translate"
                 data-vv-name="end_date"
                 data-vv-as="End date"
                 class="Date"
