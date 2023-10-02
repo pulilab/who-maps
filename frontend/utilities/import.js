@@ -88,7 +88,7 @@ export const importTemplate = [
     'Health Focus Areas': 'Adolescents and communicable diseases|\nOther sexual and reproductive health',
     'Health System Challenges': '1.1 Lack of population denominator|\n1.2 Delayed reporting of events',
     'Health Information Systems': 'A. Census, population information & data warehouse|\nB. Civil Registration and Vital Statistics',
-    'Government Contribution': 'no they have not yet contributed',
+    'Government Contribution': 'yes they are contributing inkind people or time',
     Partners: 'Partner_one|\nPartner two',
     Team: 'nico@pulilab.com|torben@pulilab.com',
     Viewers: 'nico@pulilab.com|torben@pulilab.com',

@@ -119,7 +119,7 @@
 
 <script>
 import debounce from 'lodash/debounce'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import ImportHeaders from '@/components/admin/import/ImportHeaders'
 import ImportValidation from '@/components/admin/import/ImportValidation'
 import ImportRow from '@/components/admin/import/ImportRow'
@@ -228,6 +228,9 @@ export default {
       refreshProfile: 'user/loadProfile',
       resetImport: 'admin/import/resetImport'
     }),
+    ...mapMutations({
+      setRow: 'admin/import/setRow',
+    }),
     projectLink (row) {
       return this.localePath({
         name: 'organisation-projects-id-edit',
@@ -238,16 +241,16 @@ export default {
       })
     },
     updateValue ({ row, key, value }) {
-      const originalRow = this.rows[row]
-      this.$set(originalRow.data, key, value)
-      this.saveUpdatedValue(originalRow)
+      this.setRow({ row, key, value })
+      this.saveUpdatedValue(row)
     },
-    saveUpdatedValue: debounce(function (row) {
-      this.patchRow(row)
+    saveUpdatedValue: debounce(function (rowIndex) {
+      this.patchRow(rowIndex)
     }, 1000),
-    async patchRow (row) {
-      return this.$axios.patch(`/api/projects/import-row/${row.id}/`, {
-        ...row,
+    async patchRow (rowIndex) {
+      const project = this.rows[rowIndex]
+      return this.$axios.patch(`/api/projects/import-row/${project.id}/`, {
+        ...project,
         id: undefined
       })
     },

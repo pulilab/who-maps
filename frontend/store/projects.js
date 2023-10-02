@@ -78,7 +78,6 @@ export const getters = {
   getCoverageVersions: state => [...state.currentProjectCoverageVersions],
   getProjectDetails: (state, getters, rootState, rootGetters) => p => {
     if (p) {
-      console.log("🚀 ~ file: projects.js:81 ~ p:", p)
       const user = rootGetters['user/getProfile']
       return {
         ...p,

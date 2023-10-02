@@ -185,7 +185,7 @@ export default {
           title: 'Technology Deployment Date',
           check: (words) => isSubset(['deployment','date'], words)
         },
-        licenses: {
+        osi_licenses: {
           title: 'Licenses',
           check: (words) => words.includes('licenses')
         },

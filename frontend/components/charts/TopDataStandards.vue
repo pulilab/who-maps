@@ -18,6 +18,7 @@
 <script>
 import sortBy from 'lodash/sortBy'
 import { objectToQueryString, extract } from '@/utilities/charts'
+import { getNestedList } from '@/utilities/projects'
 import GraphLayout from '@/components/charts/common/GraphLayout'
 import Chart from '@/components/charts/common/Chart'
 
@@ -38,7 +39,7 @@ export default {
       type: Number,
       default: 20
     }
-  },  
+  },
   data() {
     return {
       loadingChart: 0,
@@ -54,8 +55,8 @@ export default {
       },
       chartOptions: {
         maintainAspectRatio: false,
-        legend: { 
-          display: false 
+        legend: {
+          display: false
         },
         scales: {
           xAxes: [
@@ -100,7 +101,7 @@ export default {
         : 0
     },
     dataStandardHeight() {
-      return this.top 
+      return this.top
         ? this.top * 40
         : this.dataStandardsCount > 0 ? this.dataStandardsCount * 40 : 800
     },
@@ -109,7 +110,7 @@ export default {
     async getProjectStructure() {
       const response = await this.$axios.get('/api/projects/structure/')
       return response.data
-    },    
+    },
     async getMonthOfDataStandards() {
       const response = await this.$axios.get(
         `${base}/data-standards/${objectToQueryString(this.filters)}`
@@ -117,7 +118,8 @@ export default {
       return response.data
     },
     generateDataStandars(months) {
-      return this.interoperabilityStandards.map(standard => {
+      const flatStandards = getNestedList(this?.interoperabilityStandards, 'standards')
+      return flatStandards.map(standard => {
         return {
           ...standard,
           total: months.reduce((total, m) => {
@@ -129,13 +131,13 @@ export default {
     },
     async loadChart() {
       this.currentlyLoading = true
-      
-      const monthsOfStandards = await this.getMonthOfDataStandards()      
+
+      const monthsOfStandards = await this.getMonthOfDataStandards()
       const dataStandards = await this.generateDataStandars(monthsOfStandards)
       const totalsOfStandardsSorted = sortBy(dataStandards, ['total'])
         .reverse()
         .splice(0, this.top)
-      
+
       this.chartData.labels = extract(totalsOfStandardsSorted, 'name', true)
       this.chartData.datasets[0].data = totalsOfStandardsSorted.map(t => t.total)
 

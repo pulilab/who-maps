@@ -11,7 +11,7 @@ export const getters = {
   getQueue: state => state.queue,
   getRawImport: state => state.rawImport,
   getCollection: state => {
-    return state.collection 
+    return state.collection
       ? {
         name: state.collection.name,
         url: state.collection.url,
@@ -84,12 +84,20 @@ export const actions = {
     const projectIdx = state.collection.projects.findIndex(p => p.id === id)
     commit('addTeamMember', { projectIdx, user: user })
     return data
+  },
+  updateRow({ commit }) {
+
   }
 }
 
 export const mutations = {
   setValue (state, { key, val }) {
     state[key] = val
+  },
+  setRow(state, {row, key, value}) {
+    const originalRow = state.rawImport.rows[row]
+    console.log("🚀 ~ file: import.js:99 ~ setRow ~ originalRow:", originalRow)
+    this._vm.$set(originalRow.data, key, value)
   },
   addTeamMember(state, { projectIdx, user }) {
     state.collection.projects[projectIdx].team.push(user)

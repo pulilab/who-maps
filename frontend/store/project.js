@@ -131,7 +131,6 @@ export const getters = {
     }
     return []
   },
-  getLicenses: state => state.licenses,
   getZeroCost: state => state.zero_cost,
   getCodebaseAccessible: state => state.codebase_accessible,
   getIsCustomizable: state => state.is_customizable,
@@ -416,9 +415,6 @@ export const actions = {
   },
   setImplementationDates ({ commit }, value) {
     commit('SET_IMPLEMENTATION_DATES', value)
-  },
-  setLicenses ({ commit }, value) {
-    commit('SET_LICENSES', value)
   },
   setZeroCost ({ commit }, value) {
     commit('setValue', { key: 'zero_cost', val: value })
@@ -726,9 +722,6 @@ export const mutations = {
   SET_SHADOW_DONORS: (state, donors) => {
     Vue.set(state, 'shadow_donors', [...donors])
   },
-  SET_LICENSES: (state, licenses) => {
-    Vue.set(state, 'licenses', [...licenses])
-  },
   SET_REPOSITORY: (state, repository) => {
     state.repository = repository
   },
@@ -810,7 +803,6 @@ export const mutations = {
     state.implementing_viewers = get(project, 'implementing_viewers', [])
     state.donors = get(project, 'donors', [])
     state.shadow_donors = get(project, 'shadow_donors', [])
-    state.licenses = get(project, 'licenses', [])
     state.zero_cost = get(project, 'zero_cost', '')
     state.codebase_accessible = get(project, 'codebase_accessible', '')
     state.is_customizable = get(project, 'is_customizable', '')
