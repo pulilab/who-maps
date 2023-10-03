@@ -85,19 +85,11 @@ export const actions = {
     commit('addTeamMember', { projectIdx, user: user })
     return data
   },
-  updateRow({ commit }) {
-
-  }
 }
 
 export const mutations = {
   setValue (state, { key, val }) {
     state[key] = val
-  },
-  setRow(state, {row, key, value}) {
-    const originalRow = state.rawImport.rows[row]
-    console.log("🚀 ~ file: import.js:99 ~ setRow ~ originalRow:", originalRow)
-    this._vm.$set(originalRow.data, key, value)
   },
   addTeamMember(state, { projectIdx, user }) {
     state.collection.projects[projectIdx].team.push(user)

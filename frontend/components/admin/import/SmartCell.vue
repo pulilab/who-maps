@@ -317,11 +317,11 @@ export default {
           implementation_dates: () => this.parseDate(),
           start_date: () => this.parseDate(),
           end_date: () => this.parseDate(),
-          government_investor: () => this.enumParser(governmentContributions, this.value),
-          zero_cost: () => this.enumParser(licenseChoices, this.value),
-          codebase_accessible : () => this.enumParser(licenseChoicesAlt, this.value),
-          is_customizable: () => this.enumParser(licenseChoices, this.value),
-          free_replication : () => this.enumParser(licenseChoices, this.value),
+          government_investor: () => this.enumParser(governmentContributions),
+          zero_cost: () => this.enumParser(licenseChoices),
+          codebase_accessible : () => this.enumParser(licenseChoicesAlt),
+          is_customizable: () => this.enumParser(licenseChoices),
+          free_replication : () => this.enumParser(licenseChoices),
           osi_licenses: () => this.findProjectCollectionValue('osi_licenses', true),
           interoperability_links: () => this.findProjectCollectionValue('interoperability_links'),
           interoperability_standards: () => this.findProjectCollectionValue('interoperability_standards', true, 'standards'),
@@ -432,14 +432,20 @@ export default {
         .map(st => ({ id: st, name: st }))
       return this.toInternalRepresentation(filtered)
     },
-    enumParser(obj, val) {
-      const cleaned = ('' + val).trim().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').toLowerCase()
-      const value = Number.isInteger(val) ? val : obj[cleaned]
-      const label = !Number.isInteger(val) ? val : Object.keys(obj).find(k => obj[k] === value)
-      return {
-        ids: value !== undefined ? [value] : [],
-        names: value !== undefined ? [label] : []
+    enumParser(obj) {
+      const parsed = {
+        ids: [],
+        names: []
       }
+      if (typeof this.value === 'string') {
+        const cleaned = ('' + this.value).trim().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').toLowerCase()
+        parsed.ids[0] = obj[cleaned]
+        parsed.names[0] = Object.keys(obj).find(k => obj[k] === this.value)
+      } else {
+        parsed.ids[0] = Array.isArray(this.value) ? this.value[0] : this.value
+        parsed.names[0] = Object.keys(obj).find(k => obj[k] === this.value)
+      }
+      return parsed
     },
     valueParser (isMultiple) {
       if (!Array.isArray(this.value)) {
