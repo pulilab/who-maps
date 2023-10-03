@@ -69,7 +69,7 @@ export default {
         {
           id: 2,
           prepend: '21b',
-          header: this.$gettext('Is it allowed to replicate and redistribute the solution with others at no cost?'),
+          header: this.$gettext('Is the codebase of the solution accessible for review?'),
           content: this.licenseChoicesAlternative[this.project.codebase_accessible-1]
         },
         {
