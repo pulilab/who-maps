@@ -241,15 +241,18 @@ export default {
       })
     },
     updateValue ({ row, key, value }) {
-      this.setRow({ row, key, value })
-      this.saveUpdatedValue(row)
+      const originalRow = this.rows[row]
+      this.$set(originalRow.data, key, value)
+      this.saveUpdatedValue(originalRow)
+      /* this.setRow({ row, key, value })
+      this.saveUpdatedValue(row) */
     },
     saveUpdatedValue: debounce(function (rowIndex) {
       this.patchRow(rowIndex)
     }, 1000),
-    async patchRow (rowIndex) {
-      const project = this.rows[rowIndex]
-      return this.$axios.patch(`/api/projects/import-row/${project.id}/`, {
+    async patchRow (row) {
+      // const project = this.rows[row]
+      return this.$axios.patch(`/api/projects/import-row/${row.id}/`, {
         ...project,
         id: undefined
       })

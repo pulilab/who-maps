@@ -226,9 +226,6 @@ export default {
     internalValue: {
       get () {
         if (this.isDate) return new Date(this.value)
-        /* if (this.isGovInvestor && !isNaN(this.value)) return this.investedList[this.value]
-        if (this.isLicenseChoice && !isNaN(this.value)) return this.licenseChoices[this.value]
-        if (this.isLicenseChoiceAlt && !isNaN(this.value)) return this.licenseChoicesAlt[this.value] */
         return this.value
       },
       set (value) {
