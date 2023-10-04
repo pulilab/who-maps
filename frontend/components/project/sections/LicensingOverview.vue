@@ -41,9 +41,9 @@
             :text="$gettext(
               `This aids in comprehending the extent to which the code is accessible for public utilization. This information is particularly valuable for individuals interested in extending or examining the solution.
               You can indicate the status as follows:
-                - 'Yes' if the entire source code is accessible.
-                - 'No' if it's not available in its entirety.
-                - 'Partially' if only specific components like plugins or other parts of the codebase are accessible.`) | translate"
+                - Yes: if the entire source code is accessible.
+                - No: if it's not available in its entirety.
+                - Partially: if only specific components like plugins or other parts of the codebase are accessible.`) | translate"
           />
         </template>
         <LicenseChoice
