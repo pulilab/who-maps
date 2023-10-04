@@ -1,32 +1,10 @@
 <template>
-  <div
-    id="technology"
-    class="TechnologyOverview"
-  >
+  <div id="technology" class="TechnologyOverview">
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Technology overview') | translate"
       :prepend-title="prependTitle"
-      show-legend
     >
-      <custom-required-form-item
-        :error="errors.first('licenses')"
-        :draft-rule="draftRules.licenses"
-        :publish-rule="publishRules.licenses"
-        prepend-label="21"
-      >
-        <template slot="label">
-          <translate key="licenses">
-            Under what license is the project governed?
-          </translate>
-        </template>
-        <license-selector
-          v-model="licenses"
-          v-validate="rules.licenses"
-          data-vv-name="licenses"
-          data-vv-as="License"
-        />
-      </custom-required-form-item>
       <custom-required-form-item
         :error="errors.first('repository')"
         :draft-rule="draftRules.repository"
@@ -131,26 +109,31 @@ import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
 
 import { mapGettersActions } from '../../../utilities/form'
 import CollapsibleCard from '../CollapsibleCard'
-import LicenseSelector from '../LicenseSelector'
+import LicenseChoice from '../LicenseChoice'
+import OsiLicenseSelector from '../OsiLicenseSelector'
 import Tooltip from '@/components/dashboard/Tooltip'
 
 export default {
   components: {
     CollapsibleCard,
-    LicenseSelector,
+    LicenseChoice,
+    OsiLicenseSelector,
     Tooltip,
   },
   mixins: [VeeValidationMixin, ProjectFieldsetMixin],
   computed: {
     ...mapGettersActions({
-      licenses: ['project', 'getLicenses', 'setLicenses', 0]
+      zero_cost: ['project', 'getZeroCost', 'setZeroCost', 0],
+      codebase_accessible: ['project', 'getCodebaseAccessible', 'setCodebaseAccessible', 0],
+      is_customizable: ['project', 'getIsCustomizable', 'setIsCustomizable', 0],
+      free_replication: ['project', 'getFreeReplication', 'setFreeReplication', 0],
+      osi_licenses: ['project', 'getOsiLicenses', 'setOsiLicenses', []],
     })
   },
   methods: {
     async validate () {
       this.$refs.collapsible.expandCard()
       const validations = await Promise.all([this.$validator.validate()])
-      console.log('Technology overview validators', validations)
       return validations.reduce((a, c) => a && c, true)
     }
   }

@@ -30,16 +30,16 @@
           </xlsx-download>
         </xlsx-workbook>
       </p>
-      <warning class="red">
+      <Warning class="red">
         <translate>
           Your data should be organized to have data from only one country included in a spreadsheet. In addition, you can also only select one Investor for all of the data from within your spreadsheet. If you have more than one investor, we recommend that you go back to your projects once uploaded and add the correct investors.
         </translate>
-      </warning>
-      <warning class="red">
+      </Warning>
+      <Warning class="red">
         <translate>
           For now the imported projects are loaded in draft and need to be manually published.
         </translate>
-      </warning>
+      </Warning>
     </div>
     <el-divider class="wide" />
     <el-form-item>
@@ -88,11 +88,11 @@
                     {{ sheet }}
                   </el-option>
                 </el-select>
-                <alert v-if="!uniqueImport" type="warning">
+                <Alert v-if="!uniqueImport" type="warning">
                   <translate key="warning">
                     Note that all import files need to have a unique name. Please re-name the file and upload it again.
                   </translate>
-                </alert>
+                </Alert>
               </div>
             </template>
           </xlsx-sheets>
@@ -104,63 +104,23 @@
         </template>
       </xlsx-read>
     </el-form-item>
-    <!-- <el-form-item prop="country">
-      <template #label>
-        <form-hint>
-          <translate>
-            Select Country
-          </translate>
-          <template #hint>
-            <translate>Data can only be added one country at a time. If your data is from more than one country, you can make a separate sheet for each country.</translate>
-          </template>
-        </form-hint>
-      </template>
-      <el-radio-group v-model="countryRadio" class="RadioGroup">
-        <el-radio :label="1">Import projects from multiple countries (default)</el-radio>
-        <el-radio :label="2">Import to single country</el-radio>
-      </el-radio-group>
-      <input-group v-if="countryRadio === 2">
-        <country-select v-model="importForm.country" />
-      </input-group>
-    </el-form-item>
-    <el-form-item prop="donor">
-      <template #label>
-        <form-hint>
-          <translate>
-            Select Investor
-          </translate>
-          <template #hint>
-            <translate>
-              Data can only be uploaded for one investor at a time. You can update each project once they are saved in your My Projects page before publication.
-            </translate>
-          </template>
-        </form-hint>
-      </template>
-      <el-radio-group v-model="donorRadio" class="RadioGroup">
-        <el-radio :label="1">Import projects from multiple investors (default)</el-radio>
-        <el-radio :label="2">Import to single investor</el-radio>
-      </el-radio-group>
-      <input-group v-if="donorRadio === 2">
-        <donor-select v-model="importForm.donor" />
-      </input-group>
-    </el-form-item> -->
     <el-form-item prop="newCollection" class="flex-col">
       <template #label>
-        <form-hint>
+        <FormHint>
           <translate>Collections</translate>
           <template #hint>
             <translate>
               Explanation of what collection is and why is that good. Or good practices to use this feature. Or restrictions. Or.. something something..
             </translate>
           </template>
-        </form-hint>
+        </FormHint>
       </template>
       <el-checkbox v-model="importToCollection" class="Check">
         <translate>
           Group projects in a collection
         </translate>
       </el-checkbox>
-      <input-group v-if="importToCollection">
+      <InputGroup v-if="importToCollection">
         <el-radio-group v-model="toCollection" class="RadioGroup">
           <el-radio :label="1">Create a new collection</el-radio>
           <el-input
@@ -173,21 +133,21 @@
           <el-radio :label="2">
             <translate>Add to existing collection retrospectively</translate>
           </el-radio>
-          <collection-select v-if="toCollection === 2" v-model="importForm.collectionUrl" class="Select" />
+          <CollectionSelect v-if="toCollection === 2" v-model="importForm.collectionUrl" class="Select" />
         </el-radio-group>
-      </input-group>
+      </InputGroup>
       <el-checkbox :disabled="!importToCollection" v-model="importForm.projectEditor" class="Check">
         <translate>Add me as project editor to all imported projects</translate>
       </el-checkbox>
     </el-form-item>
     <el-divider class="wide" />
     <el-form-item v-if="alert > 0">
-      <alert v-show="alert === 1" type="success">
+      <Alert v-show="alert === 1" type="success">
         <translate key="success">File has been successfully imported.</translate>
-      </alert>
-      <alert v-show="alert === 2" type="error">
+      </Alert>
+      <Alert v-show="alert === 2" type="error">
         <translate key="error">There was an error while importing the file! Maybe try again.</translate>
-      </alert>
+      </Alert>
     </el-form-item>
     <el-button type="warning" @click="save" :loading="importing" :disabled="!canImport">
       <translate>Import now</translate>
@@ -198,22 +158,18 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import InputGroup from '@/components/common/wrappers/InputGroup'
-// import DonorSelect from '@/components/common/DonorSelect'
 import CollectionSelect from '@/components/common/CollectionSelect'
-// import CountrySelect from '@/components/common/CountrySelect'
 import FormHint from '@/components/common/FormHint'
 import Warning from '@/components/common/Warning'
 import Alert from '@/components/common/Alert'
 import { XlsxRead, XlsxSheets, XlsxJson, XlsxWorkbook, XlsxSheet, XlsxDownload } from 'vue-xlsx'
 import { importTemplate, nameMapping } from '@/utilities/import'
-import { draftRules } from '@/utilities/projects'
+import { draftRules, getNestedList } from '@/utilities/projects'
 
 export default {
   components: {
     InputGroup,
-    // DonorSelect,
     CollectionSelect,
-    // CountrySelect,
     XlsxRead,
     XlsxSheets,
     XlsxJson,
@@ -239,8 +195,6 @@ export default {
         newCollection: ''
       },
       uniqueImport: true,
-      countryRadio: 1,
-      donorRadio: 1,
       importToCollection: false,
       toCollection: 1,
       alert: 0,
@@ -270,8 +224,13 @@ export default {
         a.push(c.name)
         return a
       }, [])
-      const flatLicenses = this.projectDicts.licenses.map(l => l.name)
-      const flatSoftware = this.projectDicts.technology_platforms.map(p => p.name)
+      const flatStandards =
+        getNestedList(this.projectDicts.interoperability_standards, 'standards')
+        .map(s => s.name)
+      const flatOsiLicenses = this.projectDicts.osi_licenses.map(l => l.name)
+      const flatSoftware = this.projectDicts.technology_platforms
+        .filter(p => p.name)
+        .map(p => p.name)
       const flathDHI = this.projectDicts.strategies.reduce((a, c) => {
         const innerValue = c.subGroups.reduce((innerA, innerC) => {
           return innerA.concat(innerC.strategies.map(s => s.name))
@@ -285,12 +244,13 @@ export default {
         [nameMapping.health_focus_areas, ...flatHFA],
         [nameMapping.hsc_challenges, ...flatHSC],
         [nameMapping.his_bucket, ...flatsHIS],
-        [nameMapping.licenses, ...flatLicenses],
+        [nameMapping.osi_licenses, ...flatOsiLicenses],
         [nameMapping.software, ...flatSoftware],
         [nameMapping.digitalHealthInterventions, ...flathDHI],
         [nameMapping.organisation, ...flatOrganisations],
         [nameMapping.country, ...flatCountries],
-        [nameMapping.donors, ...flatInvestors]
+        [nameMapping.donors, ...flatInvestors],
+        [nameMapping.interoperability_standards, ...flatStandards],
       ]
     },
     draftRequiredFields () {
@@ -332,8 +292,6 @@ export default {
       this.$refs.importFile.clearFiles()
       this.inputFile = null
       this.selectedSheet = null
-      this.countryRadio = 1
-      this.donorRadio = 1
       this.importToCollection = false
       this.toCollection = 1
       this.$refs.importForm.resetFields()
@@ -387,16 +345,6 @@ export default {
           ]
         }
       }
-      /*
-        May be removed after the Stub projects released and aproved
-
-        if (this.countryRadio === 2 && this.importForm.country) {
-        importData.project_import.country = this.importForm.country
-      }
-      if (this.donorRadio === 2 && this.importForm.donor) {
-        importData.project_import.donor = this.importForm.donor
-      }
-      */
 
       if (this.importToCollection) {
         importData.add_me_as_editor = this.importForm.projectEditor

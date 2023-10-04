@@ -12,7 +12,7 @@ from core.admin import AllObjectsAdmin
 from country.models import Country
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Project, HSCGroup, \
-    ProjectImportV2, ImportRow, Stage, ProjectVersion, Collection
+    ProjectImportV2, ImportRow, Stage, ProjectVersion, Collection, OSILicence
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
@@ -112,6 +112,16 @@ class HealthCategoryAdmin(AllObjectsAdmin):
 
 class LicenceAdmin(AllObjectsAdmin):
     pass
+
+
+class OSILicenceAdmin(admin.ModelAdmin):
+    list_display = ['name', 'spdx_id', 'category', 'link']
+    list_filter = ['category']
+
+    def link(self, obj):  # pragma: no cover
+        if obj.id is None:
+            return '-'
+        return mark_safe(f"<a target='_blank' href='{obj.url}'>{obj.url}</a>")
 
 
 class InteroperabilityStandardAdmin(TabbedDjangoJqueryTranslationAdmin, AllObjectsAdmin):
@@ -276,6 +286,7 @@ admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
 admin.site.register(HealthFocusArea, HealthFocusAreaAdmin)
 admin.site.register(HealthCategory, HealthCategoryAdmin)
 admin.site.register(Licence, LicenceAdmin)
+admin.site.register(OSILicence, OSILicenceAdmin)
 admin.site.register(InteroperabilityStandard, InteroperabilityStandardAdmin)
 admin.site.register(HISBucket, HISBucketAdmin)
 admin.site.register(HSCGroup, HSCGroupAdmin)

@@ -394,6 +394,22 @@ class Licence(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pass
 
 
+class OSILicence(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    class Categories(models.IntegerChoices):
+        INT = 1, _("International")
+        NONREUSE = 2, _("Non-Reusable")
+        OTHER = 3, _("Other/Miscellaneous")
+        POPULAR = 4, _("Popular / Strong Community")
+        REDUNDANT = 5, _("Redundant with more popular")
+        SPECIAL = 6, _("Special Purpose")
+        SUPERSEDED = 7, _("Superseded")
+        UNCATEGORIZED = 8, _("Uncategorized")
+        RETIRED = 9, _("Voluntarily retired")
+    spdx_id = models.CharField(max_length=64, blank=True)
+    category = models.PositiveSmallIntegerField(choices=Categories.choices, blank=True, null=True)
+    url = models.URLField(blank=True)
+
+
 class InteroperabilityStandard(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     class Categories(models.IntegerChoices):
         HDES = 1, _("Health Data Exchange Standards")

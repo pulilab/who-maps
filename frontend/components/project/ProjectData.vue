@@ -52,6 +52,7 @@ import ViewActions from '@/components/project/ViewActions'
 import Overview from '@/components/project/sections/view/Overview'
 import Implementation from '@/components/project/sections/view/Implementation'
 import Stages from '@/components/project/sections/view/Stages'
+import Licensing from '@/components/project/sections/view/Licensing'
 import Technology from '@/components/project/sections/view/Technology'
 import Interoperability from '@/components/project/sections/view/Interoperability'
 import Custom from '@/components/project/sections/view/Custom'
@@ -65,6 +66,7 @@ export default {
     Overview,
     Implementation,
     Stages,
+    Licensing,
     Technology,
     Interoperability,
     Custom,
@@ -102,17 +104,24 @@ export default {
           component: 'Stages'
         },
         {
+          id: 'licensing',
+          nav: this.$gettext('Licensing'),
+          title: this.$gettext('Accessibility and Licensing'),
+          prepend: 4,
+          component: 'Licensing'
+        },
+        {
           id: 'technology',
           nav: this.$gettext('Technology'),
           title: this.$gettext('Technology overview'),
-          prepend: 4,
+          prepend: 5,
           component: 'Technology'
         },
         {
           id: 'interoperability',
           nav: this.$gettext('Interoperability'),
           title: this.$gettext('Interoperability & standards'),
-          prepend: 5,
+          prepend: 6,
           component: 'Interoperability'
         }
       ],

@@ -1,5 +1,5 @@
 <template>
-  <page-layout type="draft">
+  <PageLayout type="draft">
     <template #title>
       <translate>View Project Info</translate>
     </template>
@@ -8,8 +8,8 @@
       <ProjectStatusBadge status="draft" />
       <translate>version of the project.</translate>
     </template>
-    <project-data />
-  </page-layout>
+    <ProjectData />
+  </PageLayout>
 </template>
 
 <script>
@@ -17,6 +17,7 @@ import { fetchProjectData } from '@/utilities/projects'
 import ProjectData from '@/components/project/ProjectData'
 import PageLayout from '@/components/common/wrappers/PageLayout'
 import ProjectStatusBadge from '@/components/project/ProjectStatusBadge'
+
 export default {
   components: {
     ProjectData,

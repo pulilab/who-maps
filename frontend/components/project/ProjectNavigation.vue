@@ -52,6 +52,14 @@
               <translate>Stages</translate>
             </el-button>
           </li>
+          <li :class="{ active: active === 'licensing' }">
+            <el-button type="text" @click="scrollTo('licensing')">
+              <span class="Step">
+                <fa icon="arrow-right" />
+              </span>
+              <translate>Licensing</translate>
+            </el-button>
+          </li>
           <li :class="{ active: active === 'technology' }">
             <el-button type="text" @click="scrollTo('technology')">
               <span class="Step">

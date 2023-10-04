@@ -31,7 +31,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "strategies")
         self.assertContains(response, "technology_platforms")
-        self.assertContains(response, "licenses")
+        self.assertContains(response, "osi_licenses")
         self.assertContains(response, "interoperability_links")
         self.assertContains(response, "interoperability_standards")
         self.assertContains(response, "his_bucket")
@@ -188,7 +188,7 @@ class ProjectTests(SetupTests):
             name="Test Project4",
             implementing_partners=[{"object": "not good"}],
             health_focus_areas=[{"object": "not good"}],
-            licenses=[{"object": "not good"}],
+            osi_licenses=[{"object": "not good"}],
             donors=[{"object": "not good"}],
             his_bucket=[{"object": "not good"}],
             hsc_challenges=[{"object": "not good"}],
@@ -200,7 +200,7 @@ class ProjectTests(SetupTests):
         self.assertEqual(len(response.json()['project'].keys()), 8)
         self.assertEqual(response.json()['project']['implementing_partners']['0'], ['Not a valid string.'])
         self.assertEqual(response.json()['project']['health_focus_areas']['0'], ['A valid integer is required.'])
-        self.assertEqual(response.json()['project']['licenses']['0'], ['A valid integer is required.'])
+        self.assertEqual(response.json()['project']['osi_licenses']['0'], ['A valid integer is required.'])
         self.assertEqual(response.json()['project']['donors']['0'], ['A valid integer is required.'])
         self.assertEqual(response.json()['project']['his_bucket']['0'], ['A valid integer is required.'])
         self.assertEqual(response.json()['project']['hsc_challenges']['0'], ['A valid integer is required.'])
@@ -656,13 +656,12 @@ class ProjectTests(SetupTests):
             "contact_name": "name2",
             "contact_email": "a@a.com",
             "implementation_overview": "overview",
-            "implementation_dates": "2016",
             "health_focus_areas": [1, 2],
             "geographic_scope": "somewhere",
             "country": country.id,
             "software": [1, 2],
             "dhis": [1, 2, 9],
-            "licenses": [1, 2],
+            "osi_licenses": [1, 2],
             "coverage": [
                 {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
                 {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
@@ -1097,7 +1096,6 @@ class ProjectTests(SetupTests):
             "contact_name": "test_contact",
             "contact_email": "a@a.com",
             "implementation_overview": "overview",
-            "implementation_dates": "2019",
             "health_focus_areas": [1, 2],
             "country": country.id,
             "software": [software_1.id, software_2.id],

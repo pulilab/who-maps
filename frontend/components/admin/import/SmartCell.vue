@@ -63,8 +63,20 @@
           <span v-if="countryDetails.name">{{ countryDetails.name }}</span>
         </template>
 
-        <template v-else-if="isTextArea || isGovInvestor">
+        <template v-else-if="isTextArea">
           {{ internalValue }}
+        </template>
+
+        <template v-else-if="isGovInvestor">
+          {{ parsedValue.ids[0] !== undefined ? investedList[parsedValue.ids[0]] : internalValue }}
+        </template>
+
+        <template v-else-if="isLicenseChoice">
+          {{ parsedValue.ids[0] !== undefined ? licenseChoices[parsedValue.ids[0]-1] : licenseChoices[internalValue-1] }}
+        </template>
+
+        <template v-else-if="isLicenseChoiceAlt">
+          {{ parsedValue.ids[0] !== undefined ? licenseChoicesAlt[parsedValue.ids[0]-1] : licenseChoicesAlt[internalValue-1] }}
         </template>
 
         <template v-else-if="isOrganisation">
@@ -108,6 +120,25 @@ import DateField from '@/components/admin/import/DateField'
 import CountryFlag from '@/components/common/CountryFlag'
 import { Validator } from 'vee-validate'
 import { mapState } from 'vuex'
+
+const governmentContributions = {
+  'no they have not yet contributed': 0,
+  'yes they are contributing inkind people or time': 1,
+  'yes there is a financial contribution through moh budget': 2,
+  'yes moh is fully funding the project': 3
+}
+
+const licenseChoices = {
+  'yes': 1,
+  'yes  with restrictions': 2,
+  'no': 3
+}
+
+const licenseChoicesAlt = {
+  'yes': 1,
+  'partially': 2,
+  'no': 3
+}
 
 export default {
   components: {
@@ -163,7 +194,23 @@ export default {
   data () {
     return {
       shown: true,
-      active: false
+      active: false,
+      investedList: [
+        this.$gettext('No, they have not yet contributed'),
+        this.$gettext('Yes, they are contributing in-kind people or time'),
+        this.$gettext('Yes, there is a financial contribution through MOH budget'),
+        this.$gettext('Yes, MOH is fully funding the project')
+      ],
+      licenseChoices: [
+        this.$gettext('Yes'),
+        this.$gettext('Yes - With restrictions'),
+        this.$gettext('No')
+      ],
+      licenseChoicesAlt: [
+        this.$gettext('Yes'),
+        this.$gettext('Partially'),
+        this.$gettext('No')
+      ],
     }
   },
   computed: {
@@ -178,9 +225,7 @@ export default {
     },
     internalValue: {
       get () {
-        if (this.isDate) {
-          return new Date(this.value)
-        }
+        if (this.isDate) return new Date(this.value)
         return this.value
       },
       set (value) {
@@ -243,6 +288,12 @@ export default {
     isGovInvestor () {
       return this.column === 'government_investor'
     },
+    isLicenseChoice () {
+      return this.column === 'zero_cost' || this.column === 'is_customizable' || this.column === 'free_replication'
+    },
+    isLicenseChoiceAlt () {
+      return this.column === 'codebase_accessible'
+    },
     isDisabled () {
       return !this.column || this.disabled
     },
@@ -266,21 +317,12 @@ export default {
           implementation_dates: () => this.parseDate(),
           start_date: () => this.parseDate(),
           end_date: () => this.parseDate(),
-          government_investor: () => {
-            const labelLib = {
-              'no they have not yet contributed': 0,
-              'yes they are contributing inkind people or time': 1,
-              'yes there is a financial contribution through moh budget': 2
-            }
-            const cleaned = ('' + this.value).replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').toLowerCase()
-            const value = Number.isInteger(this.value) ? this.value : labelLib[cleaned]
-            const label = !Number.isInteger(this.value) ? this.value : Object.keys(labelLib).find(k => labelLib[k] === cleaned)
-            return {
-              ids: [value],
-              names: [label]
-            }
-          },
-          licenses: () => this.findProjectCollectionValue('licenses', true),
+          government_investor: () => this.enumParser(governmentContributions),
+          zero_cost: () => this.enumParser(licenseChoices),
+          codebase_accessible : () => this.enumParser(licenseChoicesAlt),
+          is_customizable: () => this.enumParser(licenseChoices),
+          free_replication : () => this.enumParser(licenseChoices),
+          osi_licenses: () => this.findProjectCollectionValue('osi_licenses', true),
           interoperability_links: () => this.findProjectCollectionValue('interoperability_links'),
           interoperability_standards: () => this.findProjectCollectionValue('interoperability_standards', true, 'standards'),
           sub_level: () => {
@@ -310,7 +352,7 @@ export default {
       }
     },
     parsingFailed () {
-      return this.value && this.column && this.parsedValue?.ids?.length === 0 && !this.isOrganisation && !this.isTeam
+      return this.value && this.column && this.parsedValue?.ids?.length === 0 && isNaN(this.value) && !this.isOrganisation && !this.isTeam
     },
     errorMessage () {
       const e = this.errors.find(e => e.field === this.column)
@@ -354,6 +396,10 @@ export default {
         this.$emit('openDialog', { value: this.parsedValue.ids, column: this.column, type: this.type })
       }
     },
+    isEnumSelected(val) {
+
+
+    },
     parseDate () {
       const result = this.value ? new Date(this.value) : null
       return {
@@ -386,6 +432,21 @@ export default {
         .map(st => ({ id: st, name: st }))
       return this.toInternalRepresentation(filtered)
     },
+    enumParser(obj) {
+      const parsed = {
+        ids: [],
+        names: []
+      }
+      if (typeof this.value === 'string') {
+        const cleaned = ('' + this.value).trim().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').toLowerCase()
+        parsed.ids[0] = obj[cleaned]
+        parsed.names[0] = Object.keys(obj).find(k => obj[k] === this.value)
+      } else {
+        parsed.ids[0] = Array.isArray(this.value) ? this.value[0] : this.value
+        parsed.names[0] = Object.keys(obj).find(k => obj[k] === this.value)
+      }
+      return parsed
+    },
     valueParser (isMultiple) {
       if (!Array.isArray(this.value)) {
         return isMultiple ? this.stringToArray(this.value) : [this.value]
@@ -413,8 +474,8 @@ export default {
       return this.toInternalRepresentation(filtered)
     },
     apiValue () {
-      const isMultiple = ['donors', 'software', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'licenses', 'interoperability_standards', 'custom_field', 'digitalHealthInterventions', 'implementing_team', 'implementing_viewers']
-      const isIds = [...isMultiple, 'country', 'organisation', 'government_investor', 'sub_level']
+      const isMultiple = ['donors', 'software', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'osi_licenses', 'interoperability_standards', 'custom_field', 'digitalHealthInterventions', 'implementing_team', 'implementing_viewers']
+      const isIds = [...isMultiple, 'country', 'organisation', 'government_investor', 'zero_cost', 'codebase_accessible', 'is_customizable', 'free_replication', 'sub_level']
       const idsOrNames = isIds.includes(this.column) ? this.parsedValue.ids : this.parsedValue.names
       return isMultiple.includes(this.column) ? idsOrNames : idsOrNames[0]
     }

@@ -1,13 +1,9 @@
 <template>
-  <div
-    id="interoperability"
-    class="InteroperabilityAndStandards"
-  >
+  <div id="interoperability" class="InteroperabilityAndStandards">
     <collapsible-card
       ref="collapsible"
       :title="$gettext('Interoperability &amp; Standards')"
       :prepend-title="prependTitle"
-      show-legend
     >
       <custom-required-form-item
         prop="interoperability_links"
