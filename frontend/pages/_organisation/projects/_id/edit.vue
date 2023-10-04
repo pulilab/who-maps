@@ -1,5 +1,5 @@
 <template>
-  <page-layout type="draft">
+  <PageLayout type="draft">
     <template #title>
       <translate>Edit Project Info</translate>
     </template>
@@ -8,8 +8,8 @@
       <ProjectStatusBadge status="draft" />
       <translate>version of the project.</translate>
     </template>
-    <project-form draft />
-  </page-layout>
+    <ProjectForm draft />
+  </PageLayout>
 </template>
 
 <script>

@@ -18,7 +18,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, TeamCollectionTokenAuthMixin, CollectionTokenAuthMixin, \
     get_object_or_400, CollectionAuthenticatedMixin
 from project.cache import cache_structure
-from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion
+from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion, OSILicence
 from project.permissions import InCountryAdminForApproval, IsOwnerShipModifiable
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor, ReferenceDocumentType
@@ -33,7 +33,7 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     CollectionListSerializer, ProjectImportV2ListSerializer, ExternalProjectResponseSerializer
 
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Collection
+    HealthCategory, InteroperabilityStandard, HISBucket, HSCChallenge, Collection
 
 from django.conf import settings
 from rest_framework.views import APIView
@@ -92,7 +92,7 @@ class ProjectPublicViewSet(ViewSet):
             interoperability_links=InteroperabilityLink.objects.values('id', 'pre', 'name'),
             technology_platforms=TechnologyPlatform.objects.exclude(state=TechnologyPlatform.DECLINED).values(
                 'id', 'name', 'state'),
-            licenses=Licence.objects.values('id', 'name'),
+            osi_licenses=OSILicence.objects.values('id', 'name'),
             his_bucket=HISBucket.objects.values('id', 'name'),
             interoperability_standards=interoperability_standards,
             health_focus_areas=health_focus_areas,

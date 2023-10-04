@@ -1,0 +1,1484 @@
+[
+{
+  "model": "project.osilicence",
+  "pk": 1,
+  "fields": {
+    "created": "2023-09-19T09:16:49.375Z",
+    "modified": "2023-09-19T09:16:49.375Z",
+    "is_active": true,
+    "name": "1-clause BSD License",
+    "spdx_id": "BSD-1-Clause",
+    "category": 3,
+    "url": "https://opensource.org/license/bsd-1-clause/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 2,
+  "fields": {
+    "created": "2023-09-19T09:16:49.380Z",
+    "modified": "2023-09-19T09:16:49.380Z",
+    "is_active": true,
+    "name": "Academic Free License v. 3.0",
+    "spdx_id": "AFL-3.0",
+    "category": 5,
+    "url": "https://opensource.org/license/afl-3-0-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 3,
+  "fields": {
+    "created": "2023-09-19T09:16:49.381Z",
+    "modified": "2023-09-19T09:16:49.381Z",
+    "is_active": true,
+    "name": "Adaptive Public License 1.0",
+    "spdx_id": "APL-1.0",
+    "category": 3,
+    "url": "https://opensource.org/license/apl1-0-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 4,
+  "fields": {
+    "created": "2023-09-19T09:16:49.383Z",
+    "modified": "2023-09-19T09:16:49.383Z",
+    "is_active": true,
+    "name": "Apache License, Version 2.0",
+    "spdx_id": "Apache-2.0",
+    "category": 4,
+    "url": "https://opensource.org/license/apache-2-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 5,
+  "fields": {
+    "created": "2023-09-19T09:16:49.383Z",
+    "modified": "2023-09-19T09:16:49.383Z",
+    "is_active": true,
+    "name": "Apache Software License, version 1.1",
+    "spdx_id": "Apache-1.1",
+    "category": 7,
+    "url": "https://opensource.org/license/apache-1-1/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 6,
+  "fields": {
+    "created": "2023-09-19T09:16:49.384Z",
+    "modified": "2023-09-19T09:16:49.384Z",
+    "is_active": true,
+    "name": "Apple Public Source License 2.0",
+    "spdx_id": "APSL-2.0",
+    "category": 2,
+    "url": "https://opensource.org/license/apsl-2-0-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 7,
+  "fields": {
+    "created": "2023-09-19T09:16:49.385Z",
+    "modified": "2023-09-19T09:16:49.385Z",
+    "is_active": true,
+    "name": "Artistic License (Perl) 1.0",
+    "spdx_id": "Artistic-1.0-Perl",
+    "category": 7,
+    "url": "https://opensource.org/license/artistic-perl-1-0-2/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 8,
+  "fields": {
+    "created": "2023-09-19T09:16:49.386Z",
+    "modified": "2023-09-19T09:16:49.386Z",
+    "is_active": true,
+    "name": "Artistic License 1.0",
+    "spdx_id": "Artistic-1.0",
+    "category": 7,
+    "url": "https://opensource.org/license/artistic-1-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 9,
+  "fields": {
+    "created": "2023-09-19T09:16:49.386Z",
+    "modified": "2023-09-19T09:16:49.386Z",
+    "is_active": true,
+    "name": "Artistic License 2.0",
+    "spdx_id": "Artistic-2.0",
+    "category": 3,
+    "url": "https://opensource.org/license/artistic-2-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 10,
+  "fields": {
+    "created": "2023-09-19T09:16:49.387Z",
+    "modified": "2023-09-19T09:16:49.387Z",
+    "is_active": true,
+    "name": "Attribution Assurance License",
+    "spdx_id": "AAL",
+    "category": 5,
+    "url": "https://opensource.org/license/attribution-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 11,
+  "fields": {
+    "created": "2023-09-19T09:16:49.388Z",
+    "modified": "2023-09-19T09:16:49.388Z",
+    "is_active": true,
+    "name": "Boost Software License 1.0",
+    "spdx_id": "BSL-1.0",
+    "category": 8,
+    "url": "https://opensource.org/license/bsl-1-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 12,
+  "fields": {
+    "created": "2023-09-19T09:16:49.389Z",
+    "modified": "2023-09-19T09:16:49.389Z",
+    "is_active": true,
+    "name": "BSD+Patent",
+    "spdx_id": "BSD-2-Clause-Patent",
+    "category": 6,
+    "url": "https://opensource.org/license/bsdpluspatent/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 13,
+  "fields": {
+    "created": "2023-09-19T09:16:49.389Z",
+    "modified": "2023-09-19T09:16:49.389Z",
+    "is_active": true,
+    "name": "Cea Cnrs Inria Logiciel Libre License, version 2.1",
+    "spdx_id": "CECILL-2.1",
+    "category": 1,
+    "url": "https://opensource.org/license/cecill-2-1/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 14,
+  "fields": {
+    "created": "2023-09-19T09:16:49.390Z",
+    "modified": "2023-09-19T09:16:49.390Z",
+    "is_active": true,
+    "name": "CERN Open Hardware Licence Version 2 – Permissive",
+    "spdx_id": "CERN-OHL-P-2.0",
+    "category": 6,
+    "url": "https://opensource.org/license/cern-ohl-p/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 15,
+  "fields": {
+    "created": "2023-09-19T09:16:49.391Z",
+    "modified": "2023-09-19T09:16:49.391Z",
+    "is_active": true,
+    "name": "CERN Open Hardware Licence Version 2 – Strongly Reciprocal",
+    "spdx_id": "CERN-OHL-S-2.0",
+    "category": 6,
+    "url": "https://opensource.org/license/cern-ohl-s/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 16,
+  "fields": {
+    "created": "2023-09-19T09:16:49.391Z",
+    "modified": "2023-09-19T09:16:49.391Z",
+    "is_active": true,
+    "name": "CERN Open Hardware Licence Version 2 – Weakly Reciprocal",
+    "spdx_id": "CERN-OHL-W-2.0",
+    "category": 6,
+    "url": "https://opensource.org/license/cern-ohl-w/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 17,
+  "fields": {
+    "created": "2023-09-19T09:16:49.392Z",
+    "modified": "2023-09-19T09:16:49.392Z",
+    "is_active": true,
+    "name": "Common Development and Distribution License 1.0",
+    "spdx_id": "CDDL-1.0",
+    "category": 4,
+    "url": "https://opensource.org/license/cddl-1-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 18,
+  "fields": {
+    "created": "2023-09-19T09:16:49.393Z",
+    "modified": "2023-09-19T09:16:49.393Z",
+    "is_active": true,
+    "name": "Common Public Attribution License Version 1.0",
+    "spdx_id": "CPAL-1.0",
+    "category": 8,
+    "url": "https://opensource.org/license/cpal_1-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 19,
+  "fields": {
+    "created": "2023-09-19T09:16:49.394Z",
+    "modified": "2023-09-19T09:16:49.394Z",
+    "is_active": true,
+    "name": "Common Public License Version 1.0",
+    "spdx_id": "CPL-1.0",
+    "category": 7,
+    "url": "https://opensource.org/license/cpl1-0-txt/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 20,
+  "fields": {
+    "created": "2023-09-19T09:16:49.394Z",
+    "modified": "2023-09-19T09:16:49.394Z",
+    "is_active": true,
+    "name": "Computer Associates Trusted Open Source License 1.1",
+    "spdx_id": "CATOSL-1.1",
+    "category": 2,
+    "url": "https://opensource.org/license/ca-tosl1-1-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 21,
+  "fields": {
+    "created": "2023-09-19T09:16:49.395Z",
+    "modified": "2023-09-19T09:16:49.395Z",
+    "is_active": true,
+    "name": "Cryptographic Autonomy License",
+    "spdx_id": "CAL-1.0",
+    "category": 8,
+    "url": "https://opensource.org/license/cal-1-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 22,
+  "fields": {
+    "created": "2023-09-19T09:16:49.395Z",
+    "modified": "2023-09-19T09:16:49.395Z",
+    "is_active": true,
+    "name": "CUA Office Public License",
+    "spdx_id": "CUA-OPL-1.0",
+    "category": 9,
+    "url": "https://opensource.org/license/cuaoffice-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 23,
+  "fields": {
+    "created": "2023-09-19T09:16:49.396Z",
+    "modified": "2023-09-19T09:16:49.396Z",
+    "is_active": true,
+    "name": "Eclipse Public License -v 1.0",
+    "spdx_id": "EPL-1.0",
+    "category": 7,
+    "url": "https://opensource.org/license/epl-1-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 24,
+  "fields": {
+    "created": "2023-09-19T09:16:49.397Z",
+    "modified": "2023-09-19T09:16:49.397Z",
+    "is_active": true,
+    "name": "Eclipse Public License version 2.0",
+    "spdx_id": "EPL-2.0",
+    "category": 4,
+    "url": "https://opensource.org/license/epl-2-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 25,
+  "fields": {
+    "created": "2023-09-19T09:16:49.397Z",
+    "modified": "2023-09-19T09:16:49.397Z",
+    "is_active": true,
+    "name": "eCos License version 2.0",
+    "spdx_id": "eCos-2.0",
+    "category": 2,
+    "url": "https://opensource.org/license/ecos-2-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 26,
+  "fields": {
+    "created": "2023-09-19T09:16:49.398Z",
+    "modified": "2023-09-19T09:16:49.398Z",
+    "is_active": true,
+    "name": "Educational Community License, Version 1.0",
+    "spdx_id": "ECL-1.0",
+    "category": 7,
+    "url": "https://opensource.org/license/ecl-1-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 27,
+  "fields": {
+    "created": "2023-09-19T09:16:49.399Z",
+    "modified": "2023-09-19T09:16:49.399Z",
+    "is_active": true,
+    "name": "Educational Community License, Version 2.0",
+    "spdx_id": "ECL-2.0",
+    "category": 6,
+    "url": "https://opensource.org/license/ecl-2-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 28,
+  "fields": {
+    "created": "2023-09-19T09:16:49.399Z",
+    "modified": "2023-09-19T09:16:49.399Z",
+    "is_active": true,
+    "name": "Eiffel Forum License, version 1",
+    "spdx_id": "EFL-1.0",
+    "category": 7,
+    "url": "https://opensource.org/license/efl-1-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 29,
+  "fields": {
+    "created": "2023-09-19T09:16:49.400Z",
+    "modified": "2023-09-19T09:16:49.400Z",
+    "is_active": true,
+    "name": "Eiffel Forum License, Version 2",
+    "spdx_id": "EFL-2.0",
+    "category": 5,
+    "url": "https://opensource.org/license/ver2_eiffel-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 30,
+  "fields": {
+    "created": "2023-09-19T09:16:49.401Z",
+    "modified": "2023-09-19T09:16:49.401Z",
+    "is_active": true,
+    "name": "Entessa Public License Version. 1.0",
+    "spdx_id": "Entessa",
+    "category": 2,
+    "url": "https://opensource.org/license/entessa/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 31,
+  "fields": {
+    "created": "2023-09-19T09:16:49.401Z",
+    "modified": "2023-09-19T09:16:49.401Z",
+    "is_active": true,
+    "name": "EU DataGrid Software License",
+    "spdx_id": "EUDatagrid",
+    "category": 2,
+    "url": "https://opensource.org/license/eudatagrid-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 32,
+  "fields": {
+    "created": "2023-09-19T09:16:49.402Z",
+    "modified": "2023-09-19T09:16:49.402Z",
+    "is_active": true,
+    "name": "European Union Public License, version 1.2",
+    "spdx_id": "EUPL-1.2",
+    "category": 1,
+    "url": "https://opensource.org/license/eupl-1-2/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 33,
+  "fields": {
+    "created": "2023-09-19T09:16:49.403Z",
+    "modified": "2023-09-19T09:16:49.403Z",
+    "is_active": true,
+    "name": "Fair License",
+    "spdx_id": "Fair",
+    "category": 5,
+    "url": "https://opensource.org/license/fair/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 34,
+  "fields": {
+    "created": "2023-09-19T09:16:49.403Z",
+    "modified": "2023-09-19T09:16:49.403Z",
+    "is_active": true,
+    "name": "Frameworx License 1.0",
+    "spdx_id": "Frameworx-1.0",
+    "category": 2,
+    "url": "https://opensource.org/license/frameworx-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 35,
+  "fields": {
+    "created": "2023-09-19T09:16:49.404Z",
+    "modified": "2023-09-19T09:16:49.404Z",
+    "is_active": true,
+    "name": "GNU Affero General Public License version 3",
+    "spdx_id": "AGPL-3.0-only",
+    "category": 8,
+    "url": "https://opensource.org/license/agpl-v3/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 36,
+  "fields": {
+    "created": "2023-09-19T09:16:49.404Z",
+    "modified": "2023-09-19T09:16:49.404Z",
+    "is_active": true,
+    "name": "GNU General Public License version 2",
+    "spdx_id": "GPL-2.0",
+    "category": 4,
+    "url": "https://opensource.org/license/gpl-2-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 37,
+  "fields": {
+    "created": "2023-09-19T09:16:49.405Z",
+    "modified": "2023-09-19T09:16:49.405Z",
+    "is_active": true,
+    "name": "GNU General Public License version 3",
+    "spdx_id": "GPL-3.0-only",
+    "category": 4,
+    "url": "https://opensource.org/license/gpl-3-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 38,
+  "fields": {
+    "created": "2023-09-19T09:16:49.406Z",
+    "modified": "2023-09-19T09:16:49.406Z",
+    "is_active": true,
+    "name": "GNU General Public License, version 1",
+    "spdx_id": "",
+    "category": 7,
+    "url": "https://opensource.org/license/gpl-1-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 39,
+  "fields": {
+    "created": "2023-09-19T09:16:49.406Z",
+    "modified": "2023-09-19T09:16:49.406Z",
+    "is_active": true,
+    "name": "GNU Lesser General Public License version 2.1",
+    "spdx_id": "LGPL-2.1",
+    "category": 4,
+    "url": "https://opensource.org/license/lgpl-2-1/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 40,
+  "fields": {
+    "created": "2023-09-19T09:16:49.407Z",
+    "modified": "2023-09-19T09:16:49.407Z",
+    "is_active": true,
+    "name": "GNU Lesser General Public License version 3",
+    "spdx_id": "LGPL-3.0-only",
+    "category": 4,
+    "url": "https://opensource.org/license/lgpl-3-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 41,
+  "fields": {
+    "created": "2023-09-19T09:16:49.408Z",
+    "modified": "2023-09-19T09:16:49.408Z",
+    "is_active": true,
+    "name": "GNU LGPL",
+    "spdx_id": "",
+    "category": null,
+    "url": "https://opensource.org/license/lgpl-license-html/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 42,
+  "fields": {
+    "created": "2023-09-19T09:16:49.408Z",
+    "modified": "2023-09-19T09:16:49.408Z",
+    "is_active": true,
+    "name": "GNU Library General Public License version 2",
+    "spdx_id": "LGPL-2.0-only",
+    "category": 4,
+    "url": "https://opensource.org/license/lgpl-2-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 43,
+  "fields": {
+    "created": "2023-09-19T09:16:49.409Z",
+    "modified": "2023-09-19T09:16:49.409Z",
+    "is_active": true,
+    "name": "Historical Permission Notice and Disclaimer",
+    "spdx_id": "HPND",
+    "category": 5,
+    "url": "https://opensource.org/license/historical-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 44,
+  "fields": {
+    "created": "2023-09-19T09:16:49.409Z",
+    "modified": "2023-09-19T09:16:49.409Z",
+    "is_active": true,
+    "name": "IBM Public License Version 1.0",
+    "spdx_id": "IPL-1.0",
+    "category": 2,
+    "url": "https://opensource.org/license/ibmpl-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 45,
+  "fields": {
+    "created": "2023-09-19T09:16:49.410Z",
+    "modified": "2023-09-19T09:16:49.410Z",
+    "is_active": true,
+    "name": "Intel Open Source License",
+    "spdx_id": "Intel",
+    "category": 9,
+    "url": "https://opensource.org/license/intel/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 46,
+  "fields": {
+    "created": "2023-09-19T09:16:49.411Z",
+    "modified": "2023-09-19T09:16:49.411Z",
+    "is_active": true,
+    "name": "IPA Font License",
+    "spdx_id": "IPA",
+    "category": 6,
+    "url": "https://opensource.org/license/ipafont-html/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 47,
+  "fields": {
+    "created": "2023-09-19T09:16:49.411Z",
+    "modified": "2023-09-19T09:16:49.411Z",
+    "is_active": true,
+    "name": "ISC License",
+    "spdx_id": "ISC",
+    "category": 8,
+    "url": "https://opensource.org/license/isc-license-txt/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 48,
+  "fields": {
+    "created": "2023-09-19T09:16:49.412Z",
+    "modified": "2023-09-19T09:16:49.412Z",
+    "is_active": true,
+    "name": "Jabber Open Source License",
+    "spdx_id": "",
+    "category": 9,
+    "url": "https://opensource.org/license/jabberpl-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 49,
+  "fields": {
+    "created": "2023-09-19T09:16:49.413Z",
+    "modified": "2023-09-19T09:16:49.413Z",
+    "is_active": true,
+    "name": "JAM License",
+    "spdx_id": "Jam",
+    "category": 3,
+    "url": "https://opensource.org/license/jam/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 50,
+  "fields": {
+    "created": "2023-09-19T09:16:49.413Z",
+    "modified": "2023-09-19T09:16:49.413Z",
+    "is_active": true,
+    "name": "LaTeX Project Public License, Version 1.3c",
+    "spdx_id": "LPPL-1.3c",
+    "category": 2,
+    "url": "https://opensource.org/license/lppl/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 51,
+  "fields": {
+    "created": "2023-09-19T09:16:49.414Z",
+    "modified": "2023-09-19T09:16:49.414Z",
+    "is_active": true,
+    "name": "Lawrence Berkeley National Labs BSD Variant License",
+    "spdx_id": "BSD-3-Clause-LBNL",
+    "category": 6,
+    "url": "https://opensource.org/license/bsd-3-clause-lbnl/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 52,
+  "fields": {
+    "created": "2023-09-19T09:16:49.414Z",
+    "modified": "2023-09-19T09:16:49.414Z",
+    "is_active": true,
+    "name": "Licence Libre du Québec – Permissive  version 1.1",
+    "spdx_id": "LiLiQ-P-1.1",
+    "category": 1,
+    "url": "https://opensource.org/license/liliq-p-1-1/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 53,
+  "fields": {
+    "created": "2023-09-19T09:16:49.415Z",
+    "modified": "2023-09-19T09:16:49.415Z",
+    "is_active": true,
+    "name": "Licence Libre du Québec – Réciprocité forte version 1.1",
+    "spdx_id": "LiLiQ-Rplus-1.1",
+    "category": 1,
+    "url": "https://opensource.org/license/liliq-rplus-1-1/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 54,
+  "fields": {
+    "created": "2023-09-19T09:16:49.416Z",
+    "modified": "2023-09-19T09:16:49.416Z",
+    "is_active": true,
+    "name": "Licence Libre du Québec – Réciprocité version 1.1",
+    "spdx_id": "LiLiQ-R-1.1",
+    "category": 1,
+    "url": "https://opensource.org/license/liliq-r-1-1/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 55,
+  "fields": {
+    "created": "2023-09-19T09:16:49.416Z",
+    "modified": "2023-09-19T09:16:49.416Z",
+    "is_active": true,
+    "name": "Lucent Public License Version 1.02",
+    "spdx_id": "LPL-1.02",
+    "category": 5,
+    "url": "https://opensource.org/license/lucent1-02-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 56,
+  "fields": {
+    "created": "2023-09-19T09:16:49.417Z",
+    "modified": "2023-09-19T09:16:49.417Z",
+    "is_active": true,
+    "name": "Lucent Public License, Plan 9, version 1.0",
+    "spdx_id": "LPL-1.0",
+    "category": 7,
+    "url": "https://opensource.org/license/lpl-1-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 57,
+  "fields": {
+    "created": "2023-09-19T09:16:49.418Z",
+    "modified": "2023-09-19T09:16:49.418Z",
+    "is_active": true,
+    "name": "Microsoft Public License",
+    "spdx_id": "MS-PL",
+    "category": 8,
+    "url": "https://opensource.org/license/ms-pl-html/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 58,
+  "fields": {
+    "created": "2023-09-19T09:16:49.418Z",
+    "modified": "2023-09-19T09:16:49.418Z",
+    "is_active": true,
+    "name": "Microsoft Reciprocal License",
+    "spdx_id": "MS-RL",
+    "category": 8,
+    "url": "https://opensource.org/license/ms-rl-html/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 59,
+  "fields": {
+    "created": "2023-09-19T09:16:49.419Z",
+    "modified": "2023-09-19T09:16:49.419Z",
+    "is_active": true,
+    "name": "MirOS License",
+    "spdx_id": "MirOS",
+    "category": 8,
+    "url": "https://opensource.org/license/miros-html/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 60,
+  "fields": {
+    "created": "2023-09-19T09:16:49.420Z",
+    "modified": "2023-09-19T09:16:49.420Z",
+    "is_active": true,
+    "name": "MIT No Attribution License",
+    "spdx_id": "MIT-0",
+    "category": 3,
+    "url": "https://opensource.org/license/mit-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 61,
+  "fields": {
+    "created": "2023-09-19T09:16:49.421Z",
+    "modified": "2023-09-19T09:16:49.421Z",
+    "is_active": true,
+    "name": "MITRE Collaborative Virtual Workspace License",
+    "spdx_id": "",
+    "category": 9,
+    "url": "https://opensource.org/license/cvw/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 62,
+  "fields": {
+    "created": "2023-09-19T09:16:49.422Z",
+    "modified": "2023-09-19T09:16:49.422Z",
+    "is_active": true,
+    "name": "Motosoto Open Source License",
+    "spdx_id": "Motosoto",
+    "category": 2,
+    "url": "https://opensource.org/license/motosoto/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 63,
+  "fields": {
+    "created": "2023-09-19T09:16:49.423Z",
+    "modified": "2023-09-19T09:16:49.423Z",
+    "is_active": true,
+    "name": "Mozilla Public License 1.1",
+    "spdx_id": "MPL-1.1",
+    "category": 7,
+    "url": "https://opensource.org/license/mpl-1-1/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 64,
+  "fields": {
+    "created": "2023-09-19T09:16:49.424Z",
+    "modified": "2023-09-19T09:16:49.424Z",
+    "is_active": true,
+    "name": "Mozilla Public License 2.0",
+    "spdx_id": "MPL-2.0",
+    "category": 4,
+    "url": "https://opensource.org/license/mpl-2-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 65,
+  "fields": {
+    "created": "2023-09-19T09:16:49.424Z",
+    "modified": "2023-09-19T09:16:49.424Z",
+    "is_active": true,
+    "name": "Mozilla Public License, version 1.0",
+    "spdx_id": "MPL-1.0",
+    "category": 7,
+    "url": "https://opensource.org/license/mpl-1-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 66,
+  "fields": {
+    "created": "2023-09-19T09:16:49.425Z",
+    "modified": "2023-09-19T09:16:49.425Z",
+    "is_active": true,
+    "name": "Mulan Permissive Software License v2",
+    "spdx_id": "MulanPSL-2.0",
+    "category": 1,
+    "url": "https://opensource.org/license/mulanpsl-2-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 67,
+  "fields": {
+    "created": "2023-09-19T09:16:49.426Z",
+    "modified": "2023-09-19T09:16:49.426Z",
+    "is_active": true,
+    "name": "Multics License",
+    "spdx_id": "Multics",
+    "category": 2,
+    "url": "https://opensource.org/license/multics-txt/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 68,
+  "fields": {
+    "created": "2023-09-19T09:16:49.426Z",
+    "modified": "2023-09-19T09:16:49.426Z",
+    "is_active": true,
+    "name": "NASA Open Source Agreement v1.3",
+    "spdx_id": "NASA-1.3",
+    "category": 6,
+    "url": "https://opensource.org/license/nasa1-3-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 69,
+  "fields": {
+    "created": "2023-09-19T09:16:49.427Z",
+    "modified": "2023-09-19T09:16:49.427Z",
+    "is_active": true,
+    "name": "NAUMEN Public License",
+    "spdx_id": "Naumen",
+    "category": 2,
+    "url": "https://opensource.org/license/naumen-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 70,
+  "fields": {
+    "created": "2023-09-19T09:16:49.428Z",
+    "modified": "2023-09-19T09:16:49.428Z",
+    "is_active": true,
+    "name": "Nokia Open Source License Version 1.0a",
+    "spdx_id": "NOKIA",
+    "category": 2,
+    "url": "https://opensource.org/license/nokia/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 71,
+  "fields": {
+    "created": "2023-09-19T09:16:49.429Z",
+    "modified": "2023-09-19T09:16:49.429Z",
+    "is_active": true,
+    "name": "Non-Profit Open Software License version 3.0",
+    "spdx_id": "NPOSL-3.0",
+    "category": 8,
+    "url": "https://opensource.org/license/nposl-3-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 72,
+  "fields": {
+    "created": "2023-09-19T09:16:49.430Z",
+    "modified": "2023-09-19T09:16:49.430Z",
+    "is_active": true,
+    "name": "NTP License",
+    "spdx_id": "NTP",
+    "category": 8,
+    "url": "https://opensource.org/license/ntp-license-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 73,
+  "fields": {
+    "created": "2023-09-19T09:16:49.431Z",
+    "modified": "2023-09-19T09:16:49.431Z",
+    "is_active": true,
+    "name": "Open Group Test Suite License",
+    "spdx_id": "OGTSL",
+    "category": 8,
+    "url": "https://opensource.org/license/opengroup-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 74,
+  "fields": {
+    "created": "2023-09-19T09:16:49.431Z",
+    "modified": "2023-09-19T09:16:49.431Z",
+    "is_active": true,
+    "name": "Open Logistics Foundation License v1.3",
+    "spdx_id": "OLFL-1.3",
+    "category": 6,
+    "url": "https://opensource.org/license/olfl-1-3/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 75,
+  "fields": {
+    "created": "2023-09-19T09:16:49.432Z",
+    "modified": "2023-09-19T09:16:49.432Z",
+    "is_active": true,
+    "name": "Open Software License 2.1",
+    "spdx_id": "OSL-2.1",
+    "category": 7,
+    "url": "https://opensource.org/license/osl-2-1/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 76,
+  "fields": {
+    "created": "2023-09-19T09:16:49.433Z",
+    "modified": "2023-09-19T09:16:49.433Z",
+    "is_active": true,
+    "name": "Open Software License, version 1.0",
+    "spdx_id": "OSL-1.0",
+    "category": 7,
+    "url": "https://opensource.org/license/osl-1-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 77,
+  "fields": {
+    "created": "2023-09-19T09:16:49.433Z",
+    "modified": "2023-09-19T09:16:49.433Z",
+    "is_active": true,
+    "name": "OpenLDAP Public License Version 2.8",
+    "spdx_id": "OLDAP-2.8",
+    "category": 5,
+    "url": "https://opensource.org/license/oldap-2-8/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 78,
+  "fields": {
+    "created": "2023-09-19T09:16:49.434Z",
+    "modified": "2023-09-19T09:16:49.434Z",
+    "is_active": true,
+    "name": "OSET Public License version 2.1",
+    "spdx_id": "OSET-PL-2.1",
+    "category": 6,
+    "url": "https://opensource.org/license/opl-2-1/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 79,
+  "fields": {
+    "created": "2023-09-19T09:16:49.435Z",
+    "modified": "2023-09-19T09:16:49.435Z",
+    "is_active": true,
+    "name": "PHP License 3.0",
+    "spdx_id": "PHP-3.0",
+    "category": 7,
+    "url": "https://opensource.org/license/php-3-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 80,
+  "fields": {
+    "created": "2023-09-19T09:16:49.435Z",
+    "modified": "2023-09-19T09:16:49.435Z",
+    "is_active": true,
+    "name": "PHP License 3.01",
+    "spdx_id": "PHP-3.01",
+    "category": 2,
+    "url": "https://opensource.org/license/php-3-01/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 81,
+  "fields": {
+    "created": "2023-09-19T09:16:49.436Z",
+    "modified": "2023-09-19T09:16:49.436Z",
+    "is_active": true,
+    "name": "Python License, Version 2",
+    "spdx_id": "PSF-2.0",
+    "category": 2,
+    "url": "https://opensource.org/license/python-2-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 82,
+  "fields": {
+    "created": "2023-09-19T09:16:49.437Z",
+    "modified": "2023-09-19T09:16:49.437Z",
+    "is_active": true,
+    "name": "RealNetworks Public Source License Version 1.0",
+    "spdx_id": "RPSL-1.0",
+    "category": 2,
+    "url": "https://opensource.org/license/real-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 83,
+  "fields": {
+    "created": "2023-09-19T09:16:49.438Z",
+    "modified": "2023-09-19T09:16:49.438Z",
+    "is_active": true,
+    "name": "Reciprocal Public License 1.5",
+    "spdx_id": "RPL-1.5",
+    "category": 8,
+    "url": "https://opensource.org/license/rpl-1-5/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 84,
+  "fields": {
+    "created": "2023-09-19T09:16:49.438Z",
+    "modified": "2023-09-19T09:16:49.438Z",
+    "is_active": true,
+    "name": "Reciprocal Public License, version 1.1",
+    "spdx_id": "RPL-1.1",
+    "category": 7,
+    "url": "https://opensource.org/license/rpl-1-1/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 85,
+  "fields": {
+    "created": "2023-09-19T09:16:49.439Z",
+    "modified": "2023-09-19T09:16:49.439Z",
+    "is_active": true,
+    "name": "SIL OPEN FONT LICENSE",
+    "spdx_id": "OFL-1.1",
+    "category": 6,
+    "url": "https://opensource.org/license/ofl-1-1/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 86,
+  "fields": {
+    "created": "2023-09-19T09:16:49.440Z",
+    "modified": "2023-09-19T09:16:49.440Z",
+    "is_active": true,
+    "name": "Simple Public License",
+    "spdx_id": "SimPL-2.0",
+    "category": 8,
+    "url": "https://opensource.org/license/simpl-2-0-html/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 87,
+  "fields": {
+    "created": "2023-09-19T09:16:49.441Z",
+    "modified": "2023-09-19T09:16:49.441Z",
+    "is_active": true,
+    "name": "Sun Industry Standards Source License",
+    "spdx_id": "SISSL",
+    "category": 9,
+    "url": "https://opensource.org/license/sissl/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 88,
+  "fields": {
+    "created": "2023-09-19T09:16:49.441Z",
+    "modified": "2023-09-19T09:16:49.441Z",
+    "is_active": true,
+    "name": "Sun Public License, Version 1.0",
+    "spdx_id": "SPL-1.0",
+    "category": 2,
+    "url": "https://opensource.org/license/sunpublic-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 89,
+  "fields": {
+    "created": "2023-09-19T09:16:49.442Z",
+    "modified": "2023-09-19T09:16:49.442Z",
+    "is_active": true,
+    "name": "The 2-Clause BSD License",
+    "spdx_id": "BSD-2-Clause",
+    "category": 4,
+    "url": "https://opensource.org/license/bsd-2-clause/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 90,
+  "fields": {
+    "created": "2023-09-19T09:16:49.443Z",
+    "modified": "2023-09-19T09:16:49.443Z",
+    "is_active": true,
+    "name": "The 3-Clause BSD License",
+    "spdx_id": "BSD-3-Clause",
+    "category": 4,
+    "url": "https://opensource.org/license/bsd-3-clause/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 91,
+  "fields": {
+    "created": "2023-09-19T09:16:49.443Z",
+    "modified": "2023-09-19T09:16:49.443Z",
+    "is_active": true,
+    "name": "The CNRI portion of the multi-part Python License",
+    "spdx_id": "CNRI-Python",
+    "category": 2,
+    "url": "https://opensource.org/license/cnri-python/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 92,
+  "fields": {
+    "created": "2023-09-19T09:16:49.444Z",
+    "modified": "2023-09-19T09:16:49.444Z",
+    "is_active": true,
+    "name": "The European Union Public License, version 1.1",
+    "spdx_id": "EUPL-1.1",
+    "category": 7,
+    "url": "https://opensource.org/license/eupl-1-1/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 93,
+  "fields": {
+    "created": "2023-09-19T09:16:49.445Z",
+    "modified": "2023-09-19T09:16:49.445Z",
+    "is_active": true,
+    "name": "The MIT License",
+    "spdx_id": "MIT",
+    "category": 4,
+    "url": "https://opensource.org/license/mit/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 94,
+  "fields": {
+    "created": "2023-09-19T09:16:49.446Z",
+    "modified": "2023-09-19T09:16:49.446Z",
+    "is_active": true,
+    "name": "The Nethack General Public License",
+    "spdx_id": "NGPL",
+    "category": 2,
+    "url": "https://opensource.org/license/nethack-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 95,
+  "fields": {
+    "created": "2023-09-19T09:16:49.447Z",
+    "modified": "2023-09-19T09:16:49.447Z",
+    "is_active": true,
+    "name": "The OCLC Research Public License 2.0 License",
+    "spdx_id": "",
+    "category": 2,
+    "url": "https://opensource.org/license/oclc2-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 96,
+  "fields": {
+    "created": "2023-09-19T09:16:49.447Z",
+    "modified": "2023-09-19T09:16:49.447Z",
+    "is_active": true,
+    "name": "The Open Software License 3.0",
+    "spdx_id": "OSL-3.0",
+    "category": 3,
+    "url": "https://opensource.org/license/osl-3-0-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 97,
+  "fields": {
+    "created": "2023-09-19T09:16:49.448Z",
+    "modified": "2023-09-19T09:16:49.448Z",
+    "is_active": true,
+    "name": "The PostgreSQL Licence",
+    "spdx_id": "PostgreSQL",
+    "category": 5,
+    "url": "https://opensource.org/license/postgresql/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 98,
+  "fields": {
+    "created": "2023-09-19T09:16:49.448Z",
+    "modified": "2023-09-19T09:16:49.448Z",
+    "is_active": true,
+    "name": "The Q Public License Version",
+    "spdx_id": "QPL-1.0",
+    "category": 3,
+    "url": "https://opensource.org/license/qpl-1-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 99,
+  "fields": {
+    "created": "2023-09-19T09:16:49.449Z",
+    "modified": "2023-09-19T09:16:49.449Z",
+    "is_active": true,
+    "name": "The Ricoh Source Code Public License",
+    "spdx_id": "RSCPL",
+    "category": 2,
+    "url": "https://opensource.org/license/ricohpl-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 100,
+  "fields": {
+    "created": "2023-09-19T09:16:49.450Z",
+    "modified": "2023-09-19T09:16:49.450Z",
+    "is_active": true,
+    "name": "The Sleepycat License",
+    "spdx_id": "Sleepycat",
+    "category": 2,
+    "url": "https://opensource.org/license/sleepycat-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 101,
+  "fields": {
+    "created": "2023-09-19T09:16:49.450Z",
+    "modified": "2023-09-19T09:16:49.450Z",
+    "is_active": true,
+    "name": "The Sybase Open Source Licence",
+    "spdx_id": "Watcom-1.0",
+    "category": 2,
+    "url": "https://opensource.org/license/sybase-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 102,
+  "fields": {
+    "created": "2023-09-19T09:16:49.451Z",
+    "modified": "2023-09-19T09:16:49.451Z",
+    "is_active": true,
+    "name": "The Universal Permissive License Version 1.0",
+    "spdx_id": "UPL-1.0",
+    "category": 3,
+    "url": "https://opensource.org/license/upl/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 103,
+  "fields": {
+    "created": "2023-09-19T09:16:49.452Z",
+    "modified": "2023-09-19T09:16:49.452Z",
+    "is_active": true,
+    "name": "The University of Illinois/NCSA Open Source License",
+    "spdx_id": "NCSA",
+    "category": 5,
+    "url": "https://opensource.org/license/uoi-ncsa-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 104,
+  "fields": {
+    "created": "2023-09-19T09:16:49.452Z",
+    "modified": "2023-09-19T09:16:49.452Z",
+    "is_active": true,
+    "name": "The Unlicense",
+    "spdx_id": "Unlicense",
+    "category": 6,
+    "url": "https://opensource.org/license/unlicense/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 105,
+  "fields": {
+    "created": "2023-09-19T09:16:49.453Z",
+    "modified": "2023-09-19T09:16:49.453Z",
+    "is_active": true,
+    "name": "The Vovida Software License v. 1.0",
+    "spdx_id": "VSL-0.1",
+    "category": 2,
+    "url": "https://opensource.org/license/vovidapl-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 106,
+  "fields": {
+    "created": "2023-09-19T09:16:49.454Z",
+    "modified": "2023-09-19T09:16:49.454Z",
+    "is_active": true,
+    "name": "The W3C® SOFTWARE NOTICE AND LICENSE",
+    "spdx_id": "W3C-20150513",
+    "category": 2,
+    "url": "https://opensource.org/license/w3c-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 107,
+  "fields": {
+    "created": "2023-09-19T09:16:49.454Z",
+    "modified": "2023-09-19T09:16:49.454Z",
+    "is_active": true,
+    "name": "The wxWindows Library Licence",
+    "spdx_id": "wxWindows",
+    "category": 2,
+    "url": "https://opensource.org/license/wxwindows-php/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 108,
+  "fields": {
+    "created": "2023-09-19T09:16:49.455Z",
+    "modified": "2023-09-19T09:16:49.455Z",
+    "is_active": true,
+    "name": "The X.Net, Inc. License",
+    "spdx_id": "Xnet",
+    "category": 5,
+    "url": "https://opensource.org/license/xnet/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 109,
+  "fields": {
+    "created": "2023-09-19T09:16:49.456Z",
+    "modified": "2023-09-19T09:16:49.456Z",
+    "is_active": true,
+    "name": "The zlib/libpng License",
+    "spdx_id": "Zlib",
+    "category": 3,
+    "url": "https://opensource.org/license/zlib/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 110,
+  "fields": {
+    "created": "2023-09-19T09:16:49.457Z",
+    "modified": "2023-09-19T09:16:49.457Z",
+    "is_active": true,
+    "name": "Unicode, Inc. License Agreement – Data Files and Software",
+    "spdx_id": "Unicode-DFS-2015",
+    "category": 6,
+    "url": "https://opensource.org/license/unicode-inc-license-agreement-data-files-and-software/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 111,
+  "fields": {
+    "created": "2023-09-19T09:16:49.458Z",
+    "modified": "2023-09-19T09:16:49.458Z",
+    "is_active": true,
+    "name": "Upstream Compatibility License v1.0",
+    "spdx_id": "UCL-1.0",
+    "category": 6,
+    "url": "https://opensource.org/license/ucl-1-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 112,
+  "fields": {
+    "created": "2023-09-19T09:16:49.459Z",
+    "modified": "2023-09-19T09:16:49.459Z",
+    "is_active": true,
+    "name": "Zero-Clause BSD",
+    "spdx_id": "0BSD",
+    "category": 3,
+    "url": "https://opensource.org/license/0bsd/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 113,
+  "fields": {
+    "created": "2023-09-19T09:16:49.459Z",
+    "modified": "2023-09-19T09:16:49.459Z",
+    "is_active": true,
+    "name": "Zope Public License 2.0",
+    "spdx_id": "ZPL - 2.0",
+    "category": 7,
+    "url": "https://opensource.org/license/zpl-2-0/"
+  }
+},
+{
+  "model": "project.osilicence",
+  "pk": 114,
+  "fields": {
+    "created": "2023-09-19T09:16:49.460Z",
+    "modified": "2023-09-19T09:16:49.460Z",
+    "is_active": true,
+    "name": "Zope Public License 2.1",
+    "spdx_id": "ZPL - 2.1",
+    "category": 5,
+    "url": "https://opensource.org/license/zpl-2-1/"
+  }
+}
+]
