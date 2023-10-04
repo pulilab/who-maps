@@ -179,6 +179,11 @@
                         Can approve users to join the investor page
                       </translate>
                     </li>
+                    <li>
+                      <translate key="da-list-item-5">
+                        Can view KPI graphs
+                      </translate>
+                    </li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -226,6 +231,11 @@
                     <li>
                       <translate key="sda-list-item-5">
                         Can customize and update investor home page
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="sda-list-item-6">
+                        Can view KPI graphs
                       </translate>
                     </li>
                   </ul>
