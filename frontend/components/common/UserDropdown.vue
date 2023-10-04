@@ -98,7 +98,7 @@
           </nuxt-link>
         </div>
 
-        <div v-if="isSuperUser || isUserCA || isUserDA" class="DropdownLink">
+        <div v-if="isSuperUser" class="DropdownLink">
           <nuxt-link
             :to="localePath({name: 'organisation-graphs', params: $route.params})"
             @click.native="closePopover"

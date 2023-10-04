@@ -189,8 +189,6 @@ export default {
     }
   },
   created() {
-    if (this.isUserCA) this.country = this.user.country
-    if (this.isUserDA) this.investor = this.user.donor
     this.dateRange = [
       new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
       new Date()
@@ -202,18 +200,6 @@ export default {
       donors: 'system/getDonors',
       regionsRaw: 'system/getRegions'
     }),
-    user() {
-      return this.$auth.user
-    },
-    isSuperUser () {
-      return this.user && this.user.is_superuser
-    },
-    isUserCA () {
-      return this.user.account_type_approved && ['CA', 'SCA'].includes(this.user.account_type)
-    },
-    isUserDA () {
-      return this.user.account_type_approved && ['DA', 'SDA'].includes(this.user.account_type)
-    },
     regions() {
       return this.regionsRaw.map(r => ({
         ...r,
