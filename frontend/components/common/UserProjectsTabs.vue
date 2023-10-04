@@ -8,6 +8,12 @@
             My projects ({count})
           </translate>
         </div>
+        <div @click="setActiveTab(3)" :class="getStyle(3)">
+          <fa icon="globe-americas" />
+          <translate :parameters="{ count: counters.myprojects }">
+            Country projects ({count})
+          </translate>
+        </div>
         <div @click="setActiveTab(1)" :class="getStyle(1)">
           <i class="el-icon-takeaway-box"></i>
           <translate :parameters="{ count: counters.archive }">
@@ -99,11 +105,11 @@ export default {
         color: #404041;
         font-weight: bold;
         border-color: @colorBrandPrimary;
-        i {
+        svg, i {
           font-weight: bold;
         }
       }
-      i {
+      svg, i {
         margin: 0 10px 0 0;
         font-size: 16px;
       }
