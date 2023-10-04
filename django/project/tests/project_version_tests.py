@@ -77,13 +77,12 @@ class ProjectVersionTests(APITestCase):
             "contact_name": "name1",
             "contact_email": "a@a.com",
             "implementation_overview": "overview",
-            "implementation_dates": "2016",
             "health_focus_areas": [1, 2],
             "geographic_scope": "somewhere",
             "country": self.country_id,
             "software": [1, 2],
             "dhis": [1, 2, 9],
-            "licenses": [1, 2],
+            "osi_licenses": [1, 2],
             "coverage": [
                 {"district": "dist1", "clients": 20, "health_workers": 5, "facilities": 4},
                 {"district": "dist2", "clients": 10, "health_workers": 2, "facilities": 8}
