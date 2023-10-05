@@ -35,6 +35,11 @@ class ProjectManager(models.Manager):
         return self.filter(Q(team=user.userprofile)
                            | Q(viewers=user.userprofile)).distinct().order_by('id')
 
+    def by_country(self, country: Country):
+        return self.annotate(country_id=Cast(KeyTextTransform('country', 'data'), output_field=IntegerField()),
+                             country_draft_id=Cast(KeyTextTransform('country', 'draft'), output_field=IntegerField()))\
+            .filter(Q(country_id=country.id) | Q(country_draft_id=country.id))
+
     # WARNING: this method is used in migration project.0016_auto_20160601_0928
     def by_organisation(self, organisation_id):  # pragma: no cover
         return self.filter(data__organisation=organisation_id)
