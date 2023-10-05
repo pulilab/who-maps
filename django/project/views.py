@@ -136,6 +136,7 @@ class ProjectAdminListViewSet(TokenAuthMixin, GenericViewSet):
     pagination_class = ResultsSetPagination
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ['name', 'team__name', 'team__user__email']
+    queryset = Project.objects.all()
 
     def get_queryset(self):
         return super().get_queryset().by_country(self.request.user.userprofile.country)
