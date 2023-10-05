@@ -70,3 +70,8 @@ class InDonorSuperAdmin(permissions.BasePermission):
             return True
         else:
             return obj.donor.super_admins.filter(id=request.user.userprofile.id).exists()
+
+
+class CountryAdminOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.userprofile.is_government_type() and request.user.userprofile.account_type_approved
