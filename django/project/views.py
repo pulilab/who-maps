@@ -2,10 +2,11 @@ import copy
 
 from django.db import transaction
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 from taggit.models import Tag
 
-from rest_framework import status
+from rest_framework import status, filters
 from rest_framework.exceptions import ValidationError, NotAuthenticated, PermissionDenied
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
     DestroyModelMixin
@@ -17,9 +18,11 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, TeamCollectionTokenAuthMixin, CollectionTokenAuthMixin, \
     get_object_or_400, CollectionAuthenticatedMixin
+from country.permissions import CountryAdminOnly
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion, OSILicence
 from project.permissions import InCountryAdminForApproval, IsOwnerShipModifiable
+from search.views import ResultsSetPagination
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor, ReferenceDocumentType
 from .tasks import notify_superusers_about_new_pending_software
@@ -126,6 +129,27 @@ class ProjectListViewSet(TeamTokenAuthMixin, ViewSet):
             data.append(project.to_response_dict(published=published, draft=draft))
 
         return Response(data)
+
+
+class ProjectAdminListViewSet(TokenAuthMixin, GenericViewSet):
+    permission_classes = (IsAuthenticated, CountryAdminOnly)
+    pagination_class = ResultsSetPagination
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['name', 'team__name', 'team__user__email']
+
+    def get_queryset(self):
+        return super().get_queryset().by_country(self.request.user.userprofile.country)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        data = []
+        page = self.paginate_queryset(queryset)
+        for project in page:
+            published = project.to_representation()
+            draft = project.to_representation(draft_mode=True)
+            data.append(project.to_response_dict(published=published, draft=draft))
+        return self.get_paginated_response(data)
 
 
 class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):

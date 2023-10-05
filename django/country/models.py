@@ -93,9 +93,12 @@ class UserManagement(models.Model):
     class Meta:
         abstract = True
 
-    def user_in_groups(self, profile):
+    def user_in_admin_groups(self, profile):
         return self.admins.filter(id=profile.id).exists() or \
-               self.super_admins.filter(id=profile.id).exists() or \
+               self.super_admins.filter(id=profile.id).exists()
+
+    def user_in_groups(self, profile):
+        return self.user_in_admin_groups(profile) or \
                self.users.filter(id=profile.id).exists()
 
 

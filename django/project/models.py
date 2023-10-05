@@ -2,10 +2,12 @@ from collections import namedtuple
 from copy import deepcopy
 
 from django.contrib.contenttypes.fields import GenericRelation
+from django.db.models.fields.json import KeyTextTransform
+from django.db.models.functions import Cast
 from hashids import Hashids
 
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, IntegerField
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -34,6 +36,11 @@ class ProjectManager(models.Manager):
     def member_of(self, user):
         return self.filter(Q(team=user.userprofile)
                            | Q(viewers=user.userprofile)).distinct().order_by('id')
+
+    def by_country(self, country: Country):
+        return self.annotate(country_id=Cast(KeyTextTransform('country', 'data'), output_field=IntegerField()),
+                             country_draft_id=Cast(KeyTextTransform('country', 'draft'), output_field=IntegerField()))\
+            .filter(Q(country_id=country.id) | Q(country_draft_id=country.id))
 
     # WARNING: this method is used in migration project.0016_auto_20160601_0928
     def by_organisation(self, organisation_id):  # pragma: no cover
@@ -125,6 +132,9 @@ class Project(SoftDeleteModel, ExtendedModel):
 
     def is_country_user_or_admin(self, user):
         return self.get_country().user_in_groups(user.userprofile) if self.get_country() else False
+
+    def is_country_admin(self, user):
+        return self.get_country().user_in_admin_groups(user.userprofile) if self.get_country() else False
 
     def get_member_data(self):
         return deepcopy(self.data)
