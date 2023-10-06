@@ -1426,3 +1426,36 @@ class ProjectTests(SetupTests):
         response = self.test_user_client.get(url + f'?search={p_in_my_country.team.first().user.email}', format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
+
+    def test_country_admins_can_change_project_groups_in_country(self):
+        p_in_my_country = Project.objects.get(name="Test Project1")
+        p_in_my_country.team.set([])
+
+        url = reverse("project-groups", kwargs={"pk": p_in_my_country.id})
+        response = self.test_user_client.get(url)
+        self.assertEqual(response.json(), {'team': [], 'viewers': []})
+
+        groups = {
+            "team": [self.userprofile.id],
+            "viewers": [self.userprofile.id]
+        }
+        response = self.test_user_client.put(url, groups)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.json(), {'detail': 'You do not have permission to perform this action.'})
+
+        # add me as admin
+        self.userprofile.account_type = UserProfile.COUNTRY_ADMIN
+        self.userprofile.save()
+        self.userprofile.country.admins.add(self.userprofile)
+
+        url = reverse("project-admin-list")
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.json()['count'], 1)
+        self.assertEqual(response.json()['results'][0]['id'], p_in_my_country.id)
+
+        url = reverse("project-groups", kwargs={"pk": p_in_my_country.id})
+        response = self.test_user_client.put(url, groups)
+        self.assertTrue("team" in response.json())
+        self.assertTrue("viewers" in response.json())
+        self.assertEqual(response.json()['team'], [self.userprofile.id])
+        self.assertEqual(response.json()['viewers'], [self.userprofile.id])
