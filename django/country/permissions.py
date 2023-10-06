@@ -74,4 +74,6 @@ class InDonorSuperAdmin(permissions.BasePermission):
 
 class CountryAdminOnly(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.user.userprofile.is_admin() and request.user.userprofile.account_type_approved
+        return all([request.user.userprofile.is_admin(),
+                    request.user.userprofile.is_government_type(),
+                    request.user.userprofile.account_type_approved])

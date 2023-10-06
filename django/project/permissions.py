@@ -37,7 +37,7 @@ class InTeamOrCollectionOwnerOrReadOnly(permissions.BasePermission):
         return request.user.is_superuser or in_team or in_collection
 
 
-class AdminTeamCollectionOwnerOrReadOnly(permissions.BasePermission):
+class CountryAdminTeamCollectionOwnerOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj: Project):
         # Read permissions are allowed to any request,
         # so we'll always allow GET, HEAD or OPTIONS requests.
