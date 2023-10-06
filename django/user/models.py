@@ -86,6 +86,10 @@ class UserProfile(ExtendedModel):
     def is_investor_type(self):
         return self.account_type in [self.DONOR, self.DONOR_ADMIN, self.SUPER_DONOR_ADMIN]
 
+    def is_admin(self):
+        return self.account_type in [self.COUNTRY_ADMIN, self.SUPER_COUNTRY_ADMIN,
+                                     self.DONOR_ADMIN, self.SUPER_DONOR_ADMIN]
+
     @property
     def account_type_approved(self):
         from country.models import Country
