@@ -123,8 +123,8 @@ class Project(SoftDeleteModel, ExtendedModel):
     def get_country_id(self, draft_mode=False):
         return self.draft.get('country') if draft_mode else self.data.get('country')
 
-    def get_country(self, draft_mode=False):
-        country_id = self.get_country_id(draft_mode)
+    def get_country(self):
+        country_id = self.get_country_id(draft_mode=False) if self.public_id else self.get_country_id(draft_mode=True)
         return Country.objects.get(id=int(country_id)) if country_id else None
 
     def is_member(self, user):
