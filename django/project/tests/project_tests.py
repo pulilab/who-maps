@@ -1387,3 +1387,42 @@ class ProjectTests(SetupTests):
         self.assertIsNone(archive[1]['published'])
         self.assertEqual(archive[1]['public_id'], '')
         self.assertEqual(archive[1]['draft']['name'], archived_project.name)
+
+    def test_country_admins_can_list_all_projects_in_country(self):
+        self._create_new_project()
+        p_not_in_country = Project.objects.get(name="Test Project2")
+        p_in_my_country = Project.objects.get(name="Test Project1")
+
+        url = reverse("project-admin-list")
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, 403)
+
+        # add me as admin
+        self.userprofile.account_type = UserProfile.COUNTRY_ADMIN
+        self.userprofile.save()
+        self.userprofile.country.admins.add(self.userprofile)
+
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 1)
+        self.assertEqual(response.json()['results'][0]['id'], p_in_my_country.id)
+
+        p_not_in_country.data['country'] = self.userprofile.country.id
+        p_not_in_country.save()
+
+        response = self.test_user_client.get(url, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 2)
+
+        response = self.test_user_client.get(url + '?search=Project2', format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 1)
+        self.assertEqual(response.json()['results'][0]['id'], p_not_in_country.id)
+
+        response = self.test_user_client.get(url + f'?search={p_in_my_country.team.first().name}', format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 2)
+
+        response = self.test_user_client.get(url + f'?search={p_in_my_country.team.first().user.email}', format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 2)
