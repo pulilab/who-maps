@@ -96,9 +96,9 @@ class UserProfile(ExtendedModel):
         approved_sca = self.account_type == self.SUPER_COUNTRY_ADMIN and Country.objects.filter(
             id=self.country.id, super_admins=self).exists()
         approved_da = self.account_type == self.DONOR_ADMIN and Donor.objects.filter(
-            id=self.country.id, admins=self).exists()
+            id=self.donor.id, admins=self).exists()
         approved_sda = self.account_type == self.SUPER_DONOR_ADMIN and Donor.objects.filter(
-            id=self.country.id, super_admins=self).exists()
+            id=self.donor.id, super_admins=self).exists()
         return self.user.is_superuser or approved_ca or approved_sca or approved_da or approved_sda
 
 
