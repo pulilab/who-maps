@@ -95,15 +95,21 @@ class UserProfile(ExtendedModel):
         from country.models import Country
         from country.models import Donor
 
+        approved_c = self.account_type == self.GOVERNMENT and Country.objects.filter(
+            id=self.country.id, users=self).exists()
         approved_ca = self.account_type == self.COUNTRY_ADMIN and Country.objects.filter(
             id=self.country.id, admins=self).exists()
         approved_sca = self.account_type == self.SUPER_COUNTRY_ADMIN and Country.objects.filter(
             id=self.country.id, super_admins=self).exists()
+        approved_d = self.account_type == self.DONOR and Donor.objects.filter(
+            id=self.donor.id, users=self).exists()
         approved_da = self.account_type == self.DONOR_ADMIN and Donor.objects.filter(
             id=self.donor.id, admins=self).exists()
         approved_sda = self.account_type == self.SUPER_DONOR_ADMIN and Donor.objects.filter(
             id=self.donor.id, super_admins=self).exists()
-        return self.user.is_superuser or approved_ca or approved_sca or approved_da or approved_sda
+        return any([self.user.is_superuser,
+                    approved_c, approved_ca, approved_sca,
+                    approved_d, approved_da, approved_sda])
 
 
 @receiver(pre_save, sender=UserProfile)
