@@ -21,7 +21,8 @@ from core.views import TokenAuthMixin, TeamTokenAuthMixin, TeamCollectionTokenAu
 from country.permissions import CountryAdminOnly
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion, OSILicence
-from project.permissions import InCountryAdminForApproval, IsOwnerShipModifiable
+from project.permissions import InCountryAdminForApproval, IsOwnerShipModifiable, \
+    AdminTeamCollectionOwnerOrReadOnly
 from search.views import ResultsSetPagination
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor, ReferenceDocumentType
@@ -598,6 +599,7 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
 
 
 class ProjectGroupViewSet(TeamCollectionTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
+    permission_classes = (IsAuthenticated, AdminTeamCollectionOwnerOrReadOnly)
     queryset = Project.objects.all()
     serializer_class = ProjectGroupSerializer
 
