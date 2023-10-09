@@ -87,7 +87,7 @@ export default {
         this.setLoadingProjects(true)
         await Promise.all([
           this.$store.dispatch('projects/loadUserProjects'),
-          this.$store.dispatch('projects/loadCountryProjects', { search: '' })
+          this.$store.dispatch('projects/loadCountryProjects')
         ])
         this.setLoadingProjects(false)
       } catch (error) {
@@ -98,7 +98,7 @@ export default {
     async loadProjects(search = '') {
       console.log("🚀 ~ file: index.vue:88 ~ loadProjects ~ search:", search)
       if (this.activeTab === 0) await this.$store.dispatch('projects/loadUserProjects')
-      if (this.activeTab === 2) await this.$store.dispatch('projects/loadCountryProjects', { search })
+      if (this.activeTab === 2) await this.$store.dispatch('projects/loadCountryProjects')
     }
   }
 }

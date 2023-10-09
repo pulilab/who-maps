@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import debounce from 'lodash/debounce'
 const tabPrams = ['myprojects','archive','country-projects']
 
@@ -98,6 +98,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setSearch: 'projects/setSearch',
+    }),
     getStyle(checkTab) {
       return checkTab === this.activeTab ? 'active' : ''
     },
@@ -105,8 +108,8 @@ export default {
       this.$emit('change', tab)
     },
     emitSearch: debounce(function() {
+      this.setSearch(this.countrySearch)
       this.$emit('search', this.countrySearch)
-
     }, 500)
   }
 }

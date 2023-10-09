@@ -3,6 +3,7 @@ import forOwn from 'lodash/forOwn'
 import qs from 'qs'
 
 export const state = () => ({
+  search: '',
   loadingProject: false,
   pageSize: 10,
   page: 1,
@@ -228,17 +229,17 @@ export const getters = {
 }
 
 export const actions = {
+  setSearch({ commit }, search) {
+    commit('setValue', { key: 'search', val: search })
+  },
   setPageSize({ commit, dispatch }, size) {
-    if (process.browser) {
-      localStorage.setItem('pageSize', size)
-    }
     commit('setValue', { key: 'pageSize', val: size })
     commit('setValue', { key: 'page', val: 1 })
-    dispatch('loadCountryProjects', { search: ''})
+    dispatch('loadCountryProjects')
   },
   setCurrentPage({ commit, dispatch }, page) {
     commit('setValue', { key: 'page', val: page })
-    dispatch('loadCountryProjects', { search: ''})
+    dispatch('loadCountryProjects')
   },
   async loadUserProjects ({ commit }) {
     try {
@@ -258,14 +259,14 @@ export const actions = {
       return Promise.reject(error)
     }
   },
-  async loadCountryProjects ({ state, commit }, { search}) {
+  async loadCountryProjects ({ state, commit }) {
     try {
       commit('setValue', { key: 'loadingProjects', val: true })
 
       const filter = {
         page_size: state.pageSize,
-        page: state.page,
-        search
+        page: state.search ? 1 : state.page,
+        search: state.search
       }
       const { data } = await this.$axios({
         method: 'get',
