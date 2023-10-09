@@ -268,6 +268,11 @@
                         active
                       </translate>
                     </li>
+                    <li>
+                      <translate key="ca-list-item-7">
+                        Can view KPI graphs
+                      </translate>
+                    </li>
                   </ul>
                 </div>
               </el-collapse-item>
@@ -325,11 +330,16 @@
                     </li>
                     <li>
                       <translate key="sca-list-item-7">
-                        Can customize and update Government home page
+                        Can view KPI graphs
                       </translate>
                     </li>
                     <li>
                       <translate key="sca-list-item-8">
+                        Can customize and update Government home page
+                      </translate>
+                    </li>
+                    <li>
+                      <translate key="sca-list-item-9">
                         Can upload and manage Countries' Reference Documents
                       </translate>
                     </li>
