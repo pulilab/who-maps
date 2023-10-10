@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from project.models import ProjectApproval
+from project.models import ProjectApproval, Project
 
 
 class InTeamOrReadOnly(permissions.BasePermission):
@@ -27,7 +27,7 @@ class InTeamOrCollectionOwnerOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # Read permissions are allowed to any request,
         # so we'll always allow GET, HEAD or OPTIONS requests.
-        if request.method in permissions.SAFE_METHODS:
+        if request.method in permissions.SAFE_METHODS:  # pragma: no cover
             return True
 
         # had to separate these due to LINTER dying on 3 'or'-s
@@ -35,6 +35,20 @@ class InTeamOrCollectionOwnerOrReadOnly(permissions.BasePermission):
         in_collection = obj.import_rows.filter(parent__collection__isnull=False).exists()
 
         return request.user.is_superuser or in_team or in_collection
+
+
+class CountryAdminTeamCollectionOwnerOrReadOnly(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj: Project):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        in_team = obj.team.filter(id=request.user.userprofile.id).exists()
+        in_collection = obj.import_rows.filter(parent__collection__isnull=False).exists()
+        is_admin = obj.is_country_admin(request.user)
+
+        return request.user.is_superuser or in_team or in_collection or is_admin
 
 
 class CollectionOwnerOrReadOnly(permissions.BasePermission):
@@ -64,6 +78,7 @@ class IsOwnerShipModifiable(permissions.BasePermission):
     Ownership of the project is modifiable IF it's draft AND in a collection AND we're using the correct collection
     url
     """
+
     def has_object_permission(self, request, view, obj):
         if obj.public_id != "":  # pragma: no cover
             return False

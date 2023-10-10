@@ -124,55 +124,46 @@ body {
   line-height: 18px;
 }
 
+.NuxtLink {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  font-size: @fontSizeBase;
+  font-weight: 700;
+  color: @colorBrandPrimary;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: @transitionAll;
 
-a {
-  // SAMPLE MARKUP:
-  //
-  // <nuxt-link class="NuxtLink IconRight">
-  //   <span>Advanced search</span>
-  //   <fa icon="angle-right" />
-  // </nuxt-link>
-  //
-  &.NuxtLink {
-    display: inline-flex;
-    align-items: center;
-    font-size: @fontSizeBase;
-    font-weight: 700;
-    color: @colorBrandPrimary;
-    text-decoration: none;
-    white-space: nowrap;
-    transition: @transitionAll;
+  &:hover {
+    color: @colorBrandPrimaryLight;
+  }
 
-    &:hover {
-      color: @colorBrandPrimaryLight;
-    }
+  &.Small {
+    font-size: @fontSizeSmall;
+  }
 
-    &.Small {
-      font-size: @fontSizeSmall;
-    }
-
-    &.IconRight {
-      .svg-inline--fa {
-        margin-left: 6px;
-      }
-    }
-
-    &.IconLeft {
-      .svg-inline--fa {
-        margin-right: 6px;
-      }
+  &.IconRight {
+    .svg-inline--fa {
+      margin-left: 6px;
     }
   }
 
-  &.TextLink {
-    color: @colorBrandPrimary;
-    text-decoration: none;
-    transition: @transitionAll;
-
-    &:hover {
-      color: @colorBrandPrimaryLight;
-      text-decoration: underline;
+  &.IconLeft {
+    .svg-inline--fa {
+      margin-right: 6px;
     }
+  }
+}
+
+.TextLink {
+  color: @colorBrandPrimary;
+  text-decoration: none;
+  transition: @transitionAll;
+
+  &:hover {
+    color: @colorBrandPrimaryLight;
+    text-decoration: underline;
   }
 }
 

@@ -55,11 +55,13 @@
           <ProjectStatusBadge :status="projectStatus" />
         </el-col>
         <el-col class="flex">
-          <el-row v-if="project.archived" type="flex" justify="end" class="RestoreAction" @click.native="openFeedback">
-            <i class="el-icon-upload2"></i>
-            <translate>Restore</translate>
-          </el-row>
-          <ProjectCardActions v-else :project="project" :force-show="false" />
+          <ProjectCardActions
+            :project="project"
+            :force-show="false"
+            :admin-action="adminAction"
+            @restore="openFeedback"
+            @edit-team="openTeamDialog"
+           />
         </el-col>
       </el-row>
     </div>
@@ -67,7 +69,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { format } from 'date-fns'
 
 import CountryItem from './CountryItem'
@@ -90,6 +92,10 @@ export default {
     projectBase: {
       type: Object,
       required: true
+    },
+    adminAction: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -125,6 +131,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setTeamMemberDialogState: 'layout/setTeamMemberDialogState',
+    }),
     openFeedback() {
       const textRequest = this.$gettext('Please restore the following project:')
       const textProjectName = this.$gettext('Project name: {name}', { name: this.projectData.name })
@@ -135,6 +144,12 @@ export default {
           subject: this.$gettext('Project restore request ({id})', { id: this.project.id }),
           message: `${textRequest}\r\n${textProjectName}\r\n${textProjectID}`
         }
+      })
+    },
+    openTeamDialog() {
+      this.setTeamMemberDialogState({
+        visible: true,
+        projectId: this.projectBase.id
       })
     },
   }
@@ -270,23 +285,6 @@ export default {
 
     &.archived {
       background-color: @colorGrayLighter;
-    }
-
-    .RestoreAction {
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      font-size: 14px;
-      font-weight: 700;
-      color: #008DC9;
-      text-decoration: none;
-      white-space: nowrap;
-      transition: all 200ms cubic-bezier(0.645, 0.045, 0.355, 1);
-      i {
-        font-size: 18px;
-        font-weight: bold;
-        margin-right: 6px;
-      }
     }
   }
 }

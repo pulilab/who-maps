@@ -7,6 +7,7 @@
     <ProjectApprovalDialog />
     <EditSubLevelDialog />
     <ReferenceDocumentDialog />
+    <EditTeamMembersDialog />
   </div>
 </template>
 
@@ -19,6 +20,7 @@ import SendEmailDialog from './SendEmailDialog'
 import ProjectApprovalDialog from './ProjectApprovalDialog'
 import EditSubLevelDialog from './EditSubLevelDialog'
 import ReferenceDocumentDialog from './ReferenceDocumentDialog'
+import EditTeamMembersDialog from './EditTeamMembersDialog'
 
 export default {
   components: {
@@ -29,6 +31,7 @@ export default {
     ProjectApprovalDialog,
     EditSubLevelDialog,
     ReferenceDocumentDialog,
+    EditTeamMembersDialog,
   },
   computed: {
     ...mapGettersActions({
@@ -56,12 +59,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
-
-  .DialogsContainer {
-
-  }
-</style>

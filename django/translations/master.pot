@@ -39,7 +39,7 @@ msgstr ""
 msgid "{country} MoH"
 msgstr ""
 
-#: components/dashboard/CurrentPage.vue:2
+#: components/common/CurrentPage.vue:2 components/dashboard/CurrentPage.vue:2
 msgid "{min}-{max} of {total}"
 msgstr ""
 
@@ -370,6 +370,10 @@ msgstr ""
 msgid "Add note (optional)"
 msgstr ""
 
+#: components/dialogs/EditTeamMembersDialog.vue:4
+msgid "Add team members (editors)"
+msgstr ""
+
 #: components/project/sections/GeneralOverview.vue:175
 #: components/project/sections/GeneralOverview.vue:1
 msgid "Add team members (editors)--can modify entry on Add New Project page"
@@ -532,10 +536,6 @@ msgstr ""
 msgid "Archived Projects"
 msgstr ""
 
-#: components/common/UserProjectsTabs.vue:12
-msgid "Archived projects ({count})"
-msgstr ""
-
 #: pages/_organisation/terms.vue:290
 msgid ""
 "are fraudulent, unlawful, threatening, abusive, harassing, libellous, "
@@ -555,7 +555,8 @@ msgid "Ask our experts"
 msgstr ""
 
 #: components/BreadCrumb.vue:36 components/common/ProjectBar.vue:86
-#: components/common/ProjectCardActions.vue:24
+#: components/common/ProjectCardActions.vue:40
+#: components/common/ProjectCardActions.vue:29
 msgid "Assessment"
 msgstr ""
 
@@ -563,6 +564,10 @@ msgstr ""
 msgid ""
 "At first level in the Health Focus Categories every project can contain the "
 "a Health Focus Category only once."
+msgstr ""
+
+#: components/dialogs/EditTeamMembersDialog.vue:20
+msgid "At least one team member is required"
 msgstr ""
 
 #: components/dialogs/ReferenceDocumentDialog.vue:64
@@ -607,87 +612,93 @@ msgid ""
 "requirements and preferences?"
 msgstr ""
 
-#: components/UserPrivileges.vue:41 components/UserPrivileges.vue:78
+#: components/UserPrivileges.vue:41 components/UserPrivileges.vue:83
 #: components/UserPrivileges.vue:27 components/admin/CountryAdmin.vue:176
-#: components/admin/CountryAdmin.vue:229
+#: components/admin/CountryAdmin.vue:234
 msgid "Can approve projects if the project approval feature is active"
 msgstr ""
 
-#: components/UserPrivileges.vue:36 components/UserPrivileges.vue:73
+#: components/UserPrivileges.vue:36 components/UserPrivileges.vue:78
 #: components/UserPrivileges.vue:22 components/admin/CountryAdmin.vue:171
-#: components/admin/CountryAdmin.vue:224
+#: components/admin/CountryAdmin.vue:229
 msgid "Can approve users to join the Government page"
 msgstr ""
 
-#: components/UserPrivileges.vue:122 components/UserPrivileges.vue:149
+#: components/UserPrivileges.vue:132 components/UserPrivileges.vue:159
 #: components/UserPrivileges.vue:17 components/admin/DonorAdmin.vue:122
 #: components/admin/DonorAdmin.vue:164
 msgid "Can approve users to join the investor page"
 msgstr ""
 
-#: components/UserPrivileges.vue:21 components/UserPrivileges.vue:58
+#: components/UserPrivileges.vue:21 components/UserPrivileges.vue:63
 #: components/UserPrivileges.vue:7 components/admin/CountryAdmin.vue:155
-#: components/admin/CountryAdmin.vue:208
+#: components/admin/CountryAdmin.vue:213
 msgid "Can create and delete Government-specific questions"
 msgstr ""
 
-#: components/UserPrivileges.vue:112 components/UserPrivileges.vue:139
+#: components/UserPrivileges.vue:122 components/UserPrivileges.vue:149
 #: components/UserPrivileges.vue:7 components/admin/DonorAdmin.vue:112
 #: components/admin/DonorAdmin.vue:154
 msgid "Can create and delete investor-specific questions"
 msgstr ""
 
-#: components/UserPrivileges.vue:88 components/UserPrivileges.vue:37
-#: components/admin/CountryAdmin.vue:240
+#: components/UserPrivileges.vue:98 components/UserPrivileges.vue:42
+#: components/admin/CountryAdmin.vue:250
 msgid "Can customize and update Government home page"
 msgstr ""
 
-#: components/UserPrivileges.vue:159 components/UserPrivileges.vue:27
+#: components/UserPrivileges.vue:169 components/UserPrivileges.vue:27
 #: components/admin/DonorAdmin.vue:169
 msgid "Can customize and update investor home page"
 msgstr ""
 
 #: components/UserPrivileges.vue:4 components/UserPrivileges.vue:31
-#: components/UserPrivileges.vue:68 components/UserPrivileges.vue:2
+#: components/UserPrivileges.vue:73 components/UserPrivileges.vue:2
 #: components/UserPrivileges.vue:17 components/admin/CountryAdmin.vue:123
-#: components/admin/CountryAdmin.vue:165 components/admin/CountryAdmin.vue:218
+#: components/admin/CountryAdmin.vue:165 components/admin/CountryAdmin.vue:223
 msgid "Can read/export responses to private Government questions"
 msgstr ""
 
-#: components/UserPrivileges.vue:100 components/UserPrivileges.vue:107
+#: components/UserPrivileges.vue:110 components/UserPrivileges.vue:117
 #: components/UserPrivileges.vue:2 components/admin/DonorAdmin.vue:86
 #: components/admin/DonorAdmin.vue:107
 msgid "Can read/export responses to private investor questions"
 msgstr ""
 
-#: components/UserPrivileges.vue:134 components/UserPrivileges.vue:2
+#: components/UserPrivileges.vue:144 components/UserPrivileges.vue:2
 #: components/admin/DonorAdmin.vue:148
 msgid "Can read/export responses to private investor-specific questions"
 msgstr ""
 
-#: components/UserPrivileges.vue:26 components/UserPrivileges.vue:63
-#: components/UserPrivileges.vue:117 components/UserPrivileges.vue:144
+#: components/UserPrivileges.vue:26 components/UserPrivileges.vue:68
+#: components/UserPrivileges.vue:127 components/UserPrivileges.vue:154
 #: components/UserPrivileges.vue:12 components/admin/CountryAdmin.vue:160
-#: components/admin/CountryAdmin.vue:213 components/admin/DonorAdmin.vue:117
+#: components/admin/CountryAdmin.vue:218 components/admin/DonorAdmin.vue:117
 #: components/admin/DonorAdmin.vue:159
 msgid "Can select which questions are private and public"
 msgstr ""
 
-#: components/UserPrivileges.vue:16 components/UserPrivileges.vue:53
+#: components/UserPrivileges.vue:46 components/UserPrivileges.vue:88
+#: components/UserPrivileges.vue:32 components/admin/CountryAdmin.vue:182
+#: components/admin/CountryAdmin.vue:240
+msgid "Can update country project's team members"
+msgstr ""
+
+#: components/UserPrivileges.vue:16 components/UserPrivileges.vue:58
 #: components/UserPrivileges.vue:2 components/admin/CountryAdmin.vue:150
-#: components/admin/CountryAdmin.vue:203
+#: components/admin/CountryAdmin.vue:208
 msgid "Can update Government map data"
 msgstr ""
 
-#: components/UserPrivileges.vue:93 components/UserPrivileges.vue:42
-#: components/admin/CountryAdmin.vue:245
+#: components/UserPrivileges.vue:103 components/UserPrivileges.vue:47
+#: components/admin/CountryAdmin.vue:255
 msgid "Can upload and manage Countries' Reference Documents"
 msgstr ""
 
-#: components/UserPrivileges.vue:46 components/UserPrivileges.vue:83
-#: components/UserPrivileges.vue:127 components/UserPrivileges.vue:154
-#: components/UserPrivileges.vue:32 components/UserPrivileges.vue:22
-#: components/admin/CountryAdmin.vue:182 components/admin/CountryAdmin.vue:235
+#: components/UserPrivileges.vue:51 components/UserPrivileges.vue:93
+#: components/UserPrivileges.vue:137 components/UserPrivileges.vue:164
+#: components/UserPrivileges.vue:37 components/UserPrivileges.vue:22
+#: components/admin/CountryAdmin.vue:187 components/admin/CountryAdmin.vue:245
 #: components/admin/DonorAdmin.vue:127 components/admin/DonorAdmin.vue:174
 msgid "Can view KPI graphs"
 msgstr ""
@@ -717,6 +728,10 @@ msgstr ""
 msgid "Can't find anything related to"
 msgstr ""
 
+#: components/common/UserProjectsList.vue:5
+msgid "Can't find project based on your search query."
+msgstr ""
+
 #: components/admin/DhaQuestion.vue:78 components/admin/DhaQuestion.vue:116
 #: components/admin/ReferenceDocumentAdmin.vue:232
 #: components/admin/import/ImportDataTable.vue:143
@@ -730,6 +745,7 @@ msgstr ""
 #: components/dialogs/DashboardFiltersDialog.vue:22
 #: components/dialogs/DigitalHealthInterventionsDialog.vue:14
 #: components/dialogs/EditSubLevelDialog.vue:11
+#: components/dialogs/EditTeamMembersDialog.vue:16
 #: components/dialogs/ProjectApprovalDialog.vue:47
 #: components/dialogs/SaveFilterDialog.vue:12
 #: components/project/ProjectData.vue:377
@@ -763,7 +779,12 @@ msgstr ""
 msgid "Change my email to:"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:10 components/admin/CountryAdmin.vue:114
+#: components/common/ProjectCardActions.vue:34
+#: components/common/ProjectCardActions.vue:23
+msgid "Change team"
+msgstr ""
+
+#: components/admin/CountryAdmin.vue:10 components/admin/CountryAdmin.vue:116
 msgid "Choose country"
 msgstr ""
 
@@ -988,7 +1009,7 @@ msgstr ""
 msgid "Country fields"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:8 components/admin/CountryAdmin.vue:98
+#: components/admin/CountryAdmin.vue:8 components/admin/CountryAdmin.vue:100
 msgid "Country information"
 msgstr ""
 
@@ -996,15 +1017,19 @@ msgstr ""
 msgid "Country logo"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:263 components/admin/CountryAdmin.vue:654
+#: components/admin/CountryAdmin.vue:273 components/admin/CountryAdmin.vue:672
 msgid "Country map"
+msgstr ""
+
+#: components/common/UserProjectsTabs.vue:18
+msgid "Country projects ({count})"
 msgstr ""
 
 #: components/dialogs/ReferenceDocumentDialog.vue:37
 msgid "Country Reference Document"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:259 components/admin/CountryAdmin.vue:645
+#: components/admin/CountryAdmin.vue:269 components/admin/CountryAdmin.vue:663
 msgid "Country specific questionnaire"
 msgstr ""
 
@@ -1021,7 +1046,7 @@ msgstr ""
 msgid "Cover image"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:18 components/admin/CountryAdmin.vue:140
+#: components/admin/CountryAdmin.vue:18 components/admin/CountryAdmin.vue:142
 #: components/admin/DonorAdmin.vue:22 components/admin/DonorAdmin.vue:136
 msgid "Cover text"
 msgstr ""
@@ -1166,7 +1191,7 @@ msgstr ""
 msgid "Disclaimer: data above sourced from"
 msgstr ""
 
-#: components/ProfileEditor.vue:385 components/admin/CountryAdmin.vue:271
+#: components/ProfileEditor.vue:385 components/admin/CountryAdmin.vue:281
 #: components/admin/DonorAdmin.vue:196
 #: components/admin/ReferenceDocumentAdmin.vue:76
 msgid "Dismiss changes"
@@ -1274,7 +1299,8 @@ msgid "Edit document"
 msgstr ""
 
 #: components/common/ProjectBar.vue:76
-#: components/common/ProjectCardActions.vue:18
+#: components/common/ProjectCardActions.vue:28
+#: components/common/ProjectCardActions.vue:17
 msgid "Edit Draft"
 msgstr ""
 
@@ -1304,6 +1330,11 @@ msgstr ""
 #: components/dialogs/EditSubLevelDialog.vue:1
 #: components/dialogs/EditSubLevelDialog.vue:19
 msgid "Edit Sub Level"
+msgstr ""
+
+#: components/dialogs/EditTeamMembersDialog.vue:1
+#: components/dialogs/EditTeamMembersDialog.vue:19
+msgid "Edit team members"
 msgstr ""
 
 #: components/admin/import/ImportInfo.vue:8
@@ -1468,12 +1499,12 @@ msgstr ""
 msgid "First and Last Name"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:26 components/admin/CountryAdmin.vue:168
+#: components/admin/CountryAdmin.vue:26 components/admin/CountryAdmin.vue:170
 #: components/admin/DonorAdmin.vue:30 components/admin/DonorAdmin.vue:163
 msgid "Footer text"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:22 components/admin/CountryAdmin.vue:154
+#: components/admin/CountryAdmin.vue:22 components/admin/CountryAdmin.vue:156
 #: components/admin/DonorAdmin.vue:26 components/admin/DonorAdmin.vue:150
 msgid "Footer title"
 msgstr ""
@@ -1554,7 +1585,7 @@ msgid ""
 "some common use cases"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:55 components/admin/CountryAdmin.vue:248
+#: components/admin/CountryAdmin.vue:55 components/admin/CountryAdmin.vue:250
 msgid "Global Digital Health Index"
 msgstr ""
 
@@ -1778,11 +1809,11 @@ msgstr ""
 msgid "here"
 msgstr ""
 
-#: components/common/UserProjectsTabs.vue:20
+#: components/common/UserProjectsTabs.vue:26
 msgid "Here are all of the projects you are a"
 msgstr ""
 
-#: components/common/UserProjectsTabs.vue:29
+#: components/common/UserProjectsTabs.vue:34
 msgid ""
 "Here are all your archived projects. You can restore individual projects by "
 "submitting a restore request."
@@ -2328,7 +2359,7 @@ msgstr ""
 msgid "Login here"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:14 components/admin/CountryAdmin.vue:126
+#: components/admin/CountryAdmin.vue:14 components/admin/CountryAdmin.vue:128
 #: components/admin/DonorAdmin.vue:109
 msgid "Logo"
 msgstr ""
@@ -2337,7 +2368,7 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:55 components/admin/CountryAdmin.vue:249
+#: components/admin/CountryAdmin.vue:55 components/admin/CountryAdmin.vue:251
 #: components/common/NotifySwitchers.vue:12
 #: components/common/NotifySwitchers.vue:48
 msgid "Lorem ipsum"
@@ -2372,7 +2403,7 @@ msgstr ""
 msgid "Me"
 msgstr ""
 
-#: components/common/UserProjectsTabs.vue:22
+#: components/common/UserProjectsTabs.vue:28
 msgid "Member"
 msgstr ""
 
@@ -2427,6 +2458,10 @@ msgstr ""
 
 #: components/admin/DhaQuestion.vue:21 components/admin/DhaQuestion.vue:76
 msgid "Multiple choice"
+msgstr ""
+
+#: components/common/UserProjectsTabs.vue:12
+msgid "My archived projects ({count})"
 msgstr ""
 
 #: components/dashboard/FilterPresetsActions.vue:6
@@ -2688,7 +2723,7 @@ msgstr ""
 msgid "Ocurrances:"
 msgstr ""
 
-#: components/common/UserProjectsTabs.vue:26
+#: components/common/UserProjectsTabs.vue:32
 msgid "of."
 msgstr ""
 
@@ -2723,7 +2758,7 @@ msgstr ""
 msgid "Operation successfully aborted"
 msgstr ""
 
-#: components/ProfileEditor.vue:121 components/common/UserProjectsTabs.vue:23
+#: components/ProfileEditor.vue:121 components/common/UserProjectsTabs.vue:29
 msgid "or"
 msgstr ""
 
@@ -2789,7 +2824,7 @@ msgstr ""
 msgid "Partially"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:41 components/admin/CountryAdmin.vue:214
+#: components/admin/CountryAdmin.vue:41 components/admin/CountryAdmin.vue:216
 #: components/admin/DonorAdmin.vue:34 components/admin/DonorAdmin.vue:176
 msgid "Partner logos"
 msgstr ""
@@ -2868,7 +2903,7 @@ msgstr ""
 msgid "Please fill out the form below:"
 msgstr ""
 
-#: components/dialogs/DialogsContainer.vue:31
+#: components/dialogs/DialogsContainer.vue:33
 msgid "Please fill your profile first"
 msgstr ""
 
@@ -2892,7 +2927,7 @@ msgid ""
 "using the Digital Health Atlas (the “DHA”)."
 msgstr ""
 
-#: components/common/ExtendedProjectCard.vue:60
+#: components/common/ExtendedProjectCard.vue:67
 msgid "Please restore the following project:"
 msgstr ""
 
@@ -2974,7 +3009,7 @@ msgstr ""
 msgid "Privileges for Government Admins"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:198 components/admin/CountryAdmin.vue:2
+#: components/admin/CountryAdmin.vue:203 components/admin/CountryAdmin.vue:2
 msgid "Privileges for Government System Admins"
 msgstr ""
 
@@ -3015,7 +3050,7 @@ msgstr ""
 msgid "Project"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:70 components/admin/CountryAdmin.vue:282
+#: components/admin/CountryAdmin.vue:70 components/admin/CountryAdmin.vue:284
 #: components/dialogs/ProjectApprovalDialog.vue:1
 #: components/dialogs/ProjectApprovalDialog.vue:33
 msgid "Project Approval"
@@ -3025,7 +3060,7 @@ msgstr ""
 msgid "Project approval per countries"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:30 components/admin/CountryAdmin.vue:182
+#: components/admin/CountryAdmin.vue:30 components/admin/CountryAdmin.vue:184
 msgid "Project approval process"
 msgstr ""
 
@@ -3033,6 +3068,8 @@ msgstr ""
 msgid "Project country"
 msgstr ""
 
+#: components/dialogs/EditTeamMembersDialog.vue:7
+#: components/dialogs/EditTeamMembersDialog.vue:33
 #: components/project/sections/GeneralOverview.vue:488
 msgid "Project editors can change and update all project information."
 msgstr ""
@@ -3049,7 +3086,7 @@ msgstr ""
 msgid "Project has been unpublished"
 msgstr ""
 
-#: components/common/ExtendedProjectCard.vue:62
+#: components/common/ExtendedProjectCard.vue:69
 msgid "Project ID: {id}"
 msgstr ""
 
@@ -3071,7 +3108,7 @@ msgstr ""
 msgid "Project Name"
 msgstr ""
 
-#: components/common/ExtendedProjectCard.vue:61
+#: components/common/ExtendedProjectCard.vue:68
 msgid "Project name: {name}"
 msgstr ""
 
@@ -3079,7 +3116,7 @@ msgstr ""
 msgid "Project page"
 msgstr ""
 
-#: components/common/ExtendedProjectCard.vue:66
+#: components/common/ExtendedProjectCard.vue:73
 msgid "Project restore request ({id})"
 msgstr ""
 
@@ -3265,7 +3302,8 @@ msgstr ""
 msgid "Reset forgotten password"
 msgstr ""
 
-#: components/common/ExtendedProjectCard.vue:50
+#: components/common/ProjectCardActions.vue:3
+#: components/common/ProjectCardActions.vue:9
 msgid "Restore"
 msgstr ""
 
@@ -3289,6 +3327,7 @@ msgstr ""
 #: components/admin/import/ImportDialog.vue:8
 #: components/dashboard/FilterPresetsActions.vue:32
 #: components/dialogs/EditSubLevelDialog.vue:16
+#: components/dialogs/EditTeamMembersDialog.vue:21
 #: components/dialogs/ProjectApprovalDialog.vue:58
 #: components/dialogs/SaveFilterDialog.vue:17
 #: angular/Cms/CommentWidget/CommentWidget.html:42
@@ -3304,7 +3343,7 @@ msgstr ""
 msgid "Save all projects"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:274 components/admin/DonorAdmin.vue:199
+#: components/admin/CountryAdmin.vue:284 components/admin/DonorAdmin.vue:199
 #: components/admin/ReferenceDocumentAdmin.vue:79
 msgid "Save changes"
 msgstr ""
@@ -3337,6 +3376,12 @@ msgstr ""
 #: pages/_organisation/graphs_showcase.vue:13
 #: angular/Cms/PlanningAndGuidance/PlanningAndGuidance.html:99
 msgid "Search"
+msgstr ""
+
+#: components/common/UserProjectsTabs.vue:160
+msgid ""
+"Search your country's projects by project name, name of team member or e-"
+"mail address. You can change individual project's team members (co-editors)."
 msgstr ""
 
 #: components/landing/MyProjectsBox.vue:16
@@ -3958,6 +4003,10 @@ msgid ""
 "national planning goals and strategic context."
 msgstr ""
 
+#: components/common/EmptyCountryProjects.vue:11
+msgid "There are no projects in your country."
+msgstr ""
+
 #: components/project/collection/CollectionProjects.vue:99
 msgid ""
 "There is no project to be shown. Refine your filter or import projects into "
@@ -4202,6 +4251,8 @@ msgstr ""
 msgid "Type name (eg: COVID-19)"
 msgstr ""
 
+#: components/common/UserProjectsTabs.vue:38
+#: components/common/UserProjectsTabs.vue:147
 #: components/dashboard/SearchBox.vue:4 components/dashboard/SearchBox.vue:35
 #: components/documents/DocumentSearch.vue:2
 #: components/documents/DocumentSearch.vue:16
@@ -4216,9 +4267,9 @@ msgstr ""
 msgid "Type to filter softwares"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:138 components/admin/CountryAdmin.vue:191
-#: components/admin/CountryAdmin.vue:254 components/admin/CountryAdmin.vue:427
-#: components/admin/CountryAdmin.vue:521 components/admin/CountryAdmin.vue:631
+#: components/admin/CountryAdmin.vue:138 components/admin/CountryAdmin.vue:196
+#: components/admin/CountryAdmin.vue:264 components/admin/CountryAdmin.vue:429
+#: components/admin/CountryAdmin.vue:531 components/admin/CountryAdmin.vue:649
 #: components/admin/DonorAdmin.vue:95 components/admin/DonorAdmin.vue:136
 #: components/admin/DonorAdmin.vue:183 components/admin/DonorAdmin.vue:319
 #: components/admin/DonorAdmin.vue:397 components/admin/DonorAdmin.vue:483
@@ -4235,7 +4286,8 @@ msgstr ""
 msgid "Unique Project ID (UID)"
 msgstr ""
 
-#: components/common/ProjectCardActions.vue:30
+#: components/common/ProjectCardActions.vue:46
+#: components/common/ProjectCardActions.vue:35
 #: components/project/ProjectData.vue:171
 #: components/project/ProjectNavigation.vue:112
 msgid "Unpublish"
@@ -4296,7 +4348,7 @@ msgstr ""
 msgid "User created succesfully"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:74 components/admin/CountryAdmin.vue:292
+#: components/admin/CountryAdmin.vue:74 components/admin/CountryAdmin.vue:294
 #: components/admin/DonorAdmin.vue:40 components/admin/DonorAdmin.vue:195
 msgid "User management"
 msgstr ""
@@ -4344,7 +4396,8 @@ msgid "View digital health projects at global and country level"
 msgstr ""
 
 #: components/common/ProjectBar.vue:71
-#: components/common/ProjectCardActions.vue:6
+#: components/common/ProjectCardActions.vue:15
+#: components/common/ProjectCardActions.vue:4
 msgid "View Draft"
 msgstr ""
 
@@ -4356,13 +4409,14 @@ msgid "View Project Info"
 msgstr ""
 
 #: components/common/ProjectBar.vue:66
-#: components/common/ProjectCardActions.vue:12
+#: components/common/ProjectCardActions.vue:21
+#: components/common/ProjectCardActions.vue:10
 msgid "View Published"
 msgstr ""
 
 #: components/common/ProjectLegendContent.vue:14
 #: components/common/ProjectLegendContent.vue:4
-#: components/common/UserProjectsTabs.vue:25
+#: components/common/UserProjectsTabs.vue:31
 msgid "Viewer"
 msgstr ""
 
@@ -4386,7 +4440,7 @@ msgstr ""
 #: components/admin/DhaQuestion.vue:113
 #: components/admin/ReferenceDocumentAdmin.vue:229
 #: components/dashboard/FilterPresetsActions.vue:47
-#: components/dialogs/DialogsContainer.vue:32
+#: components/dialogs/DialogsContainer.vue:34
 #: components/dialogs/ProjectApprovalDialog.vue:105
 #: components/project/ProjectData.vue:174
 #: components/project/ProjectData.vue:221
@@ -4548,7 +4602,7 @@ msgstr ""
 msgid "Why use the Digital Health Atlas?"
 msgstr ""
 
-#: components/admin/CountryAdmin.vue:47 components/admin/CountryAdmin.vue:228
+#: components/admin/CountryAdmin.vue:47 components/admin/CountryAdmin.vue:230
 msgid "Widgets"
 msgstr ""
 
