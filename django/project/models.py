@@ -177,7 +177,9 @@ class Project(SoftDeleteModel, ExtendedModel):
         return data
 
     def to_response_dict(self, published, draft):
-        return dict(id=self.pk, public_id=self.public_id, archived=self.archived, published=published, draft=draft)
+        return dict(id=self.pk, public_id=self.public_id, archived=self.archived,
+                    admins=self.get_country_admins(),
+                    published=published, draft=draft)
 
     def to_project_import_table_dict(self, published_data, draft_data):
         published = True if self.public_id != "" else False
