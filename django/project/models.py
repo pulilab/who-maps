@@ -127,6 +127,11 @@ class Project(SoftDeleteModel, ExtendedModel):
         country_id = self.get_country_id(draft_mode=False) if self.public_id else self.get_country_id(draft_mode=True)
         return Country.objects.get(id=int(country_id)) if country_id else None
 
+    def get_country_admins(self):
+        if country := self.get_country():
+            admins = country.super_admins.all() | country.admins.all()
+            return list(admins.values('name', 'user__email'))
+
     def is_member(self, user):
         return self.team.filter(id=user.userprofile.id).exists() or self.viewers.filter(id=user.userprofile.id).exists()
 
