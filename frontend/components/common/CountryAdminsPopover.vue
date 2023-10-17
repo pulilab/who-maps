@@ -1,20 +1,37 @@
 <template>
   <el-popover
     v-model="adminPopover"
+    width="400"
     placement="bottom-end"
     popper-class="popover"
   >
-    <translate tag="strong" class="admin-title">Team members by country admins</translate>
-    <div class="admin-list">
-      <a
-        v-for="(user,i) in admins"
-        :key="i"  :href="`mailto:${user.user__email}`"
-        class="NuxtLink Small IconRight"
-      >
-        {{ user.name }}
+    <template v-if="hasAdmins">
+      <translate tag="p" class="admin-title" key="admins">
+        The contact person can help you onboard as co-editor or update the project if you have further details.
+        If the contact person is unresponsive, your can try to reach out to the designated DHA administrator(s) for the country the project is receding:
+      </translate>
+      <div class="admin-list">
+        <a
+          v-for="(user,i) in admins"
+          :key="i"  :href="`mailto:${user.user__email}`"
+          class="NuxtLink Small IconRight"
+        >
+          {{ user.name }}
+          <fa icon="envelope" />
+        </a>
+      </div>
+    </template>
+    <template v-else>
+      <translate tag="p" class="admin-title" key="support">
+        The contact person can help you onboard as co-editor or update the project if you have further details.
+        If the contact person is unresponsive, your can try to reach out to:
+      </translate>
+      <a href="mailto:DIGITAL-HEALTH-ATLAS@who.int" class="NuxtLink Small IconRight">
+        <translate>DHA support</translate>
         <fa icon="envelope" />
-      </a>
-    </div>
+    </a>
+    </template>
+    <!-- <translate tag="strong" class="admin-title">Team members by country admins</translate> -->
     <i class="el-icon-close close-btn" @click="adminPopover = false" />
     <i slot="reference" :title="$gettext('Show country admins')" class="el-icon-info"></i>
   </el-popover>
@@ -26,7 +43,8 @@ export default {
   props: {
     admins: {
       type: Array,
-      required: true
+      required: true,
+      default: () => []
     },
   },
   data() {
@@ -34,13 +52,22 @@ export default {
       adminPopover: false,
     }
   },
+  computed: {
+    hasAdmins() {
+      return this.admins && this.admins.length > 0
+    }
+  }
 }
 </script>
 
 <style lang="less">
 @import '../../assets/style/variables.less';
 .admin-title {
-  margin-right: 1.5em;
+  margin: 0;
+  text-align: left;
+  word-break: normal;
+  hyphens: auto;
+  margin-right: 0.8em;
 }
 .admin-list {
   display: flex;
