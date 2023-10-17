@@ -54,7 +54,6 @@
             >
               <div class="Label">
                 <translate>Contact person</translate>
-                <!-- <i :title="$gettext('Show country admins')" class="el-icon-info"></i> -->
                 <CountryAdminsPopover :admins="publicProfile.admins" />
               </div>
               <div class="Info">
