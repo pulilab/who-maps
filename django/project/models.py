@@ -123,14 +123,14 @@ class Project(SoftDeleteModel, ExtendedModel):
     def get_country_id(self, draft_mode=False):
         return self.draft.get('country') if draft_mode else self.data.get('country')
 
-    def get_country(self):
+    def get_country(self) -> Country:
         country_id = self.get_country_id(draft_mode=False) if self.public_id else self.get_country_id(draft_mode=True)
         return Country.objects.get(id=int(country_id)) if country_id else None
 
-    def get_country_admins(self):
+    def get_country_admins(self) -> ProjectQuerySet:
         if country := self.get_country():
             admins = country.super_admins.all() | country.admins.all()
-            return list(admins.values('name', 'user__email'))
+            return admins
 
     def is_member(self, user):
         return self.team.filter(id=user.userprofile.id).exists() or self.viewers.filter(id=user.userprofile.id).exists()
@@ -177,8 +177,10 @@ class Project(SoftDeleteModel, ExtendedModel):
         return data
 
     def to_response_dict(self, published, draft):
+        admins = self.get_country_admins()
+        admins_list = list(admins.values('name', 'user__email')) if admins else None
         return dict(id=self.pk, public_id=self.public_id, archived=self.archived,
-                    admins=self.get_country_admins(),
+                    admins=admins_list,
                     published=published, draft=draft)
 
     def to_project_import_table_dict(self, published_data, draft_data):
