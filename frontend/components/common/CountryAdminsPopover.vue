@@ -31,7 +31,6 @@
         <fa icon="envelope" />
     </a>
     </template>
-    <!-- <translate tag="strong" class="admin-title">Team members by country admins</translate> -->
     <i class="el-icon-close close-btn" @click="adminPopover = false" />
     <i slot="reference" :title="$gettext('Show country admins')" class="el-icon-info"></i>
   </el-popover>
