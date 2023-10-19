@@ -7,7 +7,7 @@ from django.db.models.functions import Cast
 from hashids import Hashids
 
 from django.db import models
-from django.db.models import Q, IntegerField
+from django.db.models import Q, IntegerField, QuerySet
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -127,7 +127,7 @@ class Project(SoftDeleteModel, ExtendedModel):
         country_id = self.get_country_id(draft_mode=False) if self.public_id else self.get_country_id(draft_mode=True)
         return Country.objects.get(id=int(country_id)) if country_id else None
 
-    def get_country_admins(self) -> ProjectQuerySet:
+    def get_country_admins(self) -> QuerySet:
         if country := self.get_country():
             admins = country.super_admins.all() | country.admins.all()
             return admins
