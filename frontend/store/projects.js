@@ -291,7 +291,6 @@ export const actions = {
     }
   },
   setLoadingProjects ({ commit }, val) {
-    console.log("🚀 ~ file: projects.js:256 ~ setLoadingProjects ~ val:", val)
     commit('setValue', { key: 'loadingProjects', val })
   },
   async setCurrentProject ({ commit, dispatch }, id) {

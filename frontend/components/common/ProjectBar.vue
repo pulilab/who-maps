@@ -54,6 +54,7 @@
             >
               <div class="Label">
                 <translate>Contact person</translate>
+                <CountryAdminsPopover :admins="publicProfile.admins" />
               </div>
               <div class="Info">
                 <a
@@ -104,12 +105,14 @@ import { mapGetters } from 'vuex'
 import OrganisationItem from './OrganisationItem'
 import ProjectLegend from './ProjectLegend'
 import UidPopOver from '@/components/common/UidPopOver'
+import CountryAdminsPopover from '@/components/common/CountryAdminsPopover'
 
 export default {
   components: {
     OrganisationItem,
     ProjectLegend,
-    UidPopOver
+    UidPopOver,
+    CountryAdminsPopover,
   },
   data () {
     return {
@@ -281,6 +284,12 @@ export default {
         margin: 0 0 4px;
         font-size: @fontSizeSmall - 1;
         color: @colorGray;
+        i {
+          cursor: pointer;
+          &:hover {
+            color: @colorBrandPrimary;
+          }
+        }
       }
 
       .Info {

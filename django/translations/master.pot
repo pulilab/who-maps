@@ -562,7 +562,7 @@ msgstr ""
 msgid "Ask our experts"
 msgstr ""
 
-#: components/BreadCrumb.vue:36 components/common/ProjectBar.vue:86
+#: components/BreadCrumb.vue:36 components/common/ProjectBar.vue:88
 #: components/common/ProjectCardActions.vue:40
 #: components/common/ProjectCardActions.vue:29
 msgid "Assessment"
@@ -1148,6 +1148,11 @@ msgstr ""
 msgid "DHA Help Center"
 msgstr ""
 
+#: components/common/CountryAdminsPopover.vue:20
+#: components/common/CountryAdminsPopover.vue:6
+msgid "DHA support"
+msgstr ""
+
 #: components/dashboard/SearchBox.vue:36
 msgid "digital health"
 msgstr ""
@@ -1306,7 +1311,7 @@ msgstr ""
 msgid "Edit document"
 msgstr ""
 
-#: components/common/ProjectBar.vue:76
+#: components/common/ProjectBar.vue:78
 #: components/common/ProjectCardActions.vue:28
 #: components/common/ProjectCardActions.vue:17
 msgid "Edit Draft"
@@ -3644,6 +3649,10 @@ msgstr ""
 msgid "Show all selected..."
 msgstr ""
 
+#: components/common/CountryAdminsPopover.vue:78
+msgid "Show country admins"
+msgstr ""
+
 #: components/common/map/SwitchGlobalBox.vue:3
 #: components/common/map/SwitchGlobalBox.vue:13
 #: components/dashboard/CountryFilters.vue:3
@@ -3776,7 +3785,7 @@ msgstr ""
 msgid "Stage date is required"
 msgstr ""
 
-#: components/common/ProjectBar.vue:81 components/dashboard/MainTable.vue:29
+#: components/common/ProjectBar.vue:83 components/dashboard/MainTable.vue:29
 #: components/dashboard/MainTable.vue:161 components/project/ProjectData.vue:56
 #: components/project/ProjectNavigation.vue:43
 msgid "Stages"
@@ -3825,7 +3834,7 @@ msgstr ""
 msgid "Success!"
 msgstr ""
 
-#: components/common/ProjectBar.vue:96
+#: components/common/ProjectBar.vue:98
 msgid "Summary score"
 msgstr ""
 
@@ -3849,6 +3858,10 @@ msgstr ""
 
 #: components/project/sections/view/Overview.vue:140
 msgid "Team members"
+msgstr ""
+
+#: components/common/CountryAdminsPopover.vue:1
+msgid "Team members by country admins"
 msgstr ""
 
 #: components/project/ProjectData.vue:70
@@ -3893,6 +3906,23 @@ msgid ""
 "of its authorities, or concerning the delimitation of its frontiers or "
 "boundaries. Dotted and dashed lines on maps represent approximate border "
 "lines for which there may not yet be full agreement."
+msgstr ""
+
+#: components/common/CountryAdminsPopover.vue:3
+#: components/common/CountryAdminsPopover.vue:1
+msgid ""
+"The contact person can help you onboard as co-editor or update the project "
+"if you have further details. If the contact person is unresponsive, your can "
+"try to reach out to the designated DHA administrator(s) for the country the "
+"project is receding:"
+msgstr ""
+
+#: components/common/CountryAdminsPopover.vue:15
+#: components/common/CountryAdminsPopover.vue:1
+msgid ""
+"The contact person can help you onboard as co-editor or update the project "
+"if you have further details. If the contact person is unresponsive, your can "
+"try to reach out to:"
 msgstr ""
 
 #: components/project/ProjectData.vue:222
@@ -4317,7 +4347,7 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-#: components/common/ProjectBar.vue:91
+#: components/common/ProjectBar.vue:93
 #: angular/MapsToolkit/Scorecard/Scorecard.html:177
 #: angular/MapsToolkit/Scorecard/Scorecard.html:49
 msgid "Update score"
@@ -4407,7 +4437,7 @@ msgstr ""
 msgid "View digital health projects at global and country level"
 msgstr ""
 
-#: components/common/ProjectBar.vue:71
+#: components/common/ProjectBar.vue:73
 #: components/common/ProjectCardActions.vue:15
 #: components/common/ProjectCardActions.vue:4
 msgid "View Draft"
@@ -4420,7 +4450,7 @@ msgstr ""
 msgid "View Project Info"
 msgstr ""
 
-#: components/common/ProjectBar.vue:66
+#: components/common/ProjectBar.vue:68
 #: components/common/ProjectCardActions.vue:21
 #: components/common/ProjectCardActions.vue:10
 msgid "View Published"
