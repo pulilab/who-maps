@@ -454,8 +454,12 @@ msgstr ""
 msgid "An error occured during login, please reload the page and try again"
 msgstr ""
 
-#: components/admin/DhaQuestion.vue:97
-msgid "An error occured while deleting the question"
+#: components/admin/DhaQuestion.vue:102
+msgid "An error occured while archiving or the question"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:103
+msgid "An error occured while discarding or the question"
 msgstr ""
 
 #: components/admin/DhaQuestionaire.vue:42
@@ -466,7 +470,7 @@ msgstr ""
 msgid "An error occured while saving the data"
 msgstr ""
 
-#: components/admin/DhaQuestion.vue:136
+#: components/admin/DhaQuestion.vue:140
 msgid "An error occured while saving the question"
 msgstr ""
 
@@ -540,6 +544,10 @@ msgstr ""
 msgid ""
 "are fraudulent, unlawful, threatening, abusive, harassing, libellous, "
 "defamatory, or offensive;"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:74
+msgid "Are you sure you want to archive this question?"
 msgstr ""
 
 #: components/admin/import/ImportHeaders.vue:221
@@ -732,7 +740,7 @@ msgstr ""
 msgid "Can't find project based on your search query."
 msgstr ""
 
-#: components/admin/DhaQuestion.vue:78 components/admin/DhaQuestion.vue:116
+#: components/admin/DhaQuestion.vue:78 components/admin/DhaQuestion.vue:120
 #: components/admin/ReferenceDocumentAdmin.vue:232
 #: components/admin/import/ImportDataTable.vue:143
 #: components/admin/import/ImportDataTable.vue:167
@@ -2461,7 +2469,7 @@ msgstr ""
 msgid "Months"
 msgstr ""
 
-#: components/admin/DhaQuestion.vue:21 components/admin/DhaQuestion.vue:76
+#: components/admin/DhaQuestion.vue:28 components/admin/DhaQuestion.vue:88
 msgid "Multiple choice"
 msgstr ""
 
@@ -2712,7 +2720,7 @@ msgid ""
 "jurisdiction."
 msgstr ""
 
-#: components/admin/DhaQuestion.vue:18 components/admin/DhaQuestion.vue:64
+#: components/admin/DhaQuestion.vue:25 components/admin/DhaQuestion.vue:76
 msgid "Numeric field"
 msgstr ""
 
@@ -2739,7 +2747,7 @@ msgid "Ok"
 msgstr ""
 
 #: components/DhaLogin.vue:74 components/admin/DhaQuestion.vue:77
-#: components/admin/DhaQuestion.vue:115
+#: components/admin/DhaQuestion.vue:119
 #: components/admin/ReferenceDocumentAdmin.vue:231
 #: components/admin/import/ImportDataTable.vue:142
 #: components/admin/import/ImportDataTable.vue:166
@@ -3006,7 +3014,7 @@ msgstr ""
 msgid "private"
 msgstr ""
 
-#: components/admin/DhaQuestion.vue:34 components/admin/DhaQuestion.vue:94
+#: components/admin/DhaQuestion.vue:41 components/admin/DhaQuestion.vue:106
 msgid "Private"
 msgstr ""
 
@@ -3211,23 +3219,31 @@ msgstr ""
 msgid "Purpose"
 msgstr ""
 
-#: components/admin/DhaQuestion.vue:92
-msgid "Question deletion canceled"
+#: components/admin/DhaQuestion.vue:95
+msgid "Question archiving canceled"
 msgstr ""
 
-#: components/admin/DhaQuestion.vue:130
+#: components/admin/DhaQuestion.vue:96
+msgid "Question discarding canceled"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:134
 msgid "Question saving canceled"
 msgstr ""
 
-#: components/admin/DhaQuestion.vue:86
-msgid "Question successfully deleted"
+#: components/admin/DhaQuestion.vue:87
+msgid "Question successfully archived"
 msgstr ""
 
-#: components/admin/DhaQuestion.vue:124
+#: components/admin/DhaQuestion.vue:88
+msgid "Question successfully discarded"
+msgstr ""
+
+#: components/admin/DhaQuestion.vue:128
 msgid "Question successfully saved"
 msgstr ""
 
-#: components/admin/DhaQuestion.vue:25 components/admin/DhaQuestion.vue:86
+#: components/admin/DhaQuestion.vue:32 components/admin/DhaQuestion.vue:98
 msgid "Question text"
 msgstr ""
 
@@ -3698,7 +3714,7 @@ msgstr ""
 msgid "Since last month"
 msgstr ""
 
-#: components/admin/DhaQuestion.vue:20 components/admin/DhaQuestion.vue:72
+#: components/admin/DhaQuestion.vue:27 components/admin/DhaQuestion.vue:84
 msgid "Single choice"
 msgstr ""
 
@@ -3868,7 +3884,7 @@ msgstr ""
 msgid "Terms of Use"
 msgstr ""
 
-#: components/admin/DhaQuestion.vue:17 components/admin/DhaQuestion.vue:60
+#: components/admin/DhaQuestion.vue:24 components/admin/DhaQuestion.vue:72
 msgid "Text field"
 msgstr ""
 
@@ -4169,10 +4185,6 @@ msgid ""
 "redundancy of investments."
 msgstr ""
 
-#: components/admin/DhaQuestion.vue:74
-msgid "This will permanently delete the question?"
-msgstr ""
-
 #: components/admin/ReferenceDocumentAdmin.vue:228
 msgid "This will permanently delete the selected policy. Continue?"
 msgstr ""
@@ -4181,7 +4193,7 @@ msgstr ""
 msgid "This will permanently delete this saved configuration. Continue?"
 msgstr ""
 
-#: components/admin/DhaQuestion.vue:110
+#: components/admin/DhaQuestion.vue:114
 msgid ""
 "This will save the question, type and options will not be editable anymore"
 msgstr ""
@@ -4467,7 +4479,7 @@ msgid "Visit digitalhealthindex.org"
 msgstr ""
 
 #: components/DhaLogin.vue:72 components/admin/DhaQuestion.vue:75
-#: components/admin/DhaQuestion.vue:113
+#: components/admin/DhaQuestion.vue:117
 #: components/admin/ReferenceDocumentAdmin.vue:229
 #: components/dashboard/FilterPresetsActions.vue:47
 #: components/dialogs/DialogsContainer.vue:34
@@ -4666,7 +4678,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: components/admin/DhaQuestion.vue:19 components/admin/DhaQuestion.vue:68
+#: components/admin/DhaQuestion.vue:26 components/admin/DhaQuestion.vue:80
 msgid "Yes - no field"
 msgstr ""
 

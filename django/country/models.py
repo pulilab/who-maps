@@ -9,11 +9,11 @@ from django.forms import MultipleChoiceField
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinLengthValidator
-from ordered_model.models import OrderedModel, OrderedModelManager
+from ordered_model.models import OrderedModel, OrderedModelQuerySet
 from taggit.managers import TaggableManager
 
 from country.tasks import update_gdhi_data_task
-from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
+from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel, ActiveQuerySet
 from country.validators import file_size
 from user.models import UserProfile
 
@@ -259,11 +259,15 @@ class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
         base_manager_name = 'objects'
 
 
+class OrderedActiveQuerySet(ActiveQuerySet, OrderedModelQuerySet):
+    pass
+
+
 class DonorCustomQuestion(CustomQuestion):
     donor = models.ForeignKey(Donor, related_name='donor_questions', on_delete=models.CASCADE)
     order_with_respect_to = 'donor'
 
-    objects = OrderedModelManager()
+    objects = OrderedActiveQuerySet.as_manager()
 
     class Meta(OrderedModel.Meta):
         pass
@@ -276,7 +280,7 @@ class CountryCustomQuestion(CustomQuestion):
     country = models.ForeignKey(Country, related_name='country_questions', on_delete=models.CASCADE)
     order_with_respect_to = 'country'
 
-    objects = OrderedModelManager()
+    objects = OrderedActiveQuerySet.as_manager()
 
     class Meta(OrderedModel.Meta):
         pass
