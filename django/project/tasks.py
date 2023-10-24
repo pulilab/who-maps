@@ -198,6 +198,28 @@ def send_draft_expiration_reminders():
                               language=user.language,
                               context={'projects': projects, 'name': user.name})
 
+
+@app.task(name="archive_expired_drafts")
+def archive_expired_drafts(dry_run: bool = False, force_run: bool = False):
+    if not getattr(settings, 'AUTOARCHIVE_EXPIRED_DRAFTS', False) and not force_run:
+        return
+
+    six_months_back = datetime.today().replace(day=1, hour=1, minute=1, second=1) - timezone.timedelta(
+        hours=settings.DRAFT_EXPIRATION_ARCHIVAL_PERIOD)
+
+    projects = Project.objects.draft_only() \
+        .exclude(Q(import_rows__parent__collection__isnull=False) & Q(team__isnull=True)) \
+        .filter(created__lte=six_months_back)
+
+    if dry_run:
+        print(list(projects.values_list("name", flat=True)))
+    else:
+        for project in projects:
+            project.archive()
+
+    return f"{projects.count()} have been archived because they expired"
+
+
 @app.task(name="send_empty_stages_reminder")
 def send_empty_stages_reminder():
     """
