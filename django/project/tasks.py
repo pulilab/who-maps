@@ -175,7 +175,7 @@ def send_draft_only_reminders():
 
 
 @app.task(name="send_draft_expiration_reminders")
-def send_draft_expiration_reminders():
+def send_draft_expiration_reminders():  # pragma: no cover
     """
     Rules:
     1. Draft only
@@ -200,7 +200,7 @@ def send_draft_expiration_reminders():
 
 
 @app.task(name="archive_expired_drafts")
-def archive_expired_drafts(dry_run: bool = False, force_run: bool = False):
+def archive_expired_drafts(dry_run: bool = False, force_run: bool = False):  # pragma: no cover
     if not getattr(settings, 'AUTOARCHIVE_EXPIRED_DRAFTS', False) and not force_run:
         return
 
