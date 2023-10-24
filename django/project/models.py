@@ -1,5 +1,6 @@
 from collections import namedtuple
 from copy import deepcopy
+from typing import Optional
 
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db.models.fields.json import KeyTextTransform
@@ -241,12 +242,15 @@ class Project(SoftDeleteModel, ExtendedModel):
         self.save()
         self.search.reset()
 
-    def archive(self):
+    def archive(self, profile: Optional[UserProfile] = None):
         self.public_id = ''
         self.data = {}
         self.archived = True
         self.save()
         self.search.reset()
+        ProjectVersion.objects.create(project=self, user=profile, name=self.name,
+                                      data=self.draft, research=self.research,
+                                      published=False, archived=True)
 
 
 @receiver(post_save, sender=Project)
