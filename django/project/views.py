@@ -313,10 +313,7 @@ class ProjectArchiveViewSet(TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
     def update(self, request, project_id):
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
-        project.archive()
-
-        ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
-                                      data=project.draft, research=project.research, published=False, archived=True)
+        project.archive(profile=request.user.userprofile)
         return Response(status=status.HTTP_200_OK)
 
 
