@@ -192,7 +192,7 @@ def send_draft_expiration_reminders():
             .filter(team=user, created__lte=five_months_back)
 
         if projects:
-            send_mail_wrapper(subject=_(f"Your draft project(s) are expiring soon."),
+            send_mail_wrapper(subject=_("Your draft project(s) are expiring soon."),
                               email_type='draft_expiration_reminder',
                               to=user.user.email,
                               language=user.language,
