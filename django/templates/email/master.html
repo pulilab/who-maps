@@ -621,6 +621,36 @@
                         <!-- /TEMPLATE: DRAFT REMINDER -->
 
 
+                        <!-- TEMPLATE: DRAFT EXPIRATION REMINDER -->
+                        {% elif type == "draft_expiration_reminder" %}
+                        <h1>{% trans "One or more projects that you are an editor of are expiring soon." %}</h1>
+                        <h2>{% trans "Dear" %} {{ name }}</h2>
+                        <p>{% trans "Please complete and publish your draft project(s). These project(s) are expiring in 1 month and will be archived automatically" %}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" class="project-list">
+                          <tbody>
+                            <tr class="list-header">
+                              <td align="left">
+                                <b>{% trans "Project Name" %}</b>
+                              </td>
+                              <td align="right">
+                                {% trans "Date of Submission" %}
+                              </td>
+                            </tr>
+                            {% for project in projects %}
+                            <tr class="list-content">
+                              <td align="left">
+                                <a href="{% site_url %}/{{ language }}/-/projects/{{ project.id }}/edit" target="_blank"><b>{{ project.name }}</b></a>
+                              </td>
+                              <td align="right">
+                                <b>{{ project.created }}</b>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                        <!-- /TEMPLATE: DRAFT EXPIRATION REMINDER -->
+
+
                         <!-- TEMPLATE: PROJECT UPDATED ADMIN DIGEST -->
                         {% elif type == "project_updated_admin_digest" %}
                         <h1>{% trans "New Project Information in the Digital Health Atlas" %}</h1>
