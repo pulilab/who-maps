@@ -15,6 +15,7 @@
       />
       <div v-show="listType === 2 && total > 10" class="ProjectsPagination">
         <el-pagination
+          v-if="listType === 2"
           :current-page.sync="currentPage"
           :page-size.sync="pageSize"
           :page-sizes="pageSizeOption"
