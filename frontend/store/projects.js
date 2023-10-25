@@ -4,7 +4,7 @@ import qs from 'qs'
 
 export const state = () => ({
   search: '',
-  loadingProject: false,
+  loadingProjects: false,
   pageSize: 10,
   page: 1,
   total: 0,
