@@ -42,7 +42,6 @@ export default {
     if (this.$route.query?.list === 'country-projects') this.activeTab = 2
 
     await this.getCounters()
-    this.counters.countryProjects = this.countryProjectList?.count || 0
     this.$store.dispatch('project/resetProjectState')
   },
   computed: {
@@ -51,6 +50,10 @@ export default {
       userProjecList: 'projects/getUserProjectList',
       countryProjectList: 'projects/getCountryProjectList',
     }),
+    isCountryAdmin () {
+      if (!this.userProfile) return false
+      return (['CA', 'SCA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved)
+    },
     displayedProjectList() {
       return this.activeTab === 1
         ? this.userProfile.archive
@@ -68,7 +71,6 @@ export default {
   },
   watch: {
     $route(to, from) {
-      console.log("🚀 ~ file: index.vue:80 ~ $route ~ to:", to.query?.list)
       this.activeTab = 0
       if (to.query?.list === 'archive') this.activeTab = 1
       if (to.query?.list === 'country-projects') this.activeTab = 2
@@ -83,12 +85,14 @@ export default {
       this.activeTab = tab
     },
     async getCounters() {
+
       try {
         this.setLoadingProjects(true)
-        await Promise.all([
-          this.$store.dispatch('projects/loadUserProjects'),
-          this.$store.dispatch('projects/loadCountryProjects')
-        ])
+        const countersToCheck = [this.$store.dispatch('projects/loadUserProjects')]
+        if (this.isCountryAdmin)
+          countersToCheck.push(this.$store.dispatch('projects/loadCountryProjects'))
+
+        await Promise.all(countersToCheck)
         this.setLoadingProjects(false)
       } catch (error) {
         this.setLoadingProjects(false)
@@ -96,7 +100,6 @@ export default {
       }
     },
     async loadProjects(search = '') {
-      console.log("🚀 ~ file: index.vue:88 ~ loadProjects ~ search:", search)
       if (this.activeTab === 0) await this.$store.dispatch('projects/loadUserProjects')
       if (this.activeTab === 2) await this.$store.dispatch('projects/loadCountryProjects')
     }

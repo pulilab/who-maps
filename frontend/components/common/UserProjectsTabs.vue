@@ -14,7 +14,7 @@
             My archived projects ({count})
           </translate>
         </div>
-        <div @click="setActiveTab(2)" :class="getStyle(2)" key="country">
+        <div v-if="isCountryAdmin" @click="setActiveTab(2)" :class="getStyle(2)" key="country">
           <fa icon="globe-americas" />
           <translate :parameters="{ count: total }">
             Country projects ({count})
@@ -84,7 +84,12 @@ export default {
   computed: {
     ...mapGetters({
       total: 'projects/getTotal',
+      userProfile: 'user/getProfile',
     }),
+    isCountryAdmin () {
+      if (!this.userProfile) return false
+      return (['CA', 'SCA'].includes(this.userProfile.account_type) && this.userProfile.account_type_approved)
+    },
   },
   watch: {
     activeTab(val) {
