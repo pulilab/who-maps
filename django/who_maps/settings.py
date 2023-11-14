@@ -407,11 +407,11 @@ if SITE_ID in [3, 4]:
         },
         "send_draft_expiration_reminders": {
             "task": 'send_draft_expiration_reminders',
-            "schedule": crontab(hour='1', minute='0', month_of_year="1,3,5,7,9,11", day_of_month='1'),
+            "schedule": crontab(hour='11', minute='0', month_of_year="1,3,5,7,9,11", day_of_month='17'),
         },
         "archive_expired_drafts": {
             "task": 'archive_expired_drafts',
-            "schedule": crontab(hour='1', minute='0', month_of_year="2,4,6,8,10,12", day_of_month='1'),
+            "schedule": crontab(hour='11', minute='0', month_of_year="2,4,6,8,10,12", day_of_month='17'),
         },
         "send_empty_stages_reminder": {
             "task": 'send_empty_stages_reminder',
