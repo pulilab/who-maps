@@ -183,8 +183,7 @@ def send_draft_expiration_reminders():  # pragma: no cover
     3. Created more than 5 months ago
     """
     from user.models import UserProfile
-    five_months_back = datetime.today().replace(day=int(settings.DRAFT_EXPIRATION_SPECIAL_DAY),
-                                                hour=1, minute=1, second=1) - timezone.timedelta(
+    five_months_back = datetime.today().replace(hour=1, minute=1, second=1) - timezone.timedelta(
         hours=settings.DRAFT_EXPIRATION_REMINDER_PERIOD)
 
     for user in UserProfile.objects.all():  # exclude(user__last_login__isnull=True):
@@ -205,8 +204,7 @@ def archive_expired_drafts(dry_run: bool = False, force_run: bool = False):  # p
     if not getattr(settings, 'AUTOARCHIVE_EXPIRED_DRAFTS', False) and not force_run:
         return
 
-    six_months_back = datetime.today().replace(day=int(settings.DRAFT_EXPIRATION_SPECIAL_DAY),
-                                               hour=1, minute=1, second=1) - timezone.timedelta(
+    six_months_back = datetime.today().replace(hour=1, minute=1, second=1) - timezone.timedelta(
         hours=settings.DRAFT_EXPIRATION_ARCHIVAL_PERIOD)
 
     projects = Project.objects.draft_only() \
