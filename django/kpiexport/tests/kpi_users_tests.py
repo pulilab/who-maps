@@ -11,7 +11,7 @@ class KPIUserTests(KPITestData, APITestCase):
     def setUp(self):
         super().setUp()
         generate_date = date.today() - timedelta(days=150)
-        while generate_date <= date.today():
+        while generate_date <= date.today() + timedelta(days=1):
             update_auditlog_user_data_task(generate_date)
             generate_date = generate_date + timedelta(days=1)
 
@@ -28,9 +28,9 @@ class KPIUserTests(KPITestData, APITestCase):
              {'active': 2,
               'date': self.date_3_str,
               'registered': 0},
-             {'active': 3,
+             {'active': 4,
               'date': self.date_4_str,
-              'registered': 0}]
+              'registered': 1}]
         self.assertEqual(response.status_code, 200)
         self.validate_response(expected, response.json())
 
@@ -62,9 +62,9 @@ class KPIUserTests(KPITestData, APITestCase):
             [{'active': 0,
               'date': self.date_1_str,
               'registered': 1},
-             {'active': 1,
+             {'active': 2,
               'date': self.date_4_str,
-              'registered': 0}]
+              'registered': 1}]
         self.assertEqual(response.status_code, 200)
         self.validate_response(expected, response.json())
 
@@ -132,13 +132,13 @@ class KPIUserTests(KPITestData, APITestCase):
              {'active': 0,
               'date': self.date_3_str,
               'registered': 0},
-             {'active': 2,
+             {'active': 3,
               'date': self.date_4_str,
-              'registered': 0}]
+              'registered': 1}]
         self.assertEqual(response.status_code, 200)
         self.validate_response(expected, response.json())
 
-    def test_user_kpi_investor__with_region_filter(self):
+    def test_user_kpi_investor_with_region_filter(self):
         url = reverse("user-kpi")
         url += f'?investor={self.d1.id}&region=0'
         response = self.test_user_client.get(url)
@@ -146,8 +146,8 @@ class KPIUserTests(KPITestData, APITestCase):
             [{'active': 0,
               'date': self.date_1_str,
               'registered': 1},
-             {'active': 1,
+             {'active': 2,
               'date': self.date_4_str,
-              'registered': 0}]
+              'registered': 1}]
         self.assertEqual(response.status_code, 200)
         self.validate_response(expected, response.json())
