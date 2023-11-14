@@ -1,5 +1,6 @@
 import operator
 from functools import reduce
+from datetime import datetime
 
 from collections import defaultdict
 from django.conf import settings
@@ -171,6 +172,52 @@ def send_draft_only_reminders():
                               to=email_list,
                               language=language,
                               context={'project_id': p.id})
+
+
+@app.task(name="send_draft_expiration_reminders")
+def send_draft_expiration_reminders():  # pragma: no cover
+    """
+    Rules:
+    1. Draft only
+    2. If it's in collection, it's not orphan anymore
+    3. Created more than 5 months ago
+    """
+    from user.models import UserProfile
+    five_months_back = datetime.today().replace(hour=1, minute=1, second=1) - timezone.timedelta(
+        hours=settings.DRAFT_EXPIRATION_REMINDER_PERIOD)
+
+    for user in UserProfile.objects.all():  # exclude(user__last_login__isnull=True):
+        projects = Project.objects.draft_only()\
+            .exclude(Q(import_rows__parent__collection__isnull=False) & Q(team__isnull=True))\
+            .filter(team=user, created__lte=five_months_back)
+
+        if projects:
+            send_mail_wrapper(subject=_("Your draft project(s) are expiring soon."),
+                              email_type='draft_expiration_reminder',
+                              to=user.user.email,
+                              language=user.language,
+                              context={'projects': projects, 'name': user.name})
+
+
+@app.task(name="archive_expired_drafts")
+def archive_expired_drafts(dry_run: bool = False, force_run: bool = False):  # pragma: no cover
+    if not getattr(settings, 'AUTOARCHIVE_EXPIRED_DRAFTS', False) and not force_run:
+        return
+
+    six_months_back = datetime.today().replace(hour=1, minute=1, second=1) - timezone.timedelta(
+        hours=settings.DRAFT_EXPIRATION_ARCHIVAL_PERIOD)
+
+    projects = Project.objects.draft_only() \
+        .exclude(Q(import_rows__parent__collection__isnull=False) & Q(team__isnull=True)) \
+        .filter(created__lte=six_months_back)
+
+    if dry_run:
+        print(list(projects.values_list("name", flat=True)))
+    else:
+        for project in projects:
+            project.archive()
+
+    return f"{projects.count()} have been archived because they expired"
 
 
 @app.task(name="send_empty_stages_reminder")

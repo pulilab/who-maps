@@ -173,7 +173,7 @@ class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
     resource_class = ProjectResource
 
     def get_country(self, obj):
-        return obj.get_country() if obj.public_id else obj.get_country(draft_mode=True)
+        return obj.get_country()
     get_country.short_description = "Country"
 
     def get_team(self, obj):

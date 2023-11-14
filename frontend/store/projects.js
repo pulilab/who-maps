@@ -1,8 +1,17 @@
 import isEmpty from 'lodash/isEmpty'
 import forOwn from 'lodash/forOwn'
+import qs from 'qs'
 
 export const state = () => ({
+  search: '',
+  loadingProjects: false,
+  pageSize: 10,
+  page: 1,
+  total: 0,
+  nextPage: 0,
+  previousPage: 0,
   userProjects: [],
+  adminProjects: {},
   currentProject: null,
   projectStructure: {},
   currentProjectToolkitVersions: [],
@@ -19,11 +28,15 @@ const getTodayString = () => {
 }
 
 export const getters = {
+  getPageSize: (state) => state.pageSize,
+  getTotal: (state) => state.total,
+  getCurrentPage: (state) => state.page,
   getUserProjectList: state => [
     ...state.userProjects.map(p => ({
       ...p
     }))
   ],
+  getCountryProjectList: state => state.adminProjects,
   getHealthFocusAreas: state =>
     state.projectStructure.health_focus_areas
       ? [...state.projectStructure.health_focus_areas]
@@ -216,8 +229,21 @@ export const getters = {
 }
 
 export const actions = {
+  setSearch({ commit }, search) {
+    commit('setValue', { key: 'search', val: search })
+  },
+  setPageSize({ commit, dispatch }, size) {
+    commit('setValue', { key: 'pageSize', val: size })
+    commit('setValue', { key: 'page', val: 1 })
+    dispatch('loadCountryProjects')
+  },
+  setCurrentPage({ commit, dispatch }, page) {
+    commit('setValue', { key: 'page', val: page })
+    dispatch('loadCountryProjects')
+  },
   async loadUserProjects ({ commit }) {
     try {
+      commit('setValue', { key: 'loadingProjects', val: true })
       const res = await this.$axios.get('/api/projects/member-of/')
       if (res) {
         const { data } = res
@@ -226,10 +252,46 @@ export const actions = {
       } else {
         commit('SET_USER_PROJECT_LIST', [])
       }
+      commit('setValue', { key: 'loadingProjects', val: false })
     } catch (error) {
       console.error('projects/loadUserProjects failed')
+      commit('setValue', { key: 'loadingProjects', val: false })
       return Promise.reject(error)
     }
+  },
+  async loadCountryProjects ({ state, commit }) {
+    try {
+      commit('setValue', { key: 'loadingProjects', val: true })
+
+      const filter = {
+        page_size: state.pageSize,
+        page: state.search ? 1 : state.page,
+        search: state.search
+      }
+      const { data } = await this.$axios({
+        method: 'get',
+        url: '/api/projects/admin-list/',
+        params: filter,
+        paramsSerializer: params => qs.stringify(params, {
+          filter: (prefix,value) => {
+            const val = typeof value === 'string' ? value.trim() : value
+            return val === null || val === '' ? undefined : val
+          }
+        }),
+        progress: false
+      })
+
+      commit('setValue', { key: 'adminProjects', val: data })
+      commit('setValue', { key: 'total', val: data.count })
+      commit('setValue', { key: 'loadingProjects', val: false })
+    } catch (error) {
+      console.error('projects/loadUserProjects failed')
+      commit('setValue', { key: 'loadingProjects', val: false })
+      commit('setValue', { key: 'adminProjects', val: {} })
+    }
+  },
+  setLoadingProjects ({ commit }, val) {
+    commit('setValue', { key: 'loadingProjects', val })
   },
   async setCurrentProject ({ commit, dispatch }, id) {
     id = parseInt(id, 10) || id
@@ -301,6 +363,9 @@ export const actions = {
 }
 
 export const mutations = {
+  setValue (state, { key, val }) {
+    state[key] = val
+  },
   SET_USER_PROJECT_LIST: (state, projects) => {
     state.userProjects = projects
   },

@@ -98,6 +98,7 @@ export default {
   @import "../../assets/style/mixins.less";
 
 .popover {
+  position: relative;
   padding: 18px;
 }
 .popover__title {

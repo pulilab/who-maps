@@ -379,7 +379,7 @@ def update_auditlog_project_stages_data_task(current_date=None):
     date = current_date - timedelta(days=1)
     log_date = datetime(date.year, date.month, 1).date()
     create_empty_log_entries(log_date)
-    qs = ProjectVersion.objects.filter(created__date=date, published=True)
+    qs = ProjectVersion.objects.exclude(archived=True).filter(created__date=date, published=True)
 
     for entry in qs:
         country_id = entry.data.get('country')
@@ -429,7 +429,7 @@ def update_auditlog_data_standards_task(current_date=None):
 
     date = current_date - timedelta(days=1)
     log_date = datetime(date.year, date.month, 1).date()
-    qs = ProjectVersion.objects.filter(created__date=date, published=True)
+    qs = ProjectVersion.objects.exclude(archived=True).filter(created__date=date, published=True)
 
     for entry in qs:
         country_id = entry.data.get('country')
@@ -551,7 +551,7 @@ def update_auditlog_hfa_task(current_date=None):
     log_date = datetime(date.year, date.month, 1).date()
     create_empty_category_entries(log_date)
     create_empty_hfa_entries(log_date)
-    qs = ProjectVersion.objects.filter(created__date=date, published=True)
+    qs = ProjectVersion.objects.exclude(archived=True).filter(created__date=date, published=True)
 
     for entry in qs:
         country_id = entry.data.get('country')

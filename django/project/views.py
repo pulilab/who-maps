@@ -2,10 +2,11 @@ import copy
 
 from django.db import transaction
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 from taggit.models import Tag
 
-from rest_framework import status
+from rest_framework import status, filters
 from rest_framework.exceptions import ValidationError, NotAuthenticated, PermissionDenied
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
     DestroyModelMixin
@@ -17,9 +18,12 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, TeamCollectionTokenAuthMixin, CollectionTokenAuthMixin, \
     get_object_or_400, CollectionAuthenticatedMixin
+from country.permissions import CountryAdminOnly
 from project.cache import cache_structure
 from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion, OSILicence
-from project.permissions import InCountryAdminForApproval, IsOwnerShipModifiable
+from project.permissions import InCountryAdminForApproval, IsOwnerShipModifiable, \
+    CountryAdminTeamCollectionOwnerOrReadOnly
+from search.views import ResultsSetPagination
 from toolkit.models import Toolkit, ToolkitVersion
 from country.models import Country, Donor, ReferenceDocumentType
 from .tasks import notify_superusers_about_new_pending_software
@@ -126,6 +130,28 @@ class ProjectListViewSet(TeamTokenAuthMixin, ViewSet):
             data.append(project.to_response_dict(published=published, draft=draft))
 
         return Response(data)
+
+
+class ProjectAdminListViewSet(TokenAuthMixin, GenericViewSet):
+    permission_classes = (IsAuthenticated, CountryAdminOnly)
+    pagination_class = ResultsSetPagination
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['name', 'team__name', 'team__user__email']
+    queryset = Project.objects.all()
+
+    def get_queryset(self):
+        return super().get_queryset().by_country(self.request.user.userprofile.country)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        data = []
+        page = self.paginate_queryset(queryset)
+        for project in page:
+            published = project.to_representation()
+            draft = project.to_representation(draft_mode=True)
+            data.append(project.to_response_dict(published=published, draft=draft))
+        return self.get_paginated_response(data)
 
 
 class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
@@ -287,10 +313,7 @@ class ProjectArchiveViewSet(TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
     def update(self, request, project_id):
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
-        project.archive()
-
-        ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
-                                      data=project.draft, research=project.research, published=False, archived=True)
+        project.archive(profile=request.user.userprofile)
         return Response(status=status.HTTP_200_OK)
 
 
@@ -573,6 +596,7 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
 
 
 class ProjectGroupViewSet(TeamCollectionTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
+    permission_classes = (IsAuthenticated, CountryAdminTeamCollectionOwnerOrReadOnly)
     queryset = Project.objects.all()
     serializer_class = ProjectGroupSerializer
 

@@ -86,18 +86,30 @@ class UserProfile(ExtendedModel):
     def is_investor_type(self):
         return self.account_type in [self.DONOR, self.DONOR_ADMIN, self.SUPER_DONOR_ADMIN]
 
+    def is_admin(self):
+        return self.account_type in [self.COUNTRY_ADMIN, self.SUPER_COUNTRY_ADMIN,
+                                     self.DONOR_ADMIN, self.SUPER_DONOR_ADMIN]
+
     @property
     def account_type_approved(self):
         from country.models import Country
         from country.models import Donor
 
-        approved_ca = self.account_type == self.COUNTRY_ADMIN and Country.objects.filter(admins=self).exists()
+        approved_c = self.account_type == self.GOVERNMENT and Country.objects.filter(
+            id=self.country.id, users=self).exists()
+        approved_ca = self.account_type == self.COUNTRY_ADMIN and Country.objects.filter(
+            id=self.country.id, admins=self).exists()
         approved_sca = self.account_type == self.SUPER_COUNTRY_ADMIN and Country.objects.filter(
-            super_admins=self).exists()
-        approved_da = self.account_type == self.DONOR_ADMIN and Donor.objects.filter(admins=self).exists()
+            id=self.country.id, super_admins=self).exists()
+        approved_d = self.account_type == self.DONOR and Donor.objects.filter(
+            id=self.donor.id, users=self).exists()
+        approved_da = self.account_type == self.DONOR_ADMIN and Donor.objects.filter(
+            id=self.donor.id, admins=self).exists()
         approved_sda = self.account_type == self.SUPER_DONOR_ADMIN and Donor.objects.filter(
-            super_admins=self).exists()
-        return self.user.is_superuser or approved_ca or approved_sca or approved_da or approved_sda
+            id=self.donor.id, super_admins=self).exists()
+        return any([self.user.is_superuser,
+                    approved_c, approved_ca, approved_sca,
+                    approved_d, approved_da, approved_sda])
 
 
 @receiver(pre_save, sender=UserProfile)
