@@ -3,6 +3,10 @@ import { mapGetters } from 'vuex'
 import pickBy from 'lodash/pickBy'
 import flattenDeep from 'lodash/flattenDeep'
 import { format } from 'date-fns'
+import { getNestedList } from '@/utilities/projects'
+
+const licenseChoices = ['Yes','Yes - With restrictions','No']
+const licenseChoicesAlternative = ['Yes','Partially','No']
 
 export default {
   props: {
@@ -24,8 +28,13 @@ export default {
       softwares: 'projects/getTechnologyPlatforms',
       hscChallenges: 'projects/getHscChallenges',
       hisBucket: 'projects/getHisBucket',
+<<<<<<< HEAD
       applicationTypes: 'projects/getApplicationTypes',
       licenses: 'projects/getLicenses',
+=======
+      // licenses: 'projects/getLicenses',
+      osiLicenses: 'projects/getOsiLicenses',
+>>>>>>> development
       interoperabilityStandards: 'projects/getInteroperabilityStandards',
       organisations: 'system/getOrganisations',
       allStages: 'project/getStagesList'
@@ -57,8 +66,12 @@ export default {
           coverage: this.parseCoverage(s.coverage),
           coverage_second_level: this.parseCoverage(s.coverage_second_level),
           government_investor: this.parseBoolean(s.government_investor),
-          licenses: this.parseFlatList(s.licenses, 'licenses'),
-          interoperability_standards: this.parseFlatList(s.interoperability_standards, 'interoperabilityStandards'),
+          interoperability_standards: this.parseStandards(s.interoperability_standards),
+          zero_cost: this.parseLicenseFeature(s.zero_cost),
+          codebase_accessible: this.parseLicenseFeature(s.codebase_accessible, true),
+          is_customizable: this.parseLicenseFeature(s.is_customizable),
+          free_replication: this.parseLicenseFeature(s.free_replication),
+          osi_licenses: this.parseFlatList(s.osi_licenses, 'osiLicenses'),
           approved: this.parseBoolean(s.approved),
           point_of_contact: `${s.contact_name}, ${s.contact_email}`,
           donors: undefined,
@@ -92,7 +105,11 @@ export default {
         'Health Information System Support': s.his_bucket,
         'Services and Application Types': s.services_and_application_types,
         'Government Investor': s.government_investor,
-        Licenses: s.licenses,
+        'Software come at zero cost': s.zero_cost,
+        'Allowed to review codebase': s.codebase_accessible,
+        'Can customize codebase': s.is_customizable,
+        'Allowed to replicate software with no cost': s.free_replication,
+        'OSI Approved Licenses': s.osi_licenses,
         Repository: s.repository,
         'Mobile Application': s.mobile_application,
         Wiki: s.wiki,
@@ -208,7 +225,16 @@ export default {
         const stagesIds = stages.map(s => s.id)
         const stagesNames = this.allStages.filter(i => stagesIds.includes(i.id)).map(i => i.name).join(', ')
         return stagesNames
-        // this.parseFlatList(stages.map(p => p.id), 'stages')
+      })
+    },
+    parseLicenseFeature(feat, alt = false) {
+      if (!feat) return ''
+      return alt ? licenseChoicesAlternative[feat-1] : licenseChoices[feat-1]
+    },
+    parseStandards (standardsIds) {
+      return this.safeReturn(() => {
+        const flatStandards = getNestedList(this.interoperabilityStandards, 'standards')
+        return flatStandards.filter(s => standardsIds.includes(s.id)).map(s => s.name).join(', ')
       })
     }
   },
