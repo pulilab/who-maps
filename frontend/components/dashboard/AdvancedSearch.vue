@@ -70,6 +70,19 @@
         />
       </filter-item>
       <filter-item
+        :selected="selectedSAPP"
+        :limit="4"
+        :label="$gettext('Services and Application Types') | translate"
+        item="sapp"
+      >
+        <SappList
+          :value="selectedSAPP"
+          :limit="4"
+          actions
+          @delete="deleteSappHandler"
+        />
+      </filter-item>
+      <filter-item
         :selected="selectedPlatforms"
         :limit="4"
         :label="$gettext('Software') | translate"
@@ -98,7 +111,9 @@ import DhiCategoriesList from '../common/list/DhiCategoriesList'
 import HfaCategoriesList from '../common/list/HfaCategoriesList'
 import HealthSystemChallengesList from '../common/list/HealthSystemChallengesList'
 import HisBucketList from '../common/list/HisBucketList'
+import SappList from '../common/list/SappList'
 import SimplePlatformList from '../common/list/SimplePlatformList'
+
 export default {
   components: {
     FilterPresetsActions,
@@ -110,6 +125,7 @@ export default {
     HfaCategoriesList,
     HealthSystemChallengesList,
     HisBucketList,
+    SappList,
     SimplePlatformList
   },
   computed: {
@@ -120,6 +136,7 @@ export default {
       selectedHFA: ['dashboard', 'getSelectedHFA', 'setSelectedHFA', 0],
       selectedHSC: ['dashboard', 'getSelectedHSC', 'setSelectedHSC', 0],
       selectedHIS: ['dashboard', 'getSelectedHIS', 'setSelectedHIS', 0],
+      selectedSAPP: ['dashboard', 'getSelectedSAPP', 'setSelectedSAPP', 0],
       selectedPlatforms: ['dashboard', 'getSelectedPlatforms', 'setSelectedPlatforms', 0]
     })
   },
@@ -132,6 +149,9 @@ export default {
     },
     deleteHscHandler (id) {
       this.selectedHSC = this.selectedHSC.filter(hsc => hsc !== id)
+    },
+    deleteSappHandler (id) {
+      this.selectedSAPP = this.selectedSAPP.filter(sapp => sapp !== id)
     },
     deleteHisHandler (id) {
       this.selectedHIS = this.selectedHIS.filter(his => his !== id)

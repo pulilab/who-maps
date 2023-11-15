@@ -47,6 +47,10 @@
           v-if="dialogData.column === 'his_bucket'"
           v-model="dialogData.value"
         />
+        <ApplicationTypeSelector
+          v-if="dialogData.column === 'services_and_application_types'"
+          v-model="dialogData.value"
+        />
         <health-system-challenges-selector
           v-if="dialogData.column === 'hsc_challenges'"
           v-model="dialogData.value"
@@ -205,6 +209,7 @@ import DonorSelector from '@/components/project/DonorSelector.vue'
 import OrganisationSelect from '@/components/common/OrganisationSelect'
 import SoftwareSelector from '@/components/project/SoftwareSelector'
 import HisBucketSelector from '@/components/project/HisBucketSelector'
+import ApplicationTypeSelector from '@/components/project/ApplicationTypeSelector.vue'
 import HealthSystemChallengesSelector from '@/components/project/HealthSystemChallengesSelector'
 import HealthFocusAreasSelector from '@/components/project/HealthFocusAreasSelector'
 import DigitalHealthInterventionsFilter from '@/components/dialogs/filters/DigitalHealthInterventionsFilter'
@@ -219,6 +224,7 @@ export default {
     OrganisationSelect,
     SoftwareSelector,
     HisBucketSelector,
+    ApplicationTypeSelector,
     HealthSystemChallengesSelector,
     HealthFocusAreasSelector,
     DigitalHealthInterventionsFilter,
@@ -293,14 +299,11 @@ export default {
   @import "~assets/style/mixins.less";
 
   div .el-select .el-select__tags::-webkit-scrollbar {
-    // background-color: #fff;
-    // width: 16px;
     display: none;
   }
 
   div .el-select .el-select__tags {
-    max-width: 545px !important; //important for overriding default element-ui style
-    // height: calc( 100% - 2px);
+    max-width: 545px !important;
     overflow-x: scroll !important;
     margin-right: -20px;
   }

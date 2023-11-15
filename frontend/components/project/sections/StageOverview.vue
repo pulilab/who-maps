@@ -314,7 +314,6 @@ export default {
         this.$validator.validate('end_date'),
         Promise.resolve(this.stageDateError === '')
       ])
-      console.log('Project stages draft validation', validations)
       return validations.reduce((a, c) => a && c, true)
     },
     updateStagesDraft (id, key, value) {

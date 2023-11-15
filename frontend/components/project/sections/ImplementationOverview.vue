@@ -138,23 +138,21 @@
       </custom-required-form-item>
 
       <custom-required-form-item
-        :error="errors.first('his_bucket')"
-        :draft-rule="draftRules.his_bucket"
-        :publish-rule="publishRules.his_bucket"
+        :error="errors.first('applicatin_types')"
+        :publish-rule="publishRules.services_and_application_types"
         prepend-label="15"
       >
         <template slot="label">
-          <translate key="his-bucket">
-            What health information system(s) in your country does this project
-            support?
+          <translate key="application-type">
+            What are the Services and Application Types?
           </translate>
         </template>
-        <his-bucket-selector
-          v-model="his_bucket"
-          v-validate="rules.his_bucket"
-          data-vv-name="his_bucket"
+        <ApplicationTypeSelector
+          v-model="services_and_application_types"
+          v-validate="rules.services_and_application_types"
+          data-vv-name="hsc_challenges"
           data-vv-validate-on="change"
-          data-vv-as="Health information system"
+          data-vv-as="Health system challenges"
         />
       </custom-required-form-item>
 
@@ -287,8 +285,8 @@ import ProjectFieldsetMixin from '../../mixins/ProjectFieldsetMixin.js'
 import AddRmButtons from '@/components/project/AddRmButtons.vue'
 import CollapsibleCard from '../CollapsibleCard'
 import HealthSystemChallengesSelector from '../HealthSystemChallengesSelector'
+import ApplicationTypeSelector from '../ApplicationTypeSelector'
 import HealthFocusAreasSelector from '../HealthFocusAreasSelector'
-import HisBucketSelector from '../HisBucketSelector'
 import SoftwareSelector from '../SoftwareSelector'
 import DigitalHealthInterventionsSelector from '../DigitalHealthInterventionsSelector'
 import SubNationalLevelDeployment from '../SubNationalLevelDeployment'
@@ -303,7 +301,7 @@ export default {
     AddRmButtons,
     CollapsibleCard,
     HealthSystemChallengesSelector,
-    HisBucketSelector,
+    ApplicationTypeSelector,
     HealthFocusAreasSelector,
     SoftwareSelector,
     DigitalHealthInterventionsSelector,
@@ -333,7 +331,7 @@ export default {
         300,
         true
       ],
-      his_bucket: ['project', 'getHisBucket', 'setHisBucket', 0],
+      services_and_application_types: ['project', 'getApplicationTypes', 'setApplicationTypes', 0],
       coverageType: ['project', 'getCoverageType', 'setCoverageType', 0],
       national_level_deployment: [
         'project',

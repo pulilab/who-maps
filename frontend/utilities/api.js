@@ -201,7 +201,7 @@ export const apiWriteParser = (p, countryCustomAnswers, donorsCustomAnswers) => 
   const result = {}
   for (const key in p) {
     const value = dataCleaner(p[key])
-    result[key] = isEmpty(value) ? undefined : value
+    if (key !== 'his_bucket') result[key] = isEmpty(value) ? undefined : value
   }
   const interoperability_links = interoperabilityLinkWriteParser(p.interoperability_links)
   let coverage = []

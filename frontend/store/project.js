@@ -82,6 +82,7 @@ export const getters = {
     ? [null]
     : state.hsc_challenges_other,
   getHisBucket: state => state.his_bucket,
+  getApplicationTypes: state => state.services_and_application_types,
   getCoverageType: state => state.coverageType,
   getCoverage: state => (state.coverage.length === 0 ? [null] : state.coverage),
   getCoverageData: state => state.coverageData,
@@ -369,8 +370,8 @@ export const actions = {
   setHscChallengesOther ({ commit }, value) {
     commit('SET_HSC_CHALLENGES_OTHER', value)
   },
-  setHisBucket ({ commit }, value) {
-    commit('SET_HIS_BUCKET', value)
+  setApplicationTypes ({ commit }, value) {
+    commit('SET_APPLICATION_TYPES', value)
   },
   setCoverageType ({ commit }, value) {
     commit('SET_COVERAGE_TYPE', value)
@@ -681,8 +682,8 @@ export const mutations = {
   SET_HSC_CHALLENGES_OTHER: (state, hsc_challenges_other) => {
     Vue.set(state, 'hsc_challenges_other', [...hsc_challenges_other])
   },
-  SET_HIS_BUCKET: (state, his_bucket) => {
-    Vue.set(state, 'his_bucket', [...his_bucket])
+  SET_APPLICATION_TYPES: (state, sat) => {
+    Vue.set(state, 'services_and_application_types', [...sat])
   },
   SET_COVERAGE_TYPE: (state, coverageType) => {
     state.coverageType = coverageType
@@ -783,6 +784,7 @@ export const mutations = {
     state.hsc_challenges = get(project, 'hsc_challenges', [])
     state.hsc_challenges_other = get(project, 'hsc_challenges_other', [])
     state.his_bucket = get(project, 'his_bucket', [])
+    state.services_and_application_types = get(project, 'services_and_application_types', [])
     state.coverageType = get(project, 'coverageType', null)
     state.coverage = get(project, 'coverage', [])
     state.coverageData = get(project, 'coverageData', {})

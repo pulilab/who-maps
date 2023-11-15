@@ -311,6 +311,7 @@ export default {
           health_focus_areas: () => this.findProjectCollectionValue('health_focus_areas', true, 'health_focus_areas'),
           hsc_challenges: () => this.findProjectCollectionValue('hsc_challenges', true, 'challenges'),
           his_bucket: () => this.findProjectCollectionValue('his_bucket', true),
+          services_and_application_types: () => this.findApplicationTypeValue(),
           implementing_partners: this.stringArray,
           implementing_team: () => this.parseTeamEmails(),
           implementing_viewers: this.stringArray,
@@ -459,6 +460,18 @@ export default {
       const filtered = this.systemDicts[collection].filter(c => value.some(d => d === c.id || d === c.name))
       return this.toInternalRepresentation(filtered)
     },
+    findApplicationTypeValue() {
+      const values = this.valueParser(true)
+      const filtered = this.projectDicts['services_and_application_types'].reduce((a, c) => {
+          c.services.forEach(service => {
+            if (values.includes(service.name)) {
+              a.push(service)
+            }
+          })
+          return a
+        }, [])
+      return this.toInternalRepresentation(filtered)
+    },
     findProjectCollectionValue (collection, isMultiple, ...subValues) {
       const value = this.valueParser(isMultiple)
       let projectData = this.projectDicts[collection]
@@ -474,8 +487,13 @@ export default {
       return this.toInternalRepresentation(filtered)
     },
     apiValue () {
+<<<<<<< HEAD
+      const isMultiple = ['donors', 'software', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'services_and_application_types', 'licenses', 'interoperability_standards', 'custom_field', 'digitalHealthInterventions', 'implementing_team', 'implementing_viewers']
+      const isIds = [...isMultiple, 'country', 'organisation', 'government_investor', 'sub_level']
+=======
       const isMultiple = ['donors', 'software', 'implementing_partners', 'health_focus_areas', 'hsc_challenges', 'his_bucket', 'osi_licenses', 'interoperability_standards', 'custom_field', 'digitalHealthInterventions', 'implementing_team', 'implementing_viewers']
       const isIds = [...isMultiple, 'country', 'organisation', 'government_investor', 'zero_cost', 'codebase_accessible', 'is_customizable', 'free_replication', 'sub_level']
+>>>>>>> development
       const idsOrNames = isIds.includes(this.column) ? this.parsedValue.ids : this.parsedValue.names
       return isMultiple.includes(this.column) ? idsOrNames : idsOrNames[0]
     }

@@ -1,14 +1,8 @@
 <template>
   <div class="HisBucketList">
     <ul>
-      <li
-        v-for="his in selected"
-        :key="his.id"
-      >
-        <list-action
-          v-if="actions"
-          @click="$emit('delete', his.id)"
-        />
+      <li v-for="his in selected" :key="his.id">
+        <list-action v-if="actions" @click="$emit('delete', his.id)" />
         <span>{{ his.name }}</span>
       </li>
     </ul>
@@ -17,7 +11,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import ListAction from './ListAction'
+import ListAction from '@/components/common/list/ListAction.vue'
+
 export default {
   components: {
     ListAction
@@ -25,7 +20,7 @@ export default {
   props: {
     value: {
       type: Array,
-      default: null
+      default: () => []
     },
     actions: {
       type: Boolean,
@@ -40,7 +35,7 @@ export default {
     ...mapGetters({
       hisBucket: 'projects/getHisBucket'
     }),
-    selected () {
+    selected() {
       const result = this.hisBucket.filter(his => this.value.includes(his.id))
       return this.limit ? result.slice(0, this.limit) : result
     }

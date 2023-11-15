@@ -66,6 +66,7 @@ class SearchViewSet(mixins.ListModelMixin, GenericViewSet):
         "project__data__dhis",
         "project__data__health_focus_areas",
         "project__data__hsc_challenges",
+        "project__data__services_and_application_types",
         "project__data__his_bucket",
         "country__region",
         "project__data__government_investor",

@@ -1,18 +1,20 @@
 from adminsortable2.admin import SortableAdminMixin
 from django.db.models.fields.json import KeyTextTransform
 from django.db.models.functions import Cast
-from modeltranslation.admin import TabbedDjangoJqueryTranslationAdmin
 from import_export.admin import ExportActionMixin
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter, EmptyFieldListFilter
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Q, OuterRef, IntegerField, Subquery
 from django.utils.html import mark_safe
+from modeltranslation.admin import TabbedDjangoJqueryTranslationAdmin
+
 from core.admin import AllObjectsAdmin
 from country.models import Country
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Project, HSCGroup, \
-    ProjectImportV2, ImportRow, Stage, ProjectVersion, Collection, OSILicence
+    ProjectImportV2, ImportRow, Stage, ProjectVersion, Collection, OSILicence, ServicesAndApplicationsCategory, \
+    ServicesAndApplications
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
 import scheduler.celery # noqa
@@ -73,7 +75,7 @@ class SoftwareStateFilter(SimpleListFilter):
 
 class TechnologyPlatformAdmin(AllObjectsAdmin):
     list_display = [
-        'name', 'id', 'state', 'added_by', 'number_of_projects',
+        'id', 'name', 'state', 'added_by', 'number_of_projects'
     ]
     list_filter = [SoftwareStateFilter]
     list_display_links = ['name', 'id']
@@ -107,6 +109,14 @@ class HealthFocusAreaAdmin(AllObjectsAdmin):
 
 
 class HealthCategoryAdmin(AllObjectsAdmin):
+    pass
+
+
+class ServicesAndApplicationsCategoryAdmin(TabbedDjangoJqueryTranslationAdmin, AllObjectsAdmin):
+    pass
+
+
+class ServicesAndApplicationsAdmin(TabbedDjangoJqueryTranslationAdmin, AllObjectsAdmin):
     pass
 
 
@@ -285,6 +295,8 @@ admin.site.register(InteroperabilityLink, InteroperabilityLinkAdmin)
 admin.site.register(DigitalStrategy, DigitalStrategyAdmin)
 admin.site.register(HealthFocusArea, HealthFocusAreaAdmin)
 admin.site.register(HealthCategory, HealthCategoryAdmin)
+admin.site.register(ServicesAndApplicationsCategory, ServicesAndApplicationsCategoryAdmin)
+admin.site.register(ServicesAndApplications, ServicesAndApplicationsAdmin)
 admin.site.register(Licence, LicenceAdmin)
 admin.site.register(OSILicence, OSILicenceAdmin)
 admin.site.register(InteroperabilityStandard, InteroperabilityStandardAdmin)

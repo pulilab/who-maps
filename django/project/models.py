@@ -6,6 +6,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db.models.fields.json import KeyTextTransform
 from django.db.models.functions import Cast
 from hashids import Hashids
+from ckeditor.fields import RichTextField
 
 from django.db import models
 from django.db.models import Q, IntegerField, QuerySet
@@ -358,6 +359,26 @@ class HealthFocusArea(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrdered
 
     class Meta:
         ordering = ['health_category__name', 'name']
+
+
+class ServicesAndApplicationsCategory(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    description = RichTextField()
+
+    class Meta(ExtendedNameOrderedSoftDeletedModel.Meta):
+        verbose_name_plural = 'Services and Application Types - Representations within the Digital Health Architecture'
+
+
+class ServicesAndApplications(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    category = models.ForeignKey(ServicesAndApplicationsCategory, related_name='services_and_application_types',
+                                 on_delete=models.CASCADE)
+    description = RichTextField()
+
+    def __str__(self):  # pragma: no cover
+        return '[{}] {}'.format(self.category.name, self.name)
+
+    class Meta:
+        ordering = ['category__name', 'id']
+        verbose_name_plural = 'Services and Application Types'
 
 
 class InteroperabilityLink(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):

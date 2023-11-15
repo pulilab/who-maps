@@ -8,10 +8,7 @@
     custom-class="FilterDialog"
     @open="loadCurrentSelection"
   >
-    <el-row
-      type="flex"
-      class="FilterDialogWrapper"
-    >
+    <el-row type="flex" class="FilterDialogWrapper">
       <el-col class="FilterSelector">
         <filter-item
           :active="selectedFilter === 'dhi'"
@@ -42,6 +39,13 @@
           @clear="his = []"
         />
         <filter-item
+          :active="selectedFilter === 'sapp'"
+          :selected="sapp"
+          :header="$gettext('Services and Application Types') | translate"
+          item="sapp"
+          @clear="sapp = []"
+        />
+        <filter-item
           :active="selectedFilter === 'platform'"
           :selected="platforms"
           :header="$gettext('Software')"
@@ -66,6 +70,10 @@
           v-show="selectedFilter === 'his'"
           :selected.sync="his"
         />
+        <services-application-types-filter
+          v-show="selectedFilter === 'sapp'"
+          :selected.sync="sapp"
+        />
         <platform-filter
           v-show="selectedFilter === 'platform'"
           :selected.sync="platforms"
@@ -73,16 +81,9 @@
       </el-col>
     </el-row>
     <span slot="footer">
-      <el-row
-        type="flex"
-        align="center"
-      >
+      <el-row type="flex" align="center">
         <el-col class="SecondaryButtons">
-          <el-button
-            type="text"
-            class="CancelButton"
-            @click="cancel"
-          >
+          <el-button type="text" class="CancelButton" @click="cancel">
             <translate>Cancel</translate>
           </el-button>
           <!-- <el-button
@@ -93,10 +94,7 @@
           </el-button> -->
         </el-col>
         <el-col class="PrimaryButtons">
-          <el-button
-            type="primary"
-            @click="apply"
-          >
+          <el-button type="primary" @click="apply">
             <translate>Apply filters</translate>
           </el-button>
         </el-col>
@@ -112,6 +110,7 @@ import FilterItem from './FilterItem'
 import HealthFocusAreasFilter from './filters/HealthFocusAreaFilter'
 import DigitalHealthInterventionsFilter from './filters/DigitalHealthInterventionsFilter'
 import HealthInformationSystemFilter from './filters/HealthInformationSystemFilter'
+import ServicesApplicationTypesFilter from './filters/ServicesApplicationTypesFilter'
 import HealthSystemChallengesFilter from './filters/HealthSystemChallengesFilter'
 import PlatformFilter from './filters/PlatformFilter'
 
@@ -121,15 +120,17 @@ export default {
     HealthFocusAreasFilter,
     DigitalHealthInterventionsFilter,
     HealthInformationSystemFilter,
+    ServicesApplicationTypesFilter,
     HealthSystemChallengesFilter,
     PlatformFilter
   },
-  data () {
+  data() {
     return {
       dhi: [],
       hfa: [],
       hsc: [],
       his: [],
+      sapp: [],
       platforms: []
     }
   },
@@ -143,6 +144,7 @@ export default {
       selectedHFA: ['dashboard', 'getSelectedHFA', 'setSelectedHFA', 0],
       selectedHSC: ['dashboard', 'getSelectedHSC', 'setSelectedHSC', 0],
       selectedHIS: ['dashboard', 'getSelectedHIS', 'setSelectedHIS', 0],
+      selectedSAPP: ['dashboard', 'getSelectedSAPP', 'setSelectedSAPP', 0],
       selectedPlatforms: [
         'dashboard',
         'getSelectedPlatforms',
@@ -151,10 +153,10 @@ export default {
       ]
     }),
     visible: {
-      get () {
+      get() {
         return this.selectedFilter !== null
       },
-      set () {
+      set() {
         this.setDashboardFiltersDialogState(null)
       }
     }
@@ -163,28 +165,31 @@ export default {
     ...mapActions({
       setDashboardFiltersDialogState: 'layout/setDashboardFiltersDialogState'
     }),
-    loadCurrentSelection () {
+    loadCurrentSelection() {
       this.dhi = [...this.selectedDHI]
       this.hfa = [...this.selectedHFA]
       this.hsc = [...this.selectedHSC]
       this.his = [...this.selectedHIS]
+      this.sapp = [...this.selectedSAPP]
       this.platforms = [...this.selectedPlatforms]
     },
-    clearAll () {
+    clearAll() {
       this.dhi = []
       this.hfa = []
       this.hsc = []
       this.his = []
+      this.sapp = []
       this.platforms = []
     },
-    cancel () {
+    cancel() {
       this.setDashboardFiltersDialogState(null)
     },
-    apply () {
+    apply() {
       this.selectedDHI = this.dhi
       this.selectedHFA = this.hfa
       this.selectedHSC = this.hsc
       this.selectedHIS = this.his
+      this.selectedSAPP = this.sapp
       this.selectedPlatforms = this.platforms
       this.$nextTick(() => {
         this.setDashboardFiltersDialogState(null)
@@ -195,8 +200,8 @@ export default {
 </script>
 
 <style lang="less">
-@import "~assets/style/variables.less";
-@import "~assets/style/mixins.less";
+@import '~assets/style/variables.less';
+@import '~assets/style/mixins.less';
 
 .FilterDialog {
   max-width: @appWidthMaxLimit * 0.9;

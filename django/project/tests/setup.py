@@ -126,7 +126,7 @@ class TestData(APITestCase):
                     'facilities_list': ['facility1', 'facility2', 'facility3']
                 },
                 'donors': donors,
-                'his_bucket': [1, 2],
+                'services_and_application_types': [1, 2],
                 'hsc_challenges': [1, 2],
                 'government_investor': 0,
                 'implementing_partners': ['partner1', 'partner2'],

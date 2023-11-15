@@ -20,7 +20,8 @@ from core.views import TokenAuthMixin, TeamTokenAuthMixin, TeamCollectionTokenAu
     get_object_or_400, CollectionAuthenticatedMixin
 from country.permissions import CountryAdminOnly
 from project.cache import cache_structure
-from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion, OSILicence
+from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion, OSILicence, \
+    ServicesAndApplicationsCategory
 from project.permissions import InCountryAdminForApproval, IsOwnerShipModifiable, \
     CountryAdminTeamCollectionOwnerOrReadOnly
 from search.views import ResultsSetPagination
@@ -92,6 +93,16 @@ class ProjectPublicViewSet(ViewSet):
                 standards=InteroperabilityStandard.objects.filter(category=cat_id).values('id', 'name', 'description')
             ))
 
+        services_and_application_types = []
+        for category in ServicesAndApplicationsCategory.objects.all():
+            services_and_application_types.append(dict(
+                id=category.id,
+                name=category.name,
+                description=category.description,
+                services=category.services_and_application_types.filter(
+                    is_active=True).values('id', 'name', 'description')
+            ))
+
         return dict(
             interoperability_links=InteroperabilityLink.objects.values('id', 'pre', 'name'),
             technology_platforms=TechnologyPlatform.objects.exclude(state=TechnologyPlatform.DECLINED).values(
@@ -102,6 +113,7 @@ class ProjectPublicViewSet(ViewSet):
             health_focus_areas=health_focus_areas,
             hsc_challenges=hsc_challenges,
             strategies=strategies,
+            services_and_application_types=services_and_application_types,
             stages=Stage.objects.values('id', 'name', 'tooltip', 'order'),
             tags=Tag.objects.values('id', 'name'),  # TODO: invalidate on new Tag
             reference_document_types=ReferenceDocumentType.objects.values('id', 'name')

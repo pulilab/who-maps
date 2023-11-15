@@ -222,23 +222,23 @@ class SearchTests(SetupTests):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
 
-    def test_filter_his(self):
+    def test_filter_services_and_application_types(self):
         url = reverse("search-project-list")
-        data = {"his": 1}
+        data = {"sapp": 1}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
 
     def test_filter_bad_filter_term(self):
         url = reverse("search-project-list")
-        data = {"his": 'k'}
+        data = {"sapp": 'k'}
         response = self.test_user_client.get(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 0)
 
     def test_filter_bad_and_good_multi_filter_term(self):
         url = reverse("search-project-list")
-        data = {"his": [1, 'k']}
+        data = {"sapp": [1, 'k']}
 
         # will only search for the good filter term
         response = self.test_user_client.get(url, data, format="json")

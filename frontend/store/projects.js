@@ -57,6 +57,10 @@ export const getters = {
     state.projectStructure.hsc_challenges
       ? [...state.projectStructure.hsc_challenges]
       : [],
+  getApplicationTypes: state =>
+    state.projectStructure.services_and_application_types
+      ? [...state.projectStructure.services_and_application_types]
+      : [],
   getInteroperabilityLinks: state =>
     state.projectStructure.interoperability_links
       ? [...state.projectStructure.interoperability_links]

@@ -25,7 +25,7 @@
         </template>
         <template v-if="typeof contents === 'object'">
           <ul>
-            <template v-if="dhi || interoperability">
+            <template v-if="dhi || interoperability || sapp">
               <template v-if="dhi">
                 <li v-for="item in contents" :key="item.name">
                   <p>
@@ -60,6 +60,17 @@
                   </a>
                 </li>
               </template>
+            </template>
+            <template v-if="sapp">
+              <li v-for="item in contents" :key="item.id" class="sapp">
+                {{ item.name }}
+                <el-tooltip class="item" effect="light" content="Top Left prompts info" popper-class="select-tip">
+                  <div slot="content" v-html="item.description" />
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                  </svg>
+                </el-tooltip>
+              </li>
             </template>
             <template v-else>
               <li v-for="item in contents" :key="item">
@@ -116,6 +127,10 @@ export default {
       default: false
     },
     dhi: {
+      type: Boolean,
+      default: false
+    },
+    sapp: {
       type: Boolean,
       default: false
     },
@@ -232,6 +247,22 @@ export default {
   ul {
     margin: 0;
     padding: 0 0 0 20px;
+    li {
+      &.sapp {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        svg {
+          cursor: default;
+          color: @colorGray;
+          width: 20px;
+          height: 20px;
+          &:hover {
+            color: @colorBrandPrimary;
+          }
+        }
+      }
+    }
   }
   a {
     color: @colorBrandPrimary;

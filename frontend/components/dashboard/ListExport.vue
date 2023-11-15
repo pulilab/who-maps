@@ -28,8 +28,13 @@ export default {
       softwares: 'projects/getTechnologyPlatforms',
       hscChallenges: 'projects/getHscChallenges',
       hisBucket: 'projects/getHisBucket',
+<<<<<<< HEAD
+      applicationTypes: 'projects/getApplicationTypes',
+      licenses: 'projects/getLicenses',
+=======
       // licenses: 'projects/getLicenses',
       osiLicenses: 'projects/getOsiLicenses',
+>>>>>>> development
       interoperabilityStandards: 'projects/getInteroperabilityStandards',
       organisations: 'system/getOrganisations',
       allStages: 'project/getStagesList'
@@ -52,7 +57,8 @@ export default {
           implementing_viewers: this.arrayToString(s.implementing_viewers),
           health_focus_areas: this.parseHealthFocusAreas(s.health_focus_areas),
           hsc_challenges: this.parseHscChallenges(s.hsc_challenges),
-          his_bucket: this.parseFlatList(s.hsc_challenges, 'hisBucket'),
+          his_bucket: this.parseFlatList(s.his_bucket, 'hisBucket'),
+          services_and_application_types: this.parseApplicationTypes(s.services_and_application_types),
           region: this.parseSingleSelection(s.region, 'regions'),
           stages: this.parseStages(s.stages),
           software: this.parseFlatList(s.software, 'softwares'),
@@ -97,6 +103,7 @@ export default {
         Stages: s.stages,
         'Health System Challenges': s.hsc_challenges,
         'Health Information System Support': s.his_bucket,
+        'Services and Application Types': s.services_and_application_types,
         'Government Investor': s.government_investor,
         'Software come at zero cost': s.zero_cost,
         'Allowed to review codebase': s.codebase_accessible,
@@ -167,6 +174,18 @@ export default {
           c.challenges.forEach(cc => {
             if (values.includes(cc.id)) {
               a.push(cc.challenge)
+            }
+          })
+          return a
+        }, []).join(',')
+      })
+    },
+    parseApplicationTypes (values) {
+      return this.safeReturn(() => {
+        return this.applicationTypes.reduce((a, c) => {
+          c.services.forEach(service => {
+            if (values.includes(service.id)) {
+              a.push(service.name)
             }
           })
           return a

@@ -161,9 +161,9 @@ export default {
           title: 'Health System Challenges',
           check: (words) => isSubset(['health','challenges'], words)
         },
-        his_bucket: {
-          title: 'Health Information Systems',
-          check: (words) => isSubset(['health','information'], words)
+        services_and_application_types: {
+          title: 'Services and Application Types',
+          check: (words) => isSubset(['service','application', 'services_and_application_types'], words)
         },
         government_investor: {
           title: 'Government Contribution',
@@ -199,7 +199,7 @@ export default {
         },
         mobile_application: {
           title: 'Link to application',
-          check: (words) => words.includes('application')
+          check: (words) => words.includes('link') && words.includes('application')
         },
         interoperability_links: {
           title: 'Interoperability Links',
@@ -224,6 +224,10 @@ export default {
         sub_level: {
           title: 'Coverage Type',
           check: (words) => words.includes('coverage')
+        },
+        dhis: {
+          title: 'Digital Health Interventions',
+          check: (words) => isSubset(['health','interventions'], words)
         },
         digitalHealthInterventions: {
           title: 'Digital Health Interventions',

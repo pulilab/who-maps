@@ -95,7 +95,7 @@ class ProjectVersionTests(APITestCase):
                 {"clients": 20000, "health_workers": 0, "facilities": 0,
                  "facilities_list": ['facility1', 'facility2', 'facility3']},
             "donors": [self.d1.id, self.d2.id],
-            "his_bucket": [1, 2],
+            "services_and_application_types": [1, 2],
             "hsc_challenges": [1, 2],
             "government_investor": 0,
             "implementing_partners": ["partner1", "partner2"],

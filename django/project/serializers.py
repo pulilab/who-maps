@@ -24,7 +24,8 @@ from project.utils import remove_keys
 from user.models import UserProfile
 from project.models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform, \
     InteroperabilityLink, InteroperabilityStandard, HISBucket, Stage, HealthCategory, HealthFocusArea, \
-    HSCGroup, HSCChallenge, DigitalStrategy, Collection, OSILicence
+    HSCGroup, HSCChallenge, DigitalStrategy, Collection, OSILicence, \
+    ServicesAndApplications, ServicesAndApplicationsCategory
 from country.serializers import CountrySerializer, DonorSerializer
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
@@ -112,6 +113,8 @@ class ProjectPublishedSerializer(serializers.Serializer):
         child=serializers.IntegerField(), max_length=64, min_length=1)
     health_focus_areas = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=1)
+    services_and_application_types = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=1)
     hsc_challenges = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
     hsc_challenges_other = serializers.ListField(
@@ -196,6 +199,11 @@ class ProjectPublishedSerializer(serializers.Serializer):
     def validate_repository(value):
         return url_validator(value)
 
+    @staticmethod
+    def validate_his_bucket(value):  # pragma: no cover
+        # TODO: remove this and the field after no projects have this data anymore
+        raise ValidationError("This field has been discontinued, please remove it from the payload")
+
     def validate(self, attrs):
         if not attrs.get('hsc_challenges') and not attrs.get('hsc_challenges_other'):
             raise ValidationError({'hsc_challenges': 'No challenges selected'})
@@ -219,7 +227,9 @@ class ProjectDraftSerializer(ProjectPublishedSerializer):
     dhis = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
     health_focus_areas = serializers.ListField(
-        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True)
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
+    services_and_application_types = serializers.ListField(
+        child=serializers.IntegerField(), max_length=64, min_length=0, allow_empty=True, required=False)
     donors = serializers.ListField(child=serializers.IntegerField(), max_length=32, required=False)
 
     # SECTION 4
@@ -623,6 +633,20 @@ class HSCGroupWithChallengesSerializer(serializers.ModelSerializer):
         fields = ('name', 'challenges')
 
 
+class ServicesAndApplicationsReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServicesAndApplications
+        fields = ('id', 'name', 'description')
+
+
+class ServicesAndApplicationsWithCategoriesSerializer(serializers.ModelSerializer):
+    services = ServicesAndApplicationsReadSerializer(many=True)
+
+    class Meta:
+        model = ServicesAndApplicationsCategory
+        fields = ('id', 'name', 'description', 'services')
+
+
 class DigitalStrategyModelReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = DigitalStrategy
@@ -647,12 +671,12 @@ class TerminologySerializer(serializers.Serializer):
     technology_platforms = TechnologyPlatformModelReadSerializer(many=True)
     osi_licenses = OSILicenseSerializer(many=True)
     interoperability_standards = InteroperabilityStandardModelReadSerializer(many=True)
-    his_bucket = HISBucketModelReadSerializer(many=True)
     stages = StageModelReadSerializer(many=True)
 
     health_focus_areas = HFAWithCategoriesSerializer(many=True)
     hsc_challenges = HSCGroupWithChallengesSerializer(many=True)
     strategies = StrategiesByGroupSerializer(many=True)
+    services_and_application_types = ServicesAndApplicationsWithCategoriesSerializer(many=True)
 
 
 class ProjectImportV2CollectionSerializer(serializers.ModelSerializer):

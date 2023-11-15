@@ -36,6 +36,7 @@ export default {
       hscList: [],
       hsc: [],
       his: [],
+      sapp: [],
       coverage: '',
       // sub level coverage
       coverageLevelName: {},
@@ -64,6 +65,7 @@ export default {
       getHsc: 'projects/getHscChallenges',
       // getHscOther: 'project/getHscChallengesOther',
       getHis: 'projects/getHisBucket',
+      applicationTypes: 'projects/getApplicationTypes',
       country: 'project/getCountry',
       getCountrySubLevelNames: 'countries/getCountrySubLevelNames',
       getCountryFirstSubLevel: 'countries/getCountryFirstSubLevel',
@@ -94,8 +96,8 @@ export default {
           dhis,
           health_focus_areas,
           hsc_challenges,
-          // hsc_challenges_other,
           his_bucket,
+          services_and_application_types,
           coverageType,
           coverage,
           coverageData,
@@ -107,11 +109,9 @@ export default {
         this.software = getList(software, this.getSoftware)
         this.dhis = this.getDhiList(dhis),
         this.hscList = getNestedList(this.getHsc, 'challenges')
-        // console.log(this.getHscOther)
-        // this.hscOtherList = getNestedList(this.getHscOther, 'challenges')
-        // this.hscOther = getList(hsc_challenges_other, this.hscOtherList, ['challenge'])
         this.hsc = getList(hsc_challenges, this.hscList, ['challenge'])
         this.his = getList(his_bucket, this.getHis)
+        this.sapp = this.getSappList(services_and_application_types)
         this.coverage = this.isGlobalSelected
           ? this.$gettext('International')
           : this.coverageList[coverageType]
@@ -143,6 +143,16 @@ export default {
           .map(dhi => this.getDhi(dhi).name)
           .sort((a, b) => a.localeCompare(b))
         : []
+    },
+    getSappList (sapp) {
+      let items = []
+      this.applicationTypes.forEach(group => {
+        const inGroup = group.services
+          .filter(service => sapp.includes(service.id))
+          // .map(s => s.name)
+        if (inGroup.length > 0) items =[...items,...inGroup]
+      })
+      return items.sort((a, b) => a.name.localeCompare(b.name))
     },
     handleRows (coverage, data, country = this.country) {
       let rows = []
@@ -220,8 +230,9 @@ export default {
         {
           id: 6,
           prepend: 15,
-          header: this.$gettext('Health Information System (HIS)'),
-          content: this.his
+          header: this.his.length > 0 ? this.$gettext('Health Information System (HIS)') : this.$gettext('Services and Application Types'),
+          content: this.his.length > 0 ? this.his : this.sapp,
+          sapp: this.his.length === 0
         },
         {
           id: 7,

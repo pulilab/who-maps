@@ -53,9 +53,13 @@ if settings.DEBUG:  # pragma: no cover
 
 api_info = openapi.Info(
     title='Digital Health Atlas Public API',
-    default_version='v1.3 BETA',
+    default_version='v1.4 BETA',
     description="""Digital Health Atlas Public API for Developers, only BETA 
 (subject to breaking changes and deprecations)
+
+# v1.4
+DEPRECATED: `his_buckets` are no longer a valid field, we have `services_and_application_types` instead.
+NEW: `services_and_application_types` new field in project data, projects/structure endpoint lists all options
 
 # v1.3
 DEPRECATED: `project.licenses` deprecated in favor of `zero_cost`, `codebase_accessible`, `is_customizable`, 
@@ -69,8 +73,10 @@ ADDED: Reference Document endpoints
 
 /api/document/ POST,PUT,PATCH has `multipart/form-data` for uploading a file, but can also be called with 
 `application/json` if document file is not present in the request body. 
+
 # v1.1
 DEPRECATED: Project `platforms` decoupled into `software` and `dhis` and is no longer available or used
+
 # v1.0
 Bearer token implemented for External API that needs authentication 
 `project-draft-external`, `project-publish-external`
