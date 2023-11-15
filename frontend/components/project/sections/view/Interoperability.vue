@@ -9,10 +9,9 @@
 </template>
 
 <script>
-/* eslint-disable vue/no-side-effects-in-computed-properties */
 import { mapGetters } from 'vuex'
-import { isEmpty, orderBy } from 'lodash'
-import { getList } from '@/utilities/projects'
+import { isEmpty } from 'lodash'
+import { getList, getNestedList } from '@/utilities/projects'
 
 import ViewField from '@/components/project/wrappers/ViewField'
 
@@ -40,14 +39,10 @@ export default {
     }),
     fields () {
       if (!isEmpty(this.project)) {
-        const {
-          interoperability_links,
-          interoperability_standards
-        } = this.project
-        this.interoperability = this.handleInteroperability(
-          interoperability_links
-        )
-        this.standards = getList(interoperability_standards, this.getStandards)
+        const { interoperability_links, interoperability_standards } = this.project
+        this.interoperability = this.handleInteroperability(interoperability_links)
+        const standards = getNestedList(this.getStandards, 'standards')
+        this.standards = getList(interoperability_standards, standards)
         this.loading = false
         return this.handleFields()
       } else {
@@ -58,22 +53,13 @@ export default {
   },
   methods: {
     handleInteroperability (links) {
-      let result = []
-      for (const [value] of Object.entries(links)) {
-        if (value.selected && value.link) {
-          result = [
-            ...result,
-            {
-              ...value,
-              id: this.getInteroperabilityLinks[value.index]?.id,
-              label: `${this.getInteroperabilityLinks[value.index]?.pre} ${
-                this.getInteroperabilityLinks[value.index]?.name
-              }`
-            }
-          ]
-        }
-      }
-      return orderBy(result, ['index'], ['asc'])
+      return Object.keys(links)
+        .filter(l => links[l].selected)
+        .map(l => ({
+          id: l,
+          label: `${this.getInteroperabilityLinks[l]?.pre} ${this.getInteroperabilityLinks[l]?.name}`,
+          link: links[l].link,
+        }))
     },
     handleFields () {
       return [

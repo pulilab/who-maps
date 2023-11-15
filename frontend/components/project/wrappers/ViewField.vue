@@ -88,7 +88,7 @@
               <b>{{ row.name }}</b>
             </p>
             <el-col v-for="col in row.cols" :key="col.id" :span="col.span">
-              <view-field v-bind="col" no-margin />
+              <ViewField v-bind="col" no-margin />
             </el-col>
           </el-row>
         </template>

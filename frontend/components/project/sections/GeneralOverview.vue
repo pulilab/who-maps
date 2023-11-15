@@ -52,7 +52,7 @@
           <tooltip
             :text="
               $gettext(
-                'If you cannot find your investment partner in the list corresponding to the question, ask Investor/Donor to register on DHA platform by sending an email to digital-health-atlas@who.int'
+                'Investment partners are the ones who contribute to the project either financially or in kind. If you cannot find your investment partner in the list corresponding to the question, ask Investor/Donor to register on DHA platform by sending an email to digital-health-atlas@who.int'
               ) | translate
             "
           />

@@ -11,7 +11,7 @@ export const getters = {
   getQueue: state => state.queue,
   getRawImport: state => state.rawImport,
   getCollection: state => {
-    return state.collection 
+    return state.collection
       ? {
         name: state.collection.name,
         url: state.collection.url,
@@ -84,7 +84,7 @@ export const actions = {
     const projectIdx = state.collection.projects.findIndex(p => p.id === id)
     commit('addTeamMember', { projectIdx, user: user })
     return data
-  }
+  },
 }
 
 export const mutations = {

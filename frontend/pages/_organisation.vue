@@ -24,6 +24,7 @@ export default {
       store.dispatch('system/loadOrganisations'),
       store.dispatch('system/loadCountries'),
       store.dispatch('system/loadStaticData'),
+      store.dispatch('projects/loadProjectStructure'),
       store.dispatch('countries/loadMapData'),
       store.dispatch(
         'landing/search',

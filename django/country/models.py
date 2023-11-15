@@ -9,11 +9,11 @@ from django.forms import MultipleChoiceField
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinLengthValidator
-from ordered_model.models import OrderedModel, OrderedModelManager
+from ordered_model.models import OrderedModel, OrderedModelQuerySet
 from taggit.managers import TaggableManager
 
 from country.tasks import update_gdhi_data_task
-from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel
+from core.models import ExtendedModel, ExtendedMultilingualModel, SoftDeleteModel, ActiveQuerySet
 from country.validators import file_size
 from user.models import UserProfile
 
@@ -93,9 +93,12 @@ class UserManagement(models.Model):
     class Meta:
         abstract = True
 
-    def user_in_groups(self, profile):
+    def user_in_admin_groups(self, profile):
         return self.admins.filter(id=profile.id).exists() or \
-               self.super_admins.filter(id=profile.id).exists() or \
+               self.super_admins.filter(id=profile.id).exists()
+
+    def user_in_groups(self, profile):
+        return self.user_in_admin_groups(profile) or \
                self.users.filter(id=profile.id).exists()
 
 
@@ -152,32 +155,15 @@ class MultiArrayField(ArrayField):
         return super(ArrayField, self).formfield(**defaults)
 
 
-class ReferenceDocument(ExtendedModel):
-    class Type(models.TextChoices):
-        """
-        betterehealth types
-        <option value="412">Framework</option>
-        <option value="55">Guideline</option>
-        <option value="333">Laws and regulations</option>
-        <option value="1179">Monitoring and Evaluation (M&E)</option>
-        <option value="563">Operational plan</option>
-        <option value="56">Policy</option>
-        <option value="411">Report</option>
-        <option value="1167">Roadmap</option>
-        <option value="1166">Standard</option>
-        <option value="57">Strategy</option>
-        """
-        FRAMEWORK = '412', _("Framework")
-        GUIDELINE = '55', _("Guideline")
-        LAWS = '333', _("Laws and regulations")
-        ME = '1179', _("Monitoring and Evaluation (M&E)")
-        OPERATIONAL = '563', _("Operational plan")
-        POLICY = '56', _("Policy")
-        REPORT = '411', _("Report")
-        ROADMAP = '1167', _("Roadmap")
-        STANDARD = '1166', _("Standard")
-        STRATEGY = '57', _("Strategy")
+class ReferenceDocumentType(models.Model):
+    name = models.CharField(max_length=64)
+    external_id = models.IntegerField(verbose_name='Better eHealth ID', blank=True, null=True)
 
+    def __str__(self):  # pragma: no cover
+        return self.name
+
+
+class ReferenceDocument(ExtendedModel):
     class Language(models.TextChoices):
         ENGLISH = "en", _("English")
         FRENCH = "fr", _("French")
@@ -195,10 +181,10 @@ class ReferenceDocument(ExtendedModel):
 
     title = models.CharField(max_length=128)
     purpose = models.TextField()
-    types = MultiArrayField(models.CharField(choices=Type.choices))
     valid_from = models.DateField()
     valid_until = models.DateField(blank=True, null=True)
     featured = models.BooleanField(default=False)
+    document_types = models.ManyToManyField(ReferenceDocumentType)
     tags = TaggableManager(blank=True)
 
     class Meta:
@@ -273,11 +259,15 @@ class CustomQuestion(SoftDeleteModel, ExtendedModel, OrderedModel):
         base_manager_name = 'objects'
 
 
+class OrderedActiveQuerySet(ActiveQuerySet, OrderedModelQuerySet):
+    pass
+
+
 class DonorCustomQuestion(CustomQuestion):
     donor = models.ForeignKey(Donor, related_name='donor_questions', on_delete=models.CASCADE)
     order_with_respect_to = 'donor'
 
-    objects = OrderedModelManager()
+    objects = OrderedActiveQuerySet.as_manager()
 
     class Meta(OrderedModel.Meta):
         pass
@@ -290,7 +280,7 @@ class CountryCustomQuestion(CustomQuestion):
     country = models.ForeignKey(Country, related_name='country_questions', on_delete=models.CASCADE)
     order_with_respect_to = 'country'
 
-    objects = OrderedModelManager()
+    objects = OrderedActiveQuerySet.as_manager()
 
     class Meta(OrderedModel.Meta):
         pass

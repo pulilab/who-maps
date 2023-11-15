@@ -2,10 +2,11 @@ import copy
 
 from django.db import transaction
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 from taggit.models import Tag
 
-from rest_framework import status
+from rest_framework import status, filters
 from rest_framework.exceptions import ValidationError, NotAuthenticated, PermissionDenied
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, UpdateModelMixin, CreateModelMixin, \
     DestroyModelMixin
@@ -17,12 +18,15 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from core.views import TokenAuthMixin, TeamTokenAuthMixin, TeamCollectionTokenAuthMixin, CollectionTokenAuthMixin, \
     get_object_or_400, CollectionAuthenticatedMixin
+from country.permissions import CountryAdminOnly
 from project.cache import cache_structure
-from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion, \
+from project.models import HSCGroup, ProjectApproval, ProjectImportV2, ImportRow, Stage, ProjectVersion, OSILicence, \
     ServicesAndApplicationsCategory
-from project.permissions import InCountryAdminForApproval, IsOwnerShipModifiable
+from project.permissions import InCountryAdminForApproval, IsOwnerShipModifiable, \
+    CountryAdminTeamCollectionOwnerOrReadOnly
+from search.views import ResultsSetPagination
 from toolkit.models import Toolkit, ToolkitVersion
-from country.models import Country, Donor
+from country.models import Country, Donor, ReferenceDocumentType
 from .tasks import notify_superusers_about_new_pending_software
 from user.models import Organisation
 
@@ -34,7 +38,7 @@ from .serializers import ProjectDraftSerializer, ProjectGroupSerializer, Project
     CollectionListSerializer, ProjectImportV2ListSerializer, ExternalProjectResponseSerializer
 
 from .models import Project, CoverageVersion, InteroperabilityLink, TechnologyPlatform, DigitalStrategy, \
-    HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Collection
+    HealthCategory, InteroperabilityStandard, HISBucket, HSCChallenge, Collection
 
 from django.conf import settings
 from rest_framework.views import APIView
@@ -77,8 +81,16 @@ class ProjectPublicViewSet(ViewSet):
         for group in HSCGroup.objects.values('id', 'name'):
             hsc_challenges.append(dict(
                 name=group['name'],
-                challenges=[{'id': c['id'], 'challenge': c['name']}
-                            for c in HSCChallenge.objects.filter(group__id=group['id']).values('id', 'name')]
+                challenges=[{'id': c['id'], 'challenge': c['name'], 'description': c['description']}
+                            for c in HSCChallenge.objects.filter(group__id=group['id']).values(
+                        'id', 'name', 'description')]
+            ))
+
+        interoperability_standards = []
+        for cat_id, cat_name in InteroperabilityStandard.Categories.choices:
+            interoperability_standards.append(dict(
+                name=cat_name,
+                standards=InteroperabilityStandard.objects.filter(category=cat_id).values('id', 'name', 'description')
             ))
 
         services_and_application_types = []
@@ -95,15 +107,16 @@ class ProjectPublicViewSet(ViewSet):
             interoperability_links=InteroperabilityLink.objects.values('id', 'pre', 'name'),
             technology_platforms=TechnologyPlatform.objects.exclude(state=TechnologyPlatform.DECLINED).values(
                 'id', 'name', 'state'),
-            licenses=Licence.objects.values('id', 'name'),
-            interoperability_standards=InteroperabilityStandard.objects.values('id', 'name'),
+            osi_licenses=OSILicence.objects.values('id', 'name'),
             his_bucket=HISBucket.objects.values('id', 'name'),
+            interoperability_standards=interoperability_standards,
             health_focus_areas=health_focus_areas,
             hsc_challenges=hsc_challenges,
             strategies=strategies,
             services_and_application_types=services_and_application_types,
             stages=Stage.objects.values('id', 'name', 'tooltip', 'order'),
-            tags=Tag.objects.values('id', 'name')  # TODO: invalidate on new Tag
+            tags=Tag.objects.values('id', 'name'),  # TODO: invalidate on new Tag
+            reference_document_types=ReferenceDocumentType.objects.values('id', 'name')
         )
 
     @staticmethod
@@ -129,6 +142,28 @@ class ProjectListViewSet(TeamTokenAuthMixin, ViewSet):
             data.append(project.to_response_dict(published=published, draft=draft))
 
         return Response(data)
+
+
+class ProjectAdminListViewSet(TokenAuthMixin, GenericViewSet):
+    permission_classes = (IsAuthenticated, CountryAdminOnly)
+    pagination_class = ResultsSetPagination
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['name', 'team__name', 'team__user__email']
+    queryset = Project.objects.all()
+
+    def get_queryset(self):
+        return super().get_queryset().by_country(self.request.user.userprofile.country)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        data = []
+        page = self.paginate_queryset(queryset)
+        for project in page:
+            published = project.to_representation()
+            draft = project.to_representation(draft_mode=True)
+            data.append(project.to_response_dict(published=published, draft=draft))
+        return self.get_paginated_response(data)
 
 
 class ProjectRetrieveViewSet(TeamTokenAuthMixin, ViewSet):
@@ -290,10 +325,7 @@ class ProjectArchiveViewSet(TeamTokenAuthMixin, ViewSet):
     @transaction.atomic
     def update(self, request, project_id):
         project = get_object_or_400(Project, select_for_update=True, error_message="No such project", id=project_id)
-        project.archive()
-
-        ProjectVersion.objects.create(project=project, user=request.user.userprofile, name=project.name,
-                                      data=project.draft, research=project.research, published=False, archived=True)
+        project.archive(profile=request.user.userprofile)
         return Response(status=status.HTTP_200_OK)
 
 
@@ -576,6 +608,7 @@ class ExternalPublishAPI(TeamTokenAuthMixin, ViewSet):
 
 
 class ProjectGroupViewSet(TeamCollectionTokenAuthMixin, RetrieveModelMixin, GenericViewSet):
+    permission_classes = (IsAuthenticated, CountryAdminTeamCollectionOwnerOrReadOnly)
     queryset = Project.objects.all()
     serializer_class = ProjectGroupSerializer
 

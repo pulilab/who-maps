@@ -103,13 +103,16 @@ class TestData(APITestCase):
                 'contact_name': 'name1',
                 'contact_email': 'a@a.com',
                 'implementation_overview': 'overview',
-                'implementation_dates': '2016',
                 'health_focus_areas': hfa,
                 'geographic_scope': "somewhere",
                 'country': country.id,
                 'software': [1, 2],
                 'dhis': [1, 2],
-                'licenses': [1, 2],
+                'zero_cost': 1,
+                'codebase_accessible': 2,
+                'is_customizable': 3,
+                'free_replication': '',
+                'osi_licenses': [1, 2],
                 'coverage': [
                     {'district': 'dist1', 'clients': 20, 'health_workers': 5, 'facilities': 4},
                     {'district': 'dist2', 'clients': 10, 'health_workers': 2, 'facilities': 8}

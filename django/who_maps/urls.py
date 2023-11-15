@@ -9,7 +9,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework.routers import SimpleRouter
 
 from country.views import CountryLandingPageViewSet, CountryLandingListPageViewSet, DonorLandingPageViewSet, \
-    DonorLandingListPageViewSet
+    DonorLandingListPageViewSet, DocumentSearchViewSet, ReferenceDocumentUploadViewSet
 from project.views import ProjectPublicViewSet, ExternalDraftAPI, ExternalPublishAPI
 from user.views import OrganisationViewSet, TokenCheckView
 
@@ -53,14 +53,30 @@ if settings.DEBUG:  # pragma: no cover
 
 api_info = openapi.Info(
     title='Digital Health Atlas Public API',
-    default_version='v1.2 BETA',
+    default_version='v1.4 BETA',
     description="""Digital Health Atlas Public API for Developers, only BETA 
 (subject to breaking changes and deprecations)
-# v1.2
+
+# v1.4
 DEPRECATED: `his_buckets` are no longer a valid field, we have `services_and_application_types` instead.
 NEW: `services_and_application_types` new field in project data, projects/structure endpoint lists all options
+
+# v1.3
+DEPRECATED: `project.licenses` deprecated in favor of `zero_cost`, `codebase_accessible`, `is_customizable`, 
+`free_replication` and `osi_licenses`. Data from licenses was migrated automatically over to the new fields with a 
+particular business logic.
+
+# v1.2
+ADDED: Reference Document endpoints
+- /api/document/ for CRUD
+- /api/document-search/ for search and filter
+
+/api/document/ POST,PUT,PATCH has `multipart/form-data` for uploading a file, but can also be called with 
+`application/json` if document file is not present in the request body. 
+
 # v1.1
 DEPRECATED: Project `platforms` decoupled into `software` and `dhis` and is no longer available or used
+
 # v1.0
 Bearer token implemented for External API that needs authentication 
 `project-draft-external`, `project-publish-external`
@@ -74,6 +90,8 @@ api_info_router.register('api/landing-country', CountryLandingListPageViewSet, b
 api_info_router.register('api/organisations', OrganisationViewSet, basename='organisation')
 api_info_router.register('api/landing-donor', DonorLandingPageViewSet, basename='landing-donor')
 api_info_router.register('api/landing-donor', DonorLandingListPageViewSet, basename='landing-donor')
+api_info_router.register('api/document', ReferenceDocumentUploadViewSet, basename='reference-document-upload')
+api_info_router.register('api/document-search', DocumentSearchViewSet, basename='document-search')
 # These API urls miss their trailing slashes due to an apparent bug in redoc
 # adding extra trailing slashes. Since these are only used for generating the public docs,
 # this should cause no issue.

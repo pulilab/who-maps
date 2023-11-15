@@ -51,9 +51,7 @@ export default {
       investedList: [
         this.$gettext('No, they have not yet contributed'),
         this.$gettext('Yes, they are contributing in-kind people or time'),
-        this.$gettext(
-          'Yes, there is a financial contribution through MOH budget'
-        ),
+        this.$gettext('Yes, there is a financial contribution through MOH budget'),
         this.$gettext('Yes, MOH is fully funding the project')
       ]
     }

@@ -49,13 +49,23 @@
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
+          <licensing-overview
+            ref="licensingOverview"
+            :rules="rules"
+            :draft-rules="draftRules"
+            :publish-rules="publishRules"
+            :api-errors="apiErrors"
+            :prepend-title="4"
+            @hook:mounted="mountedHandler"
+            @hook:created="createdHandler"
+          />
           <technology-overview
             ref="technologyOverview"
             :rules="rules"
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
-            :prepend-title="4"
+            :prepend-title="5"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
@@ -65,7 +75,7 @@
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
-            :prepend-title="5"
+            :prepend-title="6"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
@@ -75,7 +85,7 @@
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
-            :prepend-title="6"
+            :prepend-title="7"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
@@ -85,13 +95,13 @@
             :draft-rules="draftRules"
             :publish-rules="publishRules"
             :api-errors="apiErrors"
-            :prepend-title="7"
+            :prepend-title="8"
             @hook:mounted="mountedHandler"
             @hook:created="createdHandler"
           />
         </el-col>
         <el-col :span="6">
-          <project-navigation
+          <ProjectNavigation
             @saveDraft="doSaveDraft"
             @discardDraft="doDiscardDraft"
             @archiveProject="doArchiveProject"
@@ -108,6 +118,7 @@ import { publishRules, draftRules } from '@/utilities/projects'
 import ProjectNavigation from './ProjectNavigation'
 import GeneralOverview from './sections/GeneralOverview'
 import StageOverview from '@/components/project/sections/StageOverview'
+import LicensingOverview from './sections/LicensingOverview'
 import ImplementationOverview from './sections/ImplementationOverview'
 import TechnologyOverview from './sections/TechnologyOverview'
 import InteroperabilityAndStandards from './sections/InteroperabilityAndStandards'
@@ -121,6 +132,7 @@ export default {
     GeneralOverview,
     StageOverview,
     ImplementationOverview,
+    LicensingOverview,
     TechnologyOverview,
     InteroperabilityAndStandards,
     CountryCustom,

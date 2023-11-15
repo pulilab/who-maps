@@ -4,16 +4,16 @@
     class="TwoPerRow"
     @input="changeHandler"
   >
-    <div v-for="(group,i) in standardsGroups" :key="i" class="Group">
+    <div v-for="(group,i) in standards" :key="i" class="Group">
       <div class="name">{{ group.name }}</div>
       <div class="inputs">
         <el-checkbox
-          v-for="standard in getStandards(group.standardIds)"
+          v-for="standard in group.standards"
           :key="standard.id"
           :label="standard.id"
         >
           {{ standard.name }}
-          <Tooltip :text="$gettext('Specify other digital health systems that ') | translate" />
+          <Tooltip :text="standard.description" />
         </el-checkbox>
       </div>
     </div>
@@ -38,32 +38,6 @@ export default {
       default: () => []
     }
   },
-  data() {
-    return {
-      standardsGroups: [
-        {
-          name: this.$gettext('Health Data Exchange Standards'),
-          standardIds: [1,4,5,6,17,8,9,11,13,18,15,16]
-        },
-        {
-          name: this.$gettext('Health Data Standardization'),
-          standardIds: [28,21,27,30,22,31,26]
-        },
-        {
-          name: this.$gettext('Demographic Data Standardization'),
-          standardIds: [24,25,23]
-        },
-        {
-          name: this.$gettext('Security & Privacy Standards'),
-          standardIds: [2,3,12]
-        },
-        {
-          name: this.$gettext('Technical Standards'),
-          standardIds: [19,7,10,14,20,29]
-        },
-      ],
-    }
-  },
   computed: {
     ...mapGetters({
       standards: 'projects/getInteroperabilityStandards'
@@ -72,9 +46,6 @@ export default {
   methods: {
     changeHandler (value) {
       this.$emit('change', value)
-    },
-    getStandards(ids) {
-      return this.standards.filter(s => ids.includes(s.id))
     },
   }
 }

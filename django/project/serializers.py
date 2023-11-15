@@ -23,8 +23,9 @@ from country.models import CustomQuestion, Country, Donor
 from project.utils import remove_keys
 from user.models import UserProfile
 from project.models import Project, ProjectApproval, ImportRow, ProjectImportV2, TechnologyPlatform, \
-    InteroperabilityLink, Licence, InteroperabilityStandard, HISBucket, Stage, HealthCategory, HealthFocusArea, \
-    HSCGroup, HSCChallenge, DigitalStrategy, Collection, ServicesAndApplications, ServicesAndApplicationsCategory
+    InteroperabilityLink, InteroperabilityStandard, HISBucket, Stage, HealthCategory, HealthFocusArea, \
+    HSCGroup, HSCChallenge, DigitalStrategy, Collection, OSILicence, \
+    ServicesAndApplications, ServicesAndApplicationsCategory
 from country.serializers import CountrySerializer, DonorSerializer
 
 URL_REGEX = re.compile(r"^(http[s]?://)?(www\.)?[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20}[.]?")
@@ -75,26 +76,37 @@ INVESTOR_CHOICES = [(0, 'No, they have not yet contributed'),
                     (2, 'Yes, there is a financial contribution through MOH budget'),
                     (3, 'Yes, MOH is fully funding the project')]
 
+RADIO_CHOICES = [(1, 'Yes'),
+                 (2, 'Yes - With restrictions'),
+                 (3, 'No')]
+
+RADIO_ALTERNATIVE_CHOICES = [(1, 'Yes'),
+                             (2, 'Partially'),
+                             (3, 'No')]
+
 
 class ProjectPublishedSerializer(serializers.Serializer):
-    # SECTION 1 General Overview
+    """
+    DEPRECATED: `platforms` decoupled into `software` and `dhis`
+    platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
+    DEPRECATED: `licenses` deprecated in favor of `zero_cost`, `codebase_accessible`, `is_customizable`,
+    `free_replication` and `osi_licenses`
+    licenses = serializers.ListField(child=serializers.IntegerField(), max_length=16, required=False)
+    DEPRECATED: `implementation_dates` in favor of `stages`
+    implementation_dates = serializers.CharField(max_length=128, required=False)
+    """
+
+    # SECTION General Overview
     name = serializers.CharField(max_length=250, validators=[UniqueValidator(queryset=Project.objects.all(),
                                                                              lookup='iexact')])
     organisation = serializers.CharField(max_length=128, required=False)
     country = serializers.IntegerField(min_value=0, max_value=100000)
     geographic_scope = serializers.CharField(max_length=1024, required=False)
     implementation_overview = serializers.CharField(max_length=5000)
-    start_date = serializers.CharField(max_length=256, required=True)
-    end_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
-    end_date_note = serializers.CharField(max_length=256, required=False, allow_blank=True)
     contact_name = serializers.CharField(max_length=256)
     contact_email = serializers.EmailField()
-    research = serializers.BooleanField(required=False, allow_null=True)
 
-    # DEPRECATED: `platforms` decoupled into `software` and `dhis`
-    # platforms = PlatformSerializer(many=True, required=True, allow_empty=False)
-
-    # SECTION 2 Implementation Overview
+    # SECTION Implementation Overview
     software = serializers.ListField(
         child=serializers.IntegerField(), max_length=64, min_length=1)
     dhis = serializers.ListField(
@@ -116,20 +128,30 @@ class ProjectPublishedSerializer(serializers.Serializer):
         child=serializers.CharField(max_length=1024), max_length=50, min_length=0, required=False, allow_empty=True)
     donors = serializers.ListField(child=serializers.IntegerField(), max_length=32)
 
-    # SECTION 3 Technology Overview
-    implementation_dates = serializers.CharField(max_length=128, required=False)
-    licenses = serializers.ListField(child=serializers.IntegerField(), max_length=16, required=False)
+    # SECTION Stages
+    research = serializers.BooleanField(required=False, allow_null=True)
+    start_date = serializers.CharField(max_length=256, required=True)
+    end_date = serializers.CharField(max_length=256, required=False, allow_blank=True)
+    end_date_note = serializers.CharField(max_length=256, required=False, allow_blank=True)
+    stages = StageSerializer(many=True, required=False, allow_empty=True)
+
+    # SECTION Accessibility and Licensing
+    zero_cost = serializers.ChoiceField(choices=RADIO_CHOICES, required=False, allow_blank=True)
+    codebase_accessible = serializers.ChoiceField(choices=RADIO_ALTERNATIVE_CHOICES, required=False, allow_blank=True)
+    is_customizable = serializers.ChoiceField(choices=RADIO_CHOICES, required=False, allow_blank=True)
+    free_replication = serializers.ChoiceField(choices=RADIO_CHOICES, required=False, allow_blank=True)
+    osi_licenses = serializers.ListField(
+        child=serializers.IntegerField(), max_length=16, min_length=0, allow_empty=True, required=False)
+
+    # SECTION Technology Overview
     repository = serializers.CharField(max_length=256, required=False, allow_blank=True)
     mobile_application = serializers.CharField(max_length=256, required=False, allow_blank=True)
     wiki = serializers.CharField(max_length=256, required=False, allow_blank=True)
 
-    # SECTION 4 Interoperability & Standards
+    # SECTION Interoperability & Standards
     interoperability_links = InteroperabilityLinksSerializer(many=True, required=False, allow_null=True)
     interoperability_standards = serializers.ListField(
         child=serializers.IntegerField(), required=False, max_length=50)
-
-    # SECTION 5
-    stages = StageSerializer(many=True, required=False, allow_empty=True)
 
     class Meta:
         model = Project
@@ -565,9 +587,9 @@ class InteroperabilityStandardModelReadSerializer(serializers.ModelSerializer):
         fields = ('id', 'name')
 
 
-class LicenseModelReadSerializer(serializers.ModelSerializer):
+class OSILicenseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Licence
+        model = OSILicence
         fields = ('id', 'name')
 
 
@@ -647,7 +669,7 @@ class StrategiesByGroupSerializer(serializers.Serializer):
 class TerminologySerializer(serializers.Serializer):
     interoperability_links = InteroperabilityLinkModelReadSerializer(many=True)
     technology_platforms = TechnologyPlatformModelReadSerializer(many=True)
-    licenses = LicenseModelReadSerializer(many=True)
+    osi_licenses = OSILicenseSerializer(many=True)
     interoperability_standards = InteroperabilityStandardModelReadSerializer(many=True)
     stages = StageModelReadSerializer(many=True)
 

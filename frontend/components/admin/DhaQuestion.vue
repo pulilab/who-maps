@@ -20,7 +20,14 @@
         class="DeleteButton IconLeft"
         @click="doDelete(id)"
       >
-        <fa icon="trash" /> Delete
+        <div v-if="id" key="archive">
+          <i class="el-icon-takeaway-box"></i>
+          Archive
+        </div>
+        <div v-else key="discard">
+          <i class="el-icon-delete"></i>
+          Discard
+        </div>
       </el-button>
     </div>
 
@@ -156,7 +163,7 @@ export default {
       try {
         if (this.id) {
           await this.$confirm(
-            this.$gettext('This will permanently delete the question?'),
+            this.$gettext('Are you sure you want to archive this question?'),
             this.$gettext('Warning'),
             {
               confirmButtonText: this.$gettext('OK'),
@@ -168,20 +175,24 @@ export default {
         await this.deleteQuestion(id)
         this.$message({
           type: 'success',
-          message: this.$gettext('Question successfully deleted')
+          message: this.id
+            ? this.$gettext('Question successfully archived')
+            : this.$gettext('Question successfully discarded')
         })
       } catch (e) {
         if (e === 'cancel') {
           this.$message({
             type: 'info',
-            message: this.$gettext('Question deletion canceled')
+            message: this.id
+              ? this.$gettext('Question archiving canceled')
+              : this.$gettext('Question discarding canceled')
           })
         } else {
           this.$message({
             type: 'error',
-            message: this.$gettext(
-              'An error occured while deleting the question'
-            )
+            message: this.id
+              ? this.$gettext('An error occured while archiving or the question')
+              : this.$gettext('An error occured while discarding or the question')
           })
         }
       }

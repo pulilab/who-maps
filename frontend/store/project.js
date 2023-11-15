@@ -132,9 +132,11 @@ export const getters = {
     }
     return []
   },
-  getImplementationDates: state =>
-    state.implementation_dates && new Date(state.implementation_dates),
-  getLicenses: state => state.licenses,
+  getZeroCost: state => state.zero_cost,
+  getCodebaseAccessible: state => state.codebase_accessible,
+  getIsCustomizable: state => state.is_customizable,
+  getFreeReplication: state => state.free_replication,
+  getOsiLicenses: state => state.osi_licenses,
   getRepository: state => state.repository,
   getMobileApplication: state => state.mobile_application,
   getWiki: state => state.wiki,
@@ -415,8 +417,20 @@ export const actions = {
   setImplementationDates ({ commit }, value) {
     commit('SET_IMPLEMENTATION_DATES', value)
   },
-  setLicenses ({ commit }, value) {
-    commit('SET_LICENSES', value)
+  setZeroCost ({ commit }, value) {
+    commit('setValue', { key: 'zero_cost', val: value })
+  },
+  setCodebaseAccessible ({ commit }, value) {
+    commit('setValue', { key: 'codebase_accessible', val: value })
+  },
+  setIsCustomizable ({ commit }, value) {
+    commit('setValue', { key: 'is_customizable', val: value })
+  },
+  setFreeReplication ({ commit }, value) {
+    commit('setValue', { key: 'free_replication', val: value })
+  },
+  setOsiLicenses ({ commit }, value) {
+    commit('setValue', { key: 'osi_licenses', val: value })
   },
   setRepository ({ commit }, value) {
     commit('SET_REPOSITORY', value)
@@ -599,6 +613,9 @@ export const actions = {
 }
 
 export const mutations = {
+  setValue (state, { key, val }) {
+    state[key] = val
+  },
   SET_NAME: (state, name) => {
     state.name = name
   },
@@ -706,12 +723,6 @@ export const mutations = {
   SET_SHADOW_DONORS: (state, donors) => {
     Vue.set(state, 'shadow_donors', [...donors])
   },
-  SET_IMPLEMENTATION_DATES: (state, implementation_dates) => {
-    state.implementation_dates = implementation_dates
-  },
-  SET_LICENSES: (state, licenses) => {
-    Vue.set(state, 'licenses', [...licenses])
-  },
   SET_REPOSITORY: (state, repository) => {
     state.repository = repository
   },
@@ -794,17 +805,16 @@ export const mutations = {
     state.implementing_viewers = get(project, 'implementing_viewers', [])
     state.donors = get(project, 'donors', [])
     state.shadow_donors = get(project, 'shadow_donors', [])
-    state.implementation_dates = get(project, 'implementation_dates', '')
-    state.licenses = get(project, 'licenses', [])
+    state.zero_cost = get(project, 'zero_cost', '')
+    state.codebase_accessible = get(project, 'codebase_accessible', '')
+    state.is_customizable = get(project, 'is_customizable', '')
+    state.free_replication = get(project, 'free_replication', '')
+    state.osi_licenses = get(project, 'osi_licenses', [])
     state.repository = get(project, 'repository', '')
     state.mobile_application = get(project, 'mobile_application', '')
     state.wiki = get(project, 'wiki', '')
     state.interoperability_links = get(project, 'interoperability_links', {})
-    state.interoperability_standards = get(
-      project,
-      'interoperability_standards',
-      []
-    )
+    state.interoperability_standards = get(project, 'interoperability_standards', [])
     state.country_answers = get(project, 'country_custom_answers', [])
     state.donors_answers = get(project, 'donor_custom_answers', [])
   },

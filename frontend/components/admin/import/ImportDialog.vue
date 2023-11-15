@@ -15,7 +15,12 @@
             Original Data
           </translate>
         </h3>
-        {{ dialogData.original }}
+        <span v-if="dialogData.original">
+          {{ dialogData.original }}
+        </span>
+        <translate v-else class="empty">
+          Empty cell
+        </translate>
       </el-col>
       <el-col>
         <h3 v-if="dialogData.column !== 'digitalHealthInterventions'">
@@ -115,10 +120,16 @@
           />
         </template>
 
-        <template v-if="dialogData.column === 'licenses'">
-          <license-selector
-            v-model="dialogData.value"
-          />
+        <template v-if="dialogData.column === 'osi_licenses'">
+          <OsiLicenseSelector v-model="dialogData.value" />
+        </template>
+
+        <template v-if="isLicenseChoice">
+          <LicenseChoice v-model="dialogData.value[0]" />
+        </template>
+
+        <template v-if="isLicenseChoiceAlt">
+          <LicenseChoice choice="alternative" v-model="dialogData.value[0]" />
         </template>
 
         <div
@@ -203,7 +214,8 @@ import HealthSystemChallengesSelector from '@/components/project/HealthSystemCha
 import HealthFocusAreasSelector from '@/components/project/HealthFocusAreasSelector'
 import DigitalHealthInterventionsFilter from '@/components/dialogs/filters/DigitalHealthInterventionsFilter'
 import StandardsSelector from '@/components/project/StandardsSelector'
-import LicenseSelector from '@/components/project/LicenseSelector'
+import LicenseChoice from '@/components/project/LicenseChoice'
+import OsiLicenseSelector from '@/components/project/OsiLicenseSelector'
 
 export default {
   components: {
@@ -217,7 +229,8 @@ export default {
     HealthFocusAreasSelector,
     DigitalHealthInterventionsFilter,
     StandardsSelector,
-    LicenseSelector
+    LicenseChoice,
+    OsiLicenseSelector,
   },
   props: {
     customFieldsLib: {
@@ -253,7 +266,13 @@ export default {
         width: this.dialogData.column === 'digitalHealthInterventions' ? '90vw' : '60%',
         className: ['ImportDialog', this.dialogData.column].join(' ')
       }
-    }
+    },
+    isLicenseChoice () {
+      return this.dialogData.column === 'zero_cost' || this.dialogData.column === 'is_customizable' || this.dialogData.column === 'free_replication'
+    },
+    isLicenseChoiceAlt () {
+      return this.dialogData.column === 'codebase_accessible'
+    },
   },
   methods: {
     openDialog (row, key, { column, value, type }) {
@@ -309,6 +328,10 @@ export default {
     .OriginalData {
       max-width: 350px;
       min-width: 350px;
+      .empty {
+        color: @colorTextMuted;
+        font-style: italic;
+      }
     }
 
    &.digitalHealthInterventions{

@@ -51,7 +51,8 @@ export default {
   computed: {
     ...mapGetters({
       countries: 'countries/getCountries',
-      policyRegistry: 'system/getPolicyRegistry',
+      referenceDocuments: 'system/getReferenceDocuments',
+      referenceDocumentTypes: 'projects/getReferenceDocumentsTypes',
     }),
     detailedDocuments() {
       const now = new Date()
@@ -60,8 +61,8 @@ export default {
         return {
           ...doc,
           country: this.countries.find(c => c.id == doc.country),
-          language: this.policyRegistry.languages.find(l => l.id == doc.language),
-          types: doc.types.map(typeId => this.policyRegistry.types.find(t => t.id == typeId)),
+          language: this.referenceDocuments.languages.find(l => l.id == doc.language),
+          types: doc.document_types.map(typeId => this.referenceDocumentTypes.find(t => t.id == typeId)),
           validFromDisplay: format(doc.valid_from, 'DD/MM/YYYY'),
           validUntilDisplay: doc.valid_until ? format(doc.valid_until, 'DD/MM/YYYY') : '',
           expired: differenceInCalendarDays(until, now) < 0,
@@ -71,7 +72,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      openDocumentDialog: 'registry/openPolicyDocumentDialog',
+      openDocumentDialog: 'documents/openReferenceDocumentDialog',
     }),
     showDocumentDetails(doc) {
       this.openDocumentDialog(doc)

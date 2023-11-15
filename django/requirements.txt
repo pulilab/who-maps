@@ -32,10 +32,11 @@ django-filter
 django-nonrelated-inlines
 django-import-export
 django-ordered-model
-django-simplefeedback==1.1.2
+django-simplefeedback==1.2.2
 django-simple-history
 django-ckeditor
 django-taggit
+django-ckeditor
 coreapi
 drf-yasg
 hashids

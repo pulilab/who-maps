@@ -15,7 +15,7 @@ export const state = () => ({
   regions: [],
   collections: [],
   donorsLibrary: {},
-  policy_registry: {}
+  reference_documents: {}
 })
 
 export const getters = {
@@ -100,7 +100,7 @@ export const getters = {
   }),
   getRegions: state => state.regions,
   getRegionDetails: state => id => ({ ...state.regions.find(r => r.id === id) }),
-  getPolicyRegistry: state => state.policy_registry,
+  getReferenceDocuments: state => state.reference_documents,
 }
 
 export const actions = {
@@ -128,7 +128,7 @@ export const actions = {
       commit('setValue', { key: 'toolkit_questions', val: data.toolkit_questions })
       commit('setValue', { key: 'sub_level_types', val: data.sub_level_types })
       commit('setValue', { key: 'regions', val: data.regions })
-      commit('setValue', { key: 'policy_registry', val: data.policy_registry })
+      commit('setValue', { key: 'reference_documents', val: data.reference_documents })
       dispatch('dashboard/setDashboardColumns', data.dashboard_columns, {
         root: true
       })

@@ -95,10 +95,9 @@ class StaticDataView(GenericAPIView):
                     'ar': 'sa.png'}
 
     @staticmethod
-    def get_policy_registry_limits():
+    def get_reference_document_limits():
         return {
             'languages': [{'id': lang[0], 'name': lang[1]} for lang in ReferenceDocument.Language.choices],
-            'types': [{'id': type[0], 'name': type[1]} for type in ReferenceDocument.Type.choices],
             'valid_formats': settings.VALID_ROAD_MAP_DOCUMENT_FILE_TYPES,
             'max_size_in_MB': int(settings.MAX_ROAD_MAP_DOCUMENT_UPLOAD_SIZE / 1024 ** 2)
         }
@@ -124,6 +123,6 @@ class StaticDataView(GenericAPIView):
         data['sub_level_types'] = SUB_LEVEL_TYPES
         data['regions'] = [{'id': reg[0], 'name': reg[1]} for reg in Country.REGIONS]
         data['dashboard_columns'] = DASHBOARD_COLUMNS
-        data['policy_registry'] = self.get_policy_registry_limits()
+        data['reference_documents'] = self.get_reference_document_limits()
 
         return Response(data)

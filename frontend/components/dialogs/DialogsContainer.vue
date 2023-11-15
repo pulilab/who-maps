@@ -6,7 +6,8 @@
     <SendEmailDialog />
     <ProjectApprovalDialog />
     <EditSubLevelDialog />
-    <PolicyDocumentDialog />
+    <ReferenceDocumentDialog />
+    <EditTeamMembersDialog />
   </div>
 </template>
 
@@ -18,7 +19,8 @@ import SaveFilterDialog from './SaveFilterDialog'
 import SendEmailDialog from './SendEmailDialog'
 import ProjectApprovalDialog from './ProjectApprovalDialog'
 import EditSubLevelDialog from './EditSubLevelDialog'
-import PolicyDocumentDialog from './PolicyDocumentDialog'
+import ReferenceDocumentDialog from './ReferenceDocumentDialog'
+import EditTeamMembersDialog from './EditTeamMembersDialog'
 
 export default {
   components: {
@@ -28,7 +30,8 @@ export default {
     SendEmailDialog,
     ProjectApprovalDialog,
     EditSubLevelDialog,
-    PolicyDocumentDialog,
+    ReferenceDocumentDialog,
+    EditTeamMembersDialog,
   },
   computed: {
     ...mapGettersActions({
@@ -56,12 +59,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less">
-  @import "../../assets/style/variables.less";
-  @import "../../assets/style/mixins.less";
-
-  .DialogsContainer {
-
-  }
-</style>

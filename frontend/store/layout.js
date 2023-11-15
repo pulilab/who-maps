@@ -5,6 +5,10 @@ export const state = () => ({
   sendEmailDialogState: null,
   showEmptyProfileWarning: false,
   editSubLevelDialogState: null,
+  teamMemberDialogState: {
+    visible: false,
+    projectId: null
+  },
   howToDialogState: false,
   howToDialogGuide: 0, // overview
 })
@@ -16,6 +20,7 @@ export const getters = {
   getSendEmailDialogState: state => state.sendEmailDialogState,
   getShowEmptyProfileWarning: state => state.showEmptyProfileWarning,
   getEditSubLevelDialogState: state => state.editSubLevelDialogState,
+  getTeamMemberDialogState: state => state.teamMemberDialogState,
   getHowToDialogState: state => state.howToDialogState,
   getHowToDialogGuide: state => state.howToDialogGuide
 }
@@ -41,6 +46,10 @@ export const actions = {
   },
   setHowToDialogState ({ commit }, value) {
     commit('SET_DATA', { type: 'howToDialogState', value })
+  },
+  setTeamMemberDialogState ({ commit }, value) {
+    console.log("🚀 ~ file: layout.js:51 ~ setTeamMemberDialogState ~ value:", value)
+    commit('SET_DATA', { type: 'teamMemberDialogState', value })
   },
   setHowToDialogGuide ({ commit }, value) {
     commit('SET_DATA', { type: 'howToDialogGuide', value })

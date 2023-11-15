@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'scheduler',
     'cms',
     'simple_feedback',
+    'ckeditor',
     'systemmessages',
     'kpiexport',
     'rangefilter',
@@ -245,6 +246,8 @@ PROJECT_UPDATE_DIGEST_PERIOD = 7 * 24  # 1 week
 APPROVAL_DIGEST_PERIOD = 7 * 24  # 1 week
 NEW_QUESTION_DIGEST_PERIOD = 7 * 24  # 1 week
 DRAFT_ONLY_REMINDER_PERIOD = 7 * 24  # 1 week
+DRAFT_EXPIRATION_REMINDER_PERIOD = 5 * 4 * 7 * 24  # 5 months
+DRAFT_EXPIRATION_ARCHIVAL_PERIOD = 6 * 4 * 7 * 24  # 6 months
 EMPTY_STAGES_REMINDER_PERIOD = 3 * 4 * 7 * 24  # - 3 month (12 weeks)
 NO_COVERAGE_REMINDER = 4 * 7 * 24  # 4 weeks
 
@@ -413,6 +416,14 @@ if SITE_ID in [3, 4]:
             "task": 'send_draft_only_reminders',
             "schedule": datetime.timedelta(hours=DRAFT_ONLY_REMINDER_PERIOD),
         },
+        "send_draft_expiration_reminders": {
+            "task": 'send_draft_expiration_reminders',
+            "schedule": crontab(hour='11', minute='0', month_of_year="1,3,5,7,9,11", day_of_month='17'),
+        },
+        "archive_expired_drafts": {
+            "task": 'archive_expired_drafts',
+            "schedule": crontab(hour='11', minute='0', month_of_year="2,4,6,8,10,12", day_of_month='17'),
+        },
         "send_empty_stages_reminder": {
             "task": 'send_empty_stages_reminder',
             "schedule": datetime.timedelta(hours=EMPTY_STAGES_REMINDER_PERIOD),
@@ -444,7 +455,7 @@ if SITE_ID in [3, 4]:
         "auditlog_update_hfa": {
             "task": "auditlog_update_hfa",
             "schedule": crontab(hour=2, minute=0, ),
-        },
+        }
     }
 
     DEBUG = False
@@ -512,5 +523,17 @@ OBSOLETE_PROJECT_MARKERS = {
     'delete'
 }
 
+SIMPLE_FEEDBACK_NOTIFICATIONS_ENABLED = os.environ.get('SIMPLE_FEEDBACK_NOTIFICATIONS_ENABLED', False)
 SIMPLE_FEEDBACK_SEND_TO = os.environ.get('SIMPLE_FEEDBACK_SEND_TO', 'dhasupport@pulilab.com')
 TAGGIT_CASE_INSENSITIVE = True
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar_DEFAULT': [
+            ['Bold', 'Italic', 'Underline', 'Strike', '-', 'NumberedList', 'BulletedList', '-',
+             'Outdent', 'Indent', '-', 'Undo', 'Redo', '-', 'Source']
+        ],
+        'toolbar': 'DEFAULT',
+        'width': 800,
+    }
+}
+AUTOARCHIVE_EXPIRED_DRAFTS = os.environ.get('AUTOARCHIVE_EXPIRED_DRAFTS', False)

@@ -185,7 +185,7 @@ export default {
           title: 'Technology Deployment Date',
           check: (words) => isSubset(['deployment','date'], words)
         },
-        licenses: {
+        osi_licenses: {
           title: 'Licenses',
           check: (words) => words.includes('licenses')
         },
@@ -326,7 +326,10 @@ export default {
       if (!fieldFound) {
         // 3. run through notUsedFields and run the check() function of corresponding smartHeaderMap
         const words = column.toLowerCase().split(/[\s_]+/)
-        fieldFound = this.notUsedFields.find(field => this.smartHeaderMap[field.value].check(words))
+        fieldFound = this.notUsedFields.find(field => {
+          const fieldMap = this.smartHeaderMap[field.value]
+          return fieldMap ? fieldMap.check(words) : false
+        })
       }
       return fieldFound
     },

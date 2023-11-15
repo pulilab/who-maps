@@ -1,17 +1,21 @@
 from collections import namedtuple
 from copy import deepcopy
+from typing import Optional
 
 from django.contrib.contenttypes.fields import GenericRelation
+from django.db.models.fields.json import KeyTextTransform
+from django.db.models.functions import Cast
 from hashids import Hashids
 from ckeditor.fields import RichTextField
 
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, IntegerField, QuerySet
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from simple_history.models import HistoricalRecords
+from ckeditor.fields import RichTextField
 
 from core.models import ExtendedModel, ExtendedNameOrderedSoftDeletedModel, ActiveQuerySet, SoftDeleteModel, \
     ParentByIDMixin
@@ -34,6 +38,11 @@ class ProjectManager(models.Manager):
     def member_of(self, user):
         return self.filter(Q(team=user.userprofile)
                            | Q(viewers=user.userprofile)).distinct().order_by('id')
+
+    def by_country(self, country: Country):
+        return self.annotate(country_id=Cast(KeyTextTransform('country', 'data'), output_field=IntegerField()),
+                             country_draft_id=Cast(KeyTextTransform('country', 'draft'), output_field=IntegerField()))\
+            .filter(Q(country_id=country.id) | Q(country_draft_id=country.id))
 
     # WARNING: this method is used in migration project.0016_auto_20160601_0928
     def by_organisation(self, organisation_id):  # pragma: no cover
@@ -116,15 +125,23 @@ class Project(SoftDeleteModel, ExtendedModel):
     def get_country_id(self, draft_mode=False):
         return self.draft.get('country') if draft_mode else self.data.get('country')
 
-    def get_country(self, draft_mode=False):
-        country_id = self.get_country_id(draft_mode)
+    def get_country(self) -> Country:
+        country_id = self.get_country_id(draft_mode=False) if self.public_id else self.get_country_id(draft_mode=True)
         return Country.objects.get(id=int(country_id)) if country_id else None
+
+    def get_country_admins(self) -> QuerySet:
+        if country := self.get_country():
+            admins = country.super_admins.all() | country.admins.all()
+            return admins
 
     def is_member(self, user):
         return self.team.filter(id=user.userprofile.id).exists() or self.viewers.filter(id=user.userprofile.id).exists()
 
     def is_country_user_or_admin(self, user):
         return self.get_country().user_in_groups(user.userprofile) if self.get_country() else False
+
+    def is_country_admin(self, user):
+        return self.get_country().user_in_admin_groups(user.userprofile) if self.get_country() else False
 
     def get_member_data(self):
         return deepcopy(self.data)
@@ -162,7 +179,11 @@ class Project(SoftDeleteModel, ExtendedModel):
         return data
 
     def to_response_dict(self, published, draft):
-        return dict(id=self.pk, public_id=self.public_id, archived=self.archived, published=published, draft=draft)
+        admins = self.get_country_admins()
+        admins_list = list(admins.values('name', 'user__email')) if admins else None
+        return dict(id=self.pk, public_id=self.public_id, archived=self.archived,
+                    admins=admins_list,
+                    published=published, draft=draft)
 
     def to_project_import_table_dict(self, published_data, draft_data):
         published = True if self.public_id != "" else False
@@ -222,12 +243,15 @@ class Project(SoftDeleteModel, ExtendedModel):
         self.save()
         self.search.reset()
 
-    def archive(self):
+    def archive(self, profile: Optional[UserProfile] = None):
         self.public_id = ''
         self.data = {}
         self.archived = True
         self.save()
         self.search.reset()
+        ProjectVersion.objects.create(project=self, user=profile, name=self.name,
+                                      data=self.draft, research=self.research,
+                                      published=False, archived=True)
 
 
 @receiver(post_save, sender=Project)
@@ -307,6 +331,7 @@ class HSCChallengeQuerySet(ActiveQuerySet):
 
 class HSCChallenge(ParentByIDMixin, InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     group = models.ForeignKey(HSCGroup, on_delete=models.CASCADE, related_name='challenges')
+    description = RichTextField(blank=True)
 
     def __str__(self):
         return '({}) {}'.format(self.group.name, self.name)
@@ -413,8 +438,31 @@ class Licence(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
     pass
 
 
+class OSILicence(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
+    class Categories(models.IntegerChoices):
+        INT = 1, _("International")
+        NONREUSE = 2, _("Non-Reusable")
+        OTHER = 3, _("Other/Miscellaneous")
+        POPULAR = 4, _("Popular / Strong Community")
+        REDUNDANT = 5, _("Redundant with more popular")
+        SPECIAL = 6, _("Special Purpose")
+        SUPERSEDED = 7, _("Superseded")
+        UNCATEGORIZED = 8, _("Uncategorized")
+        RETIRED = 9, _("Voluntarily retired")
+    spdx_id = models.CharField(max_length=64, blank=True)
+    category = models.PositiveSmallIntegerField(choices=Categories.choices, blank=True, null=True)
+    url = models.URLField(blank=True)
+
+
 class InteroperabilityStandard(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
-    pass
+    class Categories(models.IntegerChoices):
+        HDES = 1, _("Health Data Exchange Standards")
+        HDS = 2, _("Health Data Standardization")
+        DDS = 3, _("Demographic Data Standardization")
+        SPS = 4, _("Security & Privacy Standards")
+        TS = 5, _("Technical Standards")
+    category = models.PositiveSmallIntegerField(choices=Categories.choices, blank=True, null=True)
+    description = RichTextField(blank=True)
 
 
 class HISBucket(InvalidateCacheMixin, ExtendedNameOrderedSoftDeletedModel):
@@ -458,8 +506,8 @@ class ProjectImportV2(ExtendedModel):
 class ImportRow(models.Model):
     data = models.JSONField(default=dict)
     original_data = models.JSONField(default=dict)
-    project = models.ForeignKey(Project, null=True, on_delete=models.SET_NULL, related_name='import_rows')
-    parent = models.ForeignKey(ProjectImportV2, null=True, related_name="rows", on_delete=models.SET_NULL)
+    project = models.ForeignKey(Project, null=True, blank=True, on_delete=models.SET_NULL, related_name='import_rows')
+    parent = models.ForeignKey(ProjectImportV2, null=True, blank=True, related_name="rows", on_delete=models.SET_NULL)
 
 
 class ProjectVersion(ExtendedModel):

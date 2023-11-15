@@ -13,7 +13,7 @@ from core.admin import AllObjectsAdmin
 from country.models import Country
 from .models import TechnologyPlatform, InteroperabilityLink, DigitalStrategy, HealthFocusArea, \
     HealthCategory, Licence, InteroperabilityStandard, HISBucket, HSCChallenge, Project, HSCGroup, \
-    ProjectImportV2, ImportRow, Stage, ProjectVersion, Collection, ServicesAndApplicationsCategory, \
+    ProjectImportV2, ImportRow, Stage, ProjectVersion, Collection, OSILicence, ServicesAndApplicationsCategory, \
     ServicesAndApplications
 
 # This has to stay here to use the proper celery instance with the djcelery_email package
@@ -78,6 +78,7 @@ class TechnologyPlatformAdmin(AllObjectsAdmin):
         'id', 'name', 'state', 'added_by', 'number_of_projects'
     ]
     list_filter = [SoftwareStateFilter]
+    list_display_links = ['name', 'id']
     search_fields = ['name']
     actions = (approve, decline)
 
@@ -123,8 +124,18 @@ class LicenceAdmin(AllObjectsAdmin):
     pass
 
 
-class InteroperabilityStandardAdmin(AllObjectsAdmin):
-    pass
+class OSILicenceAdmin(admin.ModelAdmin):
+    list_display = ['name', 'spdx_id', 'category', 'link']
+    list_filter = ['category']
+
+    def link(self, obj):  # pragma: no cover
+        if obj.id is None:
+            return '-'
+        return mark_safe(f"<a target='_blank' href='{obj.url}'>{obj.url}</a>")
+
+
+class InteroperabilityStandardAdmin(TabbedDjangoJqueryTranslationAdmin, AllObjectsAdmin):
+    list_display = ['name', 'category']
 
 
 class HISBucketAdmin(AllObjectsAdmin):
@@ -135,7 +146,7 @@ class HSCGroupAdmin(AllObjectsAdmin):
     pass
 
 
-class HSCChallengeAdmin(AllObjectsAdmin):
+class HSCChallengeAdmin(TabbedDjangoJqueryTranslationAdmin, AllObjectsAdmin):
     pass
 
 
@@ -172,7 +183,7 @@ class ProjectAdmin(ExportActionMixin, AllObjectsAdmin):
     resource_class = ProjectResource
 
     def get_country(self, obj):
-        return obj.get_country() if obj.public_id else obj.get_country(draft_mode=True)
+        return obj.get_country()
     get_country.short_description = "Country"
 
     def get_team(self, obj):
@@ -231,7 +242,7 @@ class ProjectImportV2Admin(admin.ModelAdmin):
     raw_id_fields = ['donor', 'country', 'user']
 
     def get_profile(self, obj):  # pragma: no cover
-        return obj.user.userprofile
+        return obj.user.userprofile if obj.user and obj.user.userprofile else '-'
     get_profile.short_description = "User"
 
     def projects(self, obj):  # pragma: no cover
@@ -287,6 +298,7 @@ admin.site.register(HealthCategory, HealthCategoryAdmin)
 admin.site.register(ServicesAndApplicationsCategory, ServicesAndApplicationsCategoryAdmin)
 admin.site.register(ServicesAndApplications, ServicesAndApplicationsAdmin)
 admin.site.register(Licence, LicenceAdmin)
+admin.site.register(OSILicence, OSILicenceAdmin)
 admin.site.register(InteroperabilityStandard, InteroperabilityStandardAdmin)
 admin.site.register(HISBucket, HISBucketAdmin)
 admin.site.register(HSCGroup, HSCGroupAdmin)

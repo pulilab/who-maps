@@ -18,7 +18,7 @@ class HSCGroupTranslationOptions(TranslationOptions):
 
 @register(HSCChallenge)
 class HSCChallengeTranslationOptions(TranslationOptions):
-    fields = ('name',)
+    fields = ('name', 'description')
 
 
 @register(HealthCategory)
@@ -58,7 +58,7 @@ class LicenceTranslationOptions(TranslationOptions):
 
 @register(InteroperabilityStandard)
 class InteroperabilityStandardTranslationOptions(TranslationOptions):
-    fields = ('name',)
+    fields = ('name', 'description')
 
 
 @register(HISBucket)

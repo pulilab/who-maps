@@ -62,7 +62,7 @@
 
         <div v-if="isUserSCA" class="DropdownLink">
           <nuxt-link
-            :to="localePath({name: 'organisation-admin-registry', params: $route.params})"
+            :to="localePath({name: 'organisation-admin-reference-documents', params: $route.params})"
             @click.native="closePopover"
           >
             <span class="MenuIcon">
@@ -70,7 +70,7 @@
                 <path fill="currentColor" d="M14,8H10V6H14V8M20,4V20C20,21.11 19.11,22 18,22H6C4.89,22 4,21.11 4,20V4A2,2 0 0,1 6,2H18C19.11,2 20,2.9 20,4M18,13H6V20H18V13M18,4H6V11H18V4M14,15H10V17H14V15Z" />
               </svg>
             </span>
-            <translate>Policy Registry admin</translate>
+            <translate>Reference Documents admin</translate>
           </nuxt-link>
         </div>
 
@@ -98,7 +98,7 @@
           </nuxt-link>
         </div>
 
-        <div v-if="isSuperUser" class="DropdownLink">
+        <div v-if="isSuperUser || isUserCA || isUserDA" class="DropdownLink">
           <nuxt-link
             :to="localePath({name: 'organisation-graphs', params: $route.params})"
             @click.native="closePopover"

@@ -61,6 +61,10 @@ urlpatterns = [
          view=views.ProjectListViewSet.as_view({
              'get': 'list'
          }), name="project-list"),
+    path("projects/admin-list/",
+         view=views.ProjectAdminListViewSet.as_view({
+             'get': 'list'
+         }), name="project-admin-list"),
     path("projects/structure/",
          view=views.ProjectPublicViewSet.as_view({
              'get': 'project_structure'
